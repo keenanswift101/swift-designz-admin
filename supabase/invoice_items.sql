@@ -18,6 +18,9 @@ CREATE POLICY "Authenticated users can read invoice_items" ON invoice_items FOR 
 CREATE POLICY "Admins can manage invoice_items" ON invoice_items FOR ALL TO authenticated
   USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'))
   WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Viewers can manage invoice_items" ON invoice_items FOR ALL TO authenticated
+  USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'));
 
 -- Add proof_url to payments table for receipt uploads
 ALTER TABLE payments ADD COLUMN IF NOT EXISTS proof_url TEXT;

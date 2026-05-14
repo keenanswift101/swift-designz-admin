@@ -25,7 +25,7 @@ export default async function InvoiceDetailPage({
   ] = await Promise.all([
     supabase
       .from("invoices")
-      .select("*, clients(id, name, email, phone, company), projects(id, name)")
+      .select("*, clients(id, name, email, phone, company), projects(id, name), profiles(full_name)")
       .eq("id", id)
       .single(),
     supabase
@@ -44,6 +44,7 @@ export default async function InvoiceDetailPage({
 
   const client = invoice.clients as { id: string; name: string; email: string; phone: string | null; company: string | null } | null;
   const project = invoice.projects as { id: string; name: string } | null;
+  const creator = invoice.profiles as { full_name: string } | null;
   const outstanding = invoice.amount - invoice.paid_amount;
   const itemsSubtotal = (items || []).reduce((s: number, it: { amount: number }) => s + it.amount, 0);
   const discountAmt = (invoice.discount_amount ?? 0) as number;
@@ -254,6 +255,16 @@ export default async function InvoiceDetailPage({
                 <dt className="text-xs text-gray-500">Created</dt>
                 <dd className="text-xs text-gray-400">{formatDate(invoice.created_at)}</dd>
               </div>
+              {creator && (
+                <div className="flex justify-between items-center">
+                  <dt className="text-xs text-gray-500">Created by</dt>
+                  <dd>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-teal/10 text-teal border border-teal/20">
+                      {creator.full_name}
+                    </span>
+                  </dd>
+                </div>
+              )}
             </dl>
           </div>
 

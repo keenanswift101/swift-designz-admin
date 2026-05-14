@@ -10,7 +10,7 @@ import type { InvoiceStatus, PaymentMethod, IncomeCategory } from "@/types/datab
 // ── Create Invoice ────────────────────────────────────────────────────────────
 
 export async function createInvoiceAction(formData: FormData) {
-  await requireAuth();
+  const user = await requireAuth();
   const supabase = await createClient();
 
   const clientId = formData.get("client_id") as string;
@@ -92,6 +92,7 @@ export async function createInvoiceAction(formData: FormData) {
       status,
       due_date: dueDate,
       notes,
+      created_by: user.id,
       payment_plan_enabled: paymentPlanEnabled,
       installment_count: installmentCount,
       installment_interval: installmentInterval,
