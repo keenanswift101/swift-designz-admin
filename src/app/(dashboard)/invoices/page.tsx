@@ -4,7 +4,7 @@ import StatusBadge from "@/components/ui/StatusBadge";
 import DeleteInvoiceButton from "@/components/invoices/DeleteInvoiceButton";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import Link from "next/link";
-import { TrendingUp, Clock, AlertTriangle, CheckCircle2, ArrowUpRight, FileText } from "lucide-react";
+import { TrendingUp, Clock, AlertTriangle, CheckCircle2, ArrowUpRight, FileText, Plus } from "lucide-react";
 import type { Invoice } from "@/types/database";
 
 type InvoiceWithClient = Invoice & { clients: { name: string } | null };
@@ -23,25 +23,24 @@ export default async function InvoicesPage({ searchParams }: Props) {
   const { data: allDocs } = await supabase
     .from("invoices")
     .select("*, clients(name)")
+    .neq("doc_type", "quotation")
     .order("created_at", { ascending: false });
 
-  const all = (allDocs ?? []) as InvoiceWithClient[];
-  const invoices = all.filter((d) => d.doc_type !== "quotation");
-  const quotations = all.filter((d) => d.doc_type === "quotation");
+  const invoices = (allDocs ?? []) as InvoiceWithClient[];
 
   // ── KPI stats ──────────────────────────────────────────────
-  const activeDocs = all.filter((d) => !["draft", "cancelled"].includes(d.status));
+  const activeInvoices = invoices.filter((d) => !["draft", "cancelled"].includes(d.status));
   const ytdInvoices = invoices.filter((d) => !["draft", "cancelled"].includes(d.status) && d.created_at >= ytdStart);
 
   const ytdBilled = ytdInvoices.reduce((s, i) => s + i.amount, 0);
   const ytdCollected = ytdInvoices.reduce((s, i) => s + i.paid_amount, 0);
-  const totalOutstanding = activeDocs
+  const totalOutstanding = activeInvoices
     .filter((d) => ["sent", "partial", "overdue"].includes(d.status))
     .reduce((s, i) => s + (i.amount - i.paid_amount), 0);
-  const overdueInvoices = invoices.filter((d) => d.status === "overdue");
+  const overdueCount = invoices.filter((d) => d.status === "overdue").length;
 
-  const totalBilledAll = activeDocs.reduce((s, i) => s + i.amount, 0);
-  const totalCollectedAll = activeDocs.reduce((s, i) => s + i.paid_amount, 0);
+  const totalBilledAll = activeInvoices.reduce((s, i) => s + i.amount, 0);
+  const totalCollectedAll = activeInvoices.reduce((s, i) => s + i.paid_amount, 0);
   const collectionRate = totalBilledAll > 0 ? Math.round((totalCollectedAll / totalBilledAll) * 100) : 0;
 
   // ── Status breakdown counts ────────────────────────────────
@@ -51,34 +50,31 @@ export default async function InvoicesPage({ searchParams }: Props) {
   }, {});
 
   const statusPills: { label: string; key: string; color: string }[] = [
-    { key: "draft", label: "Draft", color: "text-gray-500 bg-gray-500/10 border-gray-500/20" },
-    { key: "sent", label: "Sent", color: "text-blue-400 bg-blue-400/10 border-blue-400/20" },
-    { key: "partial", label: "Partial", color: "text-amber-400 bg-amber-400/10 border-amber-400/20" },
-    { key: "overdue", label: "Overdue", color: "text-red-400 bg-red-400/10 border-red-400/20" },
-    { key: "paid", label: "Paid", color: "text-teal bg-teal/10 border-teal/20" },
+    { key: "draft",     label: "Draft",     color: "text-gray-500 bg-gray-500/10 border-gray-500/20" },
+    { key: "sent",      label: "Sent",      color: "text-blue-400 bg-blue-400/10 border-blue-400/20" },
+    { key: "partial",   label: "Partial",   color: "text-amber-400 bg-amber-400/10 border-amber-400/20" },
+    { key: "overdue",   label: "Overdue",   color: "text-red-400 bg-red-400/10 border-red-400/20" },
+    { key: "paid",      label: "Paid",      color: "text-teal bg-teal/10 border-teal/20" },
     { key: "cancelled", label: "Cancelled", color: "text-gray-600 bg-gray-600/10 border-gray-600/20" },
   ].filter(({ key }) => (statusCounts[key] ?? 0) > 0);
+
+  const visibleInvoices = filterStatus
+    ? invoices.filter((i) => i.status === filterStatus)
+    : invoices;
 
   return (
     <>
       <PageHeader
-        title="Invoices & Quotations"
-        description="Manage billing, quotations, and track payments"
+        title="Billing"
+        description="Invoices, payment tracking, and collection overview"
         actions={
-          <div className="flex items-center gap-2">
-            <Link
-              href="/invoices/new?type=quotation"
-              className="px-4 py-2 border border-teal/40 hover:border-teal text-teal text-sm font-medium rounded-lg transition-colors"
-            >
-              New Quotation
-            </Link>
-            <Link
-              href="/invoices/new"
-              className="px-4 py-2 bg-teal hover:bg-teal-hover text-white text-sm font-medium rounded-lg transition-colors"
-            >
-              New Invoice
-            </Link>
-          </div>
+          <Link
+            href="/invoices/new"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-teal/10 text-teal border border-teal/25 hover:bg-teal/20 text-sm font-medium rounded-lg transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            New Invoice
+          </Link>
         }
       />
 
@@ -150,14 +146,14 @@ export default async function InvoicesPage({ searchParams }: Props) {
           <div className="flex items-start justify-between mb-3">
             <AlertTriangle className="h-5 w-5 text-red-400" />
           </div>
-          <p className={`text-2xl font-bold ${overdueInvoices.length > 0 ? "text-red-400" : "text-gray-600"}`}>
-            {overdueInvoices.length}
+          <p className={`text-2xl font-bold ${overdueCount > 0 ? "text-red-400" : "text-gray-600"}`}>
+            {overdueCount}
           </p>
           <p className="text-xs text-gray-500 mt-1">Overdue</p>
         </div>
       </div>
 
-      {/* Status breakdown — clickable filters */}
+      {/* Status filters */}
       {statusPills.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-6">
           {filterStatus && (
@@ -187,161 +183,90 @@ export default async function InvoicesPage({ searchParams }: Props) {
       )}
 
       {/* Invoices Table */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+      <div className="glass-card overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-3 border-b border-border">
+          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
             {filterStatus
-              ? `${filterStatus.toUpperCase()} INVOICES (${invoices.filter((i) => i.status === filterStatus).length})`
-              : `Invoices (${invoices.length})`}
+              ? `${filterStatus} · ${visibleInvoices.length} invoice${visibleInvoices.length !== 1 ? "s" : ""}`
+              : `${invoices.length} invoice${invoices.length !== 1 ? "s" : ""}`}
           </h2>
         </div>
-        <div className="glass-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice #</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Issued</th>
-                  <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider w-36">Collected</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Due</th>
-                  <th className="px-5 py-3 w-10" />
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice #</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Issued</th>
+                <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider w-36">Collected</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Due</th>
+                <th className="px-5 py-3 w-10" />
+              </tr>
+            </thead>
+            <tbody>
+              {visibleInvoices.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="px-5 py-12 text-center text-sm text-gray-500">
+                    {filterStatus ? `No ${filterStatus} invoices.` : "No invoices yet."}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {invoices.length === 0 ? (
-                  <tr>
-                    <td colSpan={8} className="px-5 py-10 text-center text-sm text-gray-500">
-                      No invoices yet.
-                    </td>
-                  </tr>
-                ) : (
-                  invoices.filter((inv) => !filterStatus || inv.status === filterStatus).map((inv, i) => {
-                    const paidPct = inv.amount > 0 ? Math.min(Math.round((inv.paid_amount / inv.amount) * 100), 100) : 0;
-                    const isOverdue = inv.status === "overdue";
-                    return (
-                      <tr
-                        key={inv.id}
-                        className={`border-b border-border/50 hover:bg-card transition-colors ${
-                          isOverdue ? "bg-red-950/20" : i % 2 === 1 ? "bg-card/20" : ""
-                        }`}
-                      >
-                        <td className="px-5 py-3">
-                          <Link
-                            href={`/invoices/${inv.id}`}
-                            className="text-sm font-mono font-medium text-foreground hover:text-teal transition-colors flex items-center gap-1"
-                          >
-                            {inv.invoice_number}
-                            <ArrowUpRight className="h-3 w-3 opacity-0 group-hover:opacity-100" />
-                          </Link>
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-300">
-                          {inv.clients?.name ?? "—"}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                          {formatDate(inv.created_at.slice(0, 10))}
-                        </td>
-                        <td className="px-4 py-3 text-sm font-mono font-medium text-foreground text-right whitespace-nowrap">
-                          {formatCurrency(inv.amount)}
-                        </td>
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-2">
-                            <div className="flex-1 h-1.5 bg-card rounded-full overflow-hidden">
-                              <div
-                                className={`h-full rounded-full ${paidPct === 100 ? "bg-teal" : "bg-teal/50"}`}
-                                style={{ width: `${paidPct}%` }}
-                              />
-                            </div>
-                            <span className="text-xs text-gray-500 shrink-0 w-8 text-right">{paidPct}%</span>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3">
-                          <StatusBadge status={inv.status} />
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-500 text-right whitespace-nowrap">
-                          {formatDate(inv.due_date)}
-                        </td>
-                        <td className="px-5 py-3 text-right">
-                          <DeleteInvoiceButton id={inv.id} />
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* Quotations Table */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-            Quotations ({quotations.length})
-          </h2>
-        </div>
-        <div className="glass-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Quote #</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Issued</th>
-                  <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Valid Until</th>
-                  <th className="px-5 py-3 w-10" />
-                </tr>
-              </thead>
-              <tbody>
-                {quotations.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="px-5 py-10 text-center text-sm text-gray-500">
-                      No quotations yet.
-                    </td>
-                  </tr>
-                ) : (
-                  quotations.map((q, i) => (
+              ) : (
+                visibleInvoices.map((inv, i) => {
+                  const paidPct = inv.amount > 0 ? Math.min(Math.round((inv.paid_amount / inv.amount) * 100), 100) : 0;
+                  const isOverdue = inv.status === "overdue";
+                  return (
                     <tr
-                      key={q.id}
-                      className={`border-b border-border/50 hover:bg-card transition-colors ${i % 2 === 1 ? "bg-card/20" : ""}`}
+                      key={inv.id}
+                      className={`border-b border-border/50 hover:bg-card transition-colors ${
+                        isOverdue ? "bg-red-950/20" : i % 2 === 1 ? "bg-card/20" : ""
+                      }`}
                     >
                       <td className="px-5 py-3">
                         <Link
-                          href={`/invoices/${q.id}`}
-                          className="text-sm font-mono font-medium text-foreground hover:text-teal transition-colors"
+                          href={`/invoices/${inv.id}`}
+                          className="text-sm font-mono font-medium text-foreground hover:text-teal transition-colors flex items-center gap-1"
                         >
-                          {q.invoice_number}
+                          {inv.invoice_number}
+                          <ArrowUpRight className="h-3 w-3 opacity-0 group-hover:opacity-100" />
                         </Link>
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-300">
-                        {q.clients?.name ?? "—"}
+                        {inv.clients?.name ?? "—"}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-                        {formatDate(q.created_at.slice(0, 10))}
+                        {formatDate(inv.created_at.slice(0, 10))}
                       </td>
                       <td className="px-4 py-3 text-sm font-mono font-medium text-foreground text-right whitespace-nowrap">
-                        {formatCurrency(q.amount)}
+                        {formatCurrency(inv.amount)}
                       </td>
                       <td className="px-4 py-3">
-                        <StatusBadge status={q.status} />
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 h-1.5 bg-card rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full ${paidPct === 100 ? "bg-teal" : "bg-teal/50"}`}
+                              style={{ width: `${paidPct}%` }}
+                            />
+                          </div>
+                          <span className="text-xs text-gray-500 shrink-0 w-8 text-right">{paidPct}%</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <StatusBadge status={inv.status} />
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-500 text-right whitespace-nowrap">
-                        {formatDate(q.due_date)}
+                        {formatDate(inv.due_date)}
                       </td>
                       <td className="px-5 py-3 text-right">
-                        <DeleteInvoiceButton id={q.id} />
+                        <DeleteInvoiceButton id={inv.id} />
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </>

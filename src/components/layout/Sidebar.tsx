@@ -44,7 +44,6 @@ const NAV_SECTIONS = [
       { href: "/leads", label: "Leads", icon: UserPlus, countKey: "leads" },
       { href: "/clients", label: "Clients", icon: Users, countKey: "clients" },
       { href: "/projects", label: "Projects", icon: Briefcase, countKey: "projects" },
-      { href: "/invoices", label: "Invoices", icon: FileText, countKey: "invoices" },
     ],
   },
   {
@@ -65,7 +64,7 @@ const NAV_SECTIONS = [
 
 const AR_SUB_NAV = [
   { href: "/accounts-receivable/quotations", label: "Estimates & Quotations", icon: ClipboardList },
-  { href: "/accounts-receivable/billing",    label: "Billing",               icon: Bell },
+  { href: "/invoices",                       label: "Billing",               icon: Bell },
   { href: "/accounts-receivable/payments",   label: "Payments",              icon: CreditCard },
 ];
 
