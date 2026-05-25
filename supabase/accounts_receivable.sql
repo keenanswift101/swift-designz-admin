@@ -53,25 +53,9 @@ END;
 $$;
 
 
--- ─────────────────────────────────────────────────────────────────────────────
--- EXISTING TABLE AMENDMENTS
--- Extend invoices to support AR linkage without breaking the existing /invoices
--- ─────────────────────────────────────────────────────────────────────────────
-
--- ar_number:          SD26-INV-001 — shown in the AR system (NULL for old invoices)
--- quotation_id:       links an invoice back to the quotation it was converted from
--- installment_number: 1, 2, 3 for payment-plan invoices (NULL for single invoices)
-ALTER TABLE invoices
-  ADD COLUMN IF NOT EXISTS ar_number           TEXT UNIQUE,
-  ADD COLUMN IF NOT EXISTS quotation_id        UUID REFERENCES quotations(id) ON DELETE SET NULL,
-  ADD COLUMN IF NOT EXISTS installment_number  INTEGER;
-
 -- accounting_access flag for profiles (referenced in code but not in original schema)
 ALTER TABLE profiles
   ADD COLUMN IF NOT EXISTS accounting_access BOOLEAN NOT NULL DEFAULT false;
-
-CREATE INDEX IF NOT EXISTS idx_invoices_ar_number   ON invoices(ar_number);
-CREATE INDEX IF NOT EXISTS idx_invoices_quotation   ON invoices(quotation_id);
 
 
 -- ═══════════════════════════════════════════════════════════════════════════════
@@ -237,6 +221,15 @@ BEGIN
   RETURN v_count;
 END;
 $$;
+
+-- Extend invoices to link to quotations (must come after CREATE TABLE quotations)
+ALTER TABLE invoices
+  ADD COLUMN IF NOT EXISTS ar_number          TEXT UNIQUE,
+  ADD COLUMN IF NOT EXISTS quotation_id       UUID REFERENCES quotations(id) ON DELETE SET NULL,
+  ADD COLUMN IF NOT EXISTS installment_number INTEGER;
+
+CREATE INDEX IF NOT EXISTS idx_invoices_ar_number ON invoices(ar_number);
+CREATE INDEX IF NOT EXISTS idx_invoices_quotation  ON invoices(quotation_id);
 
 
 -- ═══════════════════════════════════════════════════════════════════════════════
