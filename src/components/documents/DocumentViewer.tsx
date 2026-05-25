@@ -10,13 +10,15 @@ interface Props {
   slug: string;
   label: string;
   hasPdf?: boolean;
-  /** When set, loads this URL with ?embed=true (returns HTML with data-URI PDF — no download prompt) */
+  /** When set, loads this URL with ?embed=true (returns HTML with <object> PDF — no download prompt) */
   pdfPreviewUrl?: string;
+  /** Overrides the default /api/docs/templates/${slug} download URL */
+  downloadUrl?: string;
   /** When set, shows an Edit button linking to this URL (admin only) */
   editUrl?: string;
 }
 
-export default function DocumentViewer({ slug, label, hasPdf = true, pdfPreviewUrl, editUrl }: Props) {
+export default function DocumentViewer({ slug, label, hasPdf = true, pdfPreviewUrl, downloadUrl, editUrl }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -27,7 +29,7 @@ export default function DocumentViewer({ slug, label, hasPdf = true, pdfPreviewU
     setDownloading(true);
     toast.loading("Preparing download...");
     try {
-      const res = await fetch(`/api/docs/templates/${slug}`);
+      const res = await fetch(downloadUrl ?? `/api/docs/templates/${slug}`);
       if (!res.ok) throw new Error("Download failed");
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);

@@ -55,6 +55,26 @@
 
 Template logic lives in src/lib/document-templates.ts; content in src/lib/document-content-client.ts and src/lib/document-content-investor.ts.
 
+## Dynamic Contract Builders
+
+### Retainer Contracts (`/documents/retainers`)
+- DB table: `retainers` (id, name, content JSONB, contract_type, created_by, updated_by)
+- Types: src/types/estore-retainer.ts (`RetainerContent`, `RetainerRecord`)
+- PDF: src/components/documents/EstoreRetainerPDF.tsx
+- Editor: src/components/documents/RetainerEditor.tsx
+- API: `/api/docs/retainers/[id]` — supports `?embed=true`, `?preview=true`, default download
+- Templates: `BLANK_RETAINER`, `ESTORE_RETAINER_TEMPLATE`
+
+### Employment Contracts (`/documents/employee-contracts`)
+- DB table: `employee_contracts` (id, name, contract_type, content JSONB, created_by, updated_by)
+- Types: src/types/employee-contract.ts (`TempContractContent`, `EmployeeContractRecord`, `ContractType`)
+- PDF: src/components/documents/TempContractPDF.tsx (temp contract — others to be added)
+- Editor: src/components/documents/EmployeeContractEditor.tsx
+- API: `/api/docs/employee-contracts/[id]` — supports `?embed=true`, `?preview=true`, default download
+- Contract types planned: `temp` ✓, `fixed`, `intern`, `probono`, `outsourcing`, `subcontractor`
+- Default content: `DEFAULT_TEMP_CONTRACT` in src/types/employee-contract.ts
+- SQL migration: supabase/employee_contracts.sql
+
 ## Key Library Files
 - src/lib/auth.ts — server-side auth helpers
 - src/lib/email.ts — Resend email (document delivery)

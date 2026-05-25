@@ -70,22 +70,40 @@ export default async function DocumentsPage() {
         </div>
       </div>
 
-      {/* Retainer contracts entry point */}
-      <Link
-        href="/documents/retainers"
-        className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors mb-6 group"
-      >
-        <div className="flex items-center gap-4">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal/10">
-            <FileText className="h-5 w-5 text-teal" />
-          </span>
-          <div>
-            <h3 className="text-sm font-semibold text-foreground">Retainer Contracts</h3>
-            <p className="text-xs text-gray-500 mt-0.5">Build and manage monthly service retainer agreements</p>
+      {/* Dynamic contract builders */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <Link
+          href="/documents/retainers"
+          className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal/10">
+              <FileText className="h-5 w-5 text-teal" />
+            </span>
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">Retainer Contracts</h3>
+              <p className="text-xs text-gray-500 mt-0.5">Monthly service retainer agreements</p>
+            </div>
           </div>
-        </div>
-        <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
-      </Link>
+          <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
+        </Link>
+
+        <Link
+          href="/documents/employee-contracts"
+          className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10">
+              <Briefcase className="h-5 w-5 text-amber-400" />
+            </span>
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">Employment Contracts</h3>
+              <p className="text-xs text-gray-500 mt-0.5">Temp, fixed-term, intern and outsourcing agreements</p>
+            </div>
+          </div>
+          <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
+        </Link>
+      </div>
 
       {/* Category cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
