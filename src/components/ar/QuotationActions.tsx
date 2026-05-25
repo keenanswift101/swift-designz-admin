@@ -1,0 +1,67 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2, Send, Ban } from "lucide-react";
+import { useToast } from "@/components/ui/ToastProvider";
+import { sendQuotationAction, cancelQuotationAction } from "@/app/(dashboard)/accounts-receivable/quotations/actions";
+
+interface Props {
+  id: string;
+  action: "send" | "cancel";
+}
+
+export default function QuotationActions({ id, action }: Props) {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const toast = useToast();
+
+  async function handle() {
+    if (action === "cancel") {
+      if (!confirm("Cancel this quotation? This cannot be undone.")) return;
+    }
+    if (action === "send") {
+      if (!confirm("Mark this quotation as sent and lock it for editing?")) return;
+    }
+
+    setLoading(true);
+    try {
+      const result = action === "send"
+        ? await sendQuotationAction(id)
+        : await cancelQuotationAction(id);
+
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success(action === "send" ? "Quotation marked as sent" : "Quotation cancelled");
+        router.refresh();
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (action === "send") {
+    return (
+      <button
+        onClick={handle}
+        disabled={loading}
+        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-teal/10 text-teal border border-teal/25 hover:bg-teal/20 transition-colors text-xs font-medium disabled:opacity-50"
+      >
+        {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+        Mark as Sent
+      </button>
+    );
+  }
+
+  return (
+    <button
+      onClick={handle}
+      disabled={loading}
+      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors text-xs font-medium disabled:opacity-50"
+    >
+      {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Ban className="h-3.5 w-3.5" />}
+      Cancel
+    </button>
+  );
+}

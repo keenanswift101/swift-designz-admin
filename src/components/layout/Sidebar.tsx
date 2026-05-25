@@ -8,7 +8,6 @@ import {
   Users,
   Briefcase,
   FileText,
-  Receipt,
   TrendingUp,
   FolderOpen,
   Landmark,
@@ -22,6 +21,9 @@ import {
   Moon,
   Package,
   BarChart2,
+  ClipboardList,
+  Bell,
+  CreditCard,
 } from "lucide-react";
 import { signOut } from "@/app/auth/actions";
 import { flushSync } from "react-dom";
@@ -59,6 +61,12 @@ const NAV_SECTIONS = [
       { href: "/settings", label: "Settings", icon: Settings },
     ],
   },
+];
+
+const AR_SUB_NAV = [
+  { href: "/accounts-receivable/quotations", label: "Estimates & Quotations", icon: ClipboardList },
+  { href: "/accounts-receivable/billing",    label: "Billing",               icon: Bell },
+  { href: "/accounts-receivable/payments",   label: "Payments",              icon: CreditCard },
 ];
 
 const INVESTOR_NAV = [
@@ -198,6 +206,39 @@ export default function Sidebar({ profile, initialCounts }: SidebarProps) {
                     );
                   })}
                 </ul>
+
+                {/* Accounts Receivable sub-section — injected after first section */}
+                {sIdx === 0 && profile?.role !== "investor" && (
+                  <div className="mt-3">
+                    <hr className="mb-3 border-border" />
+                    <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-600">
+                      Accounts Receivable
+                    </p>
+                    <ul className="space-y-0.5">
+                      {AR_SUB_NAV.map((item) => {
+                        const Icon = item.icon;
+                        const active = isActive(item.href);
+                        return (
+                          <li key={item.href}>
+                            <Link
+                              href={item.href}
+                              onClick={() => setMobileOpen(false)}
+                              className={cn(
+                                "flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                                active
+                                  ? "bg-teal/10 text-teal border border-teal/20"
+                                  : "text-gray-400 hover:text-foreground hover:bg-card"
+                              )}
+                            >
+                              <Icon className="h-3.5 w-3.5 shrink-0" />
+                              {item.label}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
               </div>
               );
             })}
