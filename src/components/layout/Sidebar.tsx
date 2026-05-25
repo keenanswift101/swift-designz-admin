@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   Users,
   Briefcase,
-  FileText,
   TrendingUp,
   FolderOpen,
   Landmark,
