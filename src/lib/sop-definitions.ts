@@ -781,6 +781,7 @@ export const DOC_CATEGORIES: DocCategory[] = [
       { id: "tpl-retainer",     title: "Maintenance Retainer",     description: "Ongoing support and maintenance agreement",                 type: "template", templateSlug: "maintenance-retainer",   roles: ["admin", "viewer"] },
       { id: "tpl-payplan",      title: "Payment Plan Agreement",   description: "Structured installment payment schedule",                   type: "template", templateSlug: "payment-plan-agreement", roles: ["admin", "viewer"] },
       { id: "tpl-handover",     title: "Project Handover",         description: "Final delivery document transferring ownership to client",  type: "template", templateSlug: "project-handover",       roles: ["admin", "viewer"] },
+      { id: "tpl-estore-retainer", title: "eStore Retainer Agreement", description: "Monthly eCommerce management and support retainer contract", type: "template", templateSlug: "estore-retainer", roles: ["admin", "viewer"] },
     ],
   },
 

@@ -20,6 +20,7 @@ export const DOCUMENT_TEMPLATES: DocumentTemplateDefinition[] = [
   { slug: "maintenance-retainer", label: "Maintenance Retainer", audiences: ["admin"], clientGeneration: true },
   { slug: "payment-plan-agreement", label: "Payment Plan Agreement", audiences: ["admin"], clientGeneration: true },
   { slug: "project-handover", label: "Project Handover", audiences: ["admin"], clientGeneration: true },
+  { slug: "estore-retainer", label: "eStore Retainer Agreement", audiences: ["admin"], clientGeneration: true },
   { slug: "investor-nda", label: "Investor NDA", audiences: ["admin", "investor"], clientGeneration: false },
   { slug: "investor-terms-and-conditions", label: "Investor Terms and Conditions", audiences: ["admin", "investor"], clientGeneration: false },
   { slug: "investor-reporting-policy", label: "Investor Reporting Policy", audiences: ["admin", "investor"], clientGeneration: false },

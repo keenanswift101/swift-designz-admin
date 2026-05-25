@@ -70,6 +70,23 @@ export default async function DocumentsPage() {
         </div>
       </div>
 
+      {/* Retainer contracts entry point */}
+      <Link
+        href="/documents/retainers"
+        className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors mb-6 group"
+      >
+        <div className="flex items-center gap-4">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal/10">
+            <FileText className="h-5 w-5 text-teal" />
+          </span>
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">Retainer Contracts</h3>
+            <p className="text-xs text-gray-500 mt-0.5">Build and manage monthly service retainer agreements</p>
+          </div>
+        </div>
+        <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
+      </Link>
+
       {/* Category cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {categories.map((cat) => {

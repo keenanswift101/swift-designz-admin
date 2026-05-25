@@ -32,5 +32,15 @@ export default async function DocumentViewPage({ params }: Props) {
 
   const hasPdf = hasTemplateContent(slug);
 
-  return <DocumentViewer slug={slug} label={template.label} hasPdf={hasPdf} />;
+  const PDF_ONLY_SLUGS = ["estore-retainer"];
+  const pdfPreviewUrl = PDF_ONLY_SLUGS.includes(slug)
+    ? `/api/docs/templates/${slug}`
+    : undefined;
+
+  const EDITABLE_SLUGS: Record<string, string> = {
+    "estore-retainer": "/documents/edit/estore-retainer",
+  };
+  const editUrl = role === "admin" ? EDITABLE_SLUGS[slug] : undefined;
+
+  return <DocumentViewer slug={slug} label={template.label} hasPdf={hasPdf} pdfPreviewUrl={pdfPreviewUrl} editUrl={editUrl} />;
 }

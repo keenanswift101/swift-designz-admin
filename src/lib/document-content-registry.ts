@@ -8,6 +8,7 @@ import {
   maintenanceRetainer,
   paymentPlanAgreement,
   projectHandover,
+  estoreRetainer,
 } from "./document-content-client";
 import {
   investorTermsAndConditions,
@@ -30,6 +31,7 @@ const DOCUMENT_CONTENT_REGISTRY: Record<string, TemplateDocument> = {
   "maintenance-retainer": maintenanceRetainer,
   "payment-plan-agreement": paymentPlanAgreement,
   "project-handover": projectHandover,
+  "estore-retainer": estoreRetainer,
   "investor-terms-and-conditions": investorTermsAndConditions,
   "investor-nda": investorNda,
   "investor-reporting-policy": investorReportingPolicy,
