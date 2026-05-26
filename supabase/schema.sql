@@ -177,8 +177,8 @@ CREATE TABLE income_entries (
 -- ALTER TABLE income_entries ADD COLUMN IF NOT EXISTS reconciled_at TIMESTAMPTZ;
 
 -- Business settings extra fields (add to existing DB via migration)
--- ALTER TABLE business_settings ADD COLUMN IF NOT EXISTS registration_date DATE;
--- ALTER TABLE business_settings ADD COLUMN IF NOT EXISTS directors TEXT;
+ALTER TABLE business_settings ADD COLUMN IF NOT EXISTS registration_date DATE;
+ALTER TABLE business_settings ADD COLUMN IF NOT EXISTS directors TEXT;
 
 -- Liabilities
 CREATE TABLE liabilities (
