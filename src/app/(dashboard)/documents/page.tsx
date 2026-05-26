@@ -17,18 +17,17 @@ export default async function DocumentsPage() {
   const supabase = await createClient();
   const { data: authUser } = await supabase.auth.getUser();
   const userId = authUser.user?.id;
-  const { data: profile } = userId
-    ? await supabase.from("profiles").select("role").eq("id", userId).single()
-    : { data: null };
-  const role = (profile?.role as UserRole | undefined) ?? null;
 
-  // Load sign-off counts for the current user
-  const { data: acks } = userId
-    ? await supabase
-        .from("sop_acknowledgements")
-        .select("sop_id")
-        .eq("user_id", userId)
-    : { data: [] };
+  const [{ data: profile }, { data: acks }] = await Promise.all([
+    userId
+      ? supabase.from("profiles").select("role").eq("id", userId).single()
+      : Promise.resolve({ data: null }),
+    userId
+      ? supabase.from("sop_acknowledgements").select("sop_id").eq("user_id", userId)
+      : Promise.resolve({ data: [] as { sop_id: string }[] }),
+  ]);
+
+  const role = (profile?.role as UserRole | undefined) ?? null;
   const signedIds = new Set((acks ?? []).map((a: { sop_id: string }) => a.sop_id));
 
   const categories = getCategoriesForRole(role);

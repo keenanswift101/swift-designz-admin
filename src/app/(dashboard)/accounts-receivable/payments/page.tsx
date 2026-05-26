@@ -8,17 +8,18 @@ import SendReceiptButton from "@/components/invoices/SendReceiptButton";
 export default async function PaymentsPage() {
   const supabase = await createClient();
 
-  const { data: payments } = await supabase
-    .from("payments")
-    .select(`
-      id, amount, method, reference, paid_at,
-      invoices(id, invoice_number, amount, paid_amount, clients(name, email, company))
-    `)
-    .order("paid_at", { ascending: false });
-
-  const { data: confirmations } = await supabase
-    .from("payment_confirmations")
-    .select("payment_id, receipt_number, sent_at");
+  const [{ data: payments }, { data: confirmations }] = await Promise.all([
+    supabase
+      .from("payments")
+      .select(`
+        id, amount, method, reference, paid_at,
+        invoices(id, invoice_number, amount, paid_amount, clients(name, email, company))
+      `)
+      .order("paid_at", { ascending: false }),
+    supabase
+      .from("payment_confirmations")
+      .select("payment_id, receipt_number, sent_at"),
+  ]);
 
   const sentMap = new Map(
     (confirmations ?? []).map((c) => [c.payment_id, { receiptNumber: c.receipt_number, sentAt: c.sent_at }])

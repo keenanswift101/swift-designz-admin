@@ -26,6 +26,8 @@ export default async function InvoiceDetailPage({
     { data: invoice },
     { data: items },
     { data: payments },
+    { data: creditNotes },
+    { data: confirmations },
   ] = await Promise.all([
     supabase
       .from("invoices")
@@ -42,20 +44,16 @@ export default async function InvoiceDetailPage({
       .select("*")
       .eq("invoice_id", id)
       .order("paid_at", { ascending: false }),
+    supabase
+      .from("credit_notes")
+      .select("id, credit_note_number, type, reason, amount, status, issued_at")
+      .eq("invoice_id", id)
+      .order("issued_at", { ascending: false }),
+    supabase
+      .from("payment_confirmations")
+      .select("payment_id")
+      .eq("invoice_id", id),
   ]);
-
-  // Fetch credit notes
-  const { data: creditNotes } = await supabase
-    .from("credit_notes")
-    .select("id, credit_note_number, type, reason, amount, status, issued_at")
-    .eq("invoice_id", id)
-    .order("issued_at", { ascending: false });
-
-  // Fetch which payments already have receipts
-  const { data: confirmations } = await supabase
-    .from("payment_confirmations")
-    .select("payment_id")
-    .eq("invoice_id", id);
   const receiptSentSet = new Set((confirmations ?? []).map((c) => c.payment_id));
 
   // Fetch linked quotation if this invoice was converted from one
