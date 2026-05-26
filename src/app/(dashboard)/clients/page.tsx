@@ -151,7 +151,7 @@ export default async function ClientsPage() {
                     <tr
                       key={client.id}
                       className={`border-b border-border/50 hover:bg-card transition-colors group ${
-                        hasOutstanding ? "bg-amber-950/10" : i % 2 === 1 ? "bg-card/20" : ""
+                        hasOutstanding ? "bg-amber-950/10" : i % 2 === 1 ? "bg-foreground/3" : ""
                       }`}
                     >
                       <td className="px-5 py-3">
@@ -186,7 +186,7 @@ export default async function ClientsPage() {
                           <span className="text-xs text-gray-600">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-sm font-mono text-right text-gray-300">
+                      <td className="px-4 py-3 text-sm font-mono text-right text-foreground/60">
                         {billing ? formatCurrency(billing.billed) : "—"}
                       </td>
                       <td className="px-4 py-3 text-right">

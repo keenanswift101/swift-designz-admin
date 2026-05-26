@@ -13,7 +13,7 @@ function Field({ label, value, onChange, textarea, placeholder }: {
   label: string; value: string; onChange: (v: string) => void;
   textarea?: boolean; placeholder?: string;
 }) {
-  const base = "w-full bg-white/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal placeholder:text-gray-600 resize-none";
+  const base = "w-full bg-foreground/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal placeholder:text-gray-600 resize-none";
   return (
     <div className="flex flex-col gap-1">
       <label className="text-xs text-gray-500 font-medium">{label}</label>
@@ -31,7 +31,7 @@ function BulletListEditor({ items, onChange }: { items: string[]; onChange: (v: 
         <div key={i} className="flex gap-2 items-start">
           <span className="text-teal mt-2.5 shrink-0 text-base">›</span>
           <textarea
-            className="flex-1 bg-white/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal resize-none min-h-[56px]"
+            className="flex-1 bg-foreground/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal resize-none min-h-[56px]"
             value={item}
             onChange={e => { const n = [...items]; n[i] = e.target.value; onChange(n); }}
           />
@@ -58,11 +58,11 @@ function ServiceItemEditor({ items, onChange, addLabel = "Add service" }: {
         <div key={i} className="flex gap-2 p-3 bg-white/3 border border-border/50 rounded-lg">
           <div className="flex-1 flex flex-col gap-2">
             <input placeholder="Service name"
-              className="bg-white/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal"
+              className="bg-foreground/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal"
               value={item.title}
               onChange={e => { const n = [...items]; n[i] = { ...n[i], title: e.target.value }; onChange(n); }} />
             <textarea placeholder="Description"
-              className="bg-white/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal resize-none min-h-[52px]"
+              className="bg-foreground/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal resize-none min-h-[52px]"
               value={item.description}
               onChange={e => { const n = [...items]; n[i] = { ...n[i], description: e.target.value }; onChange(n); }} />
           </div>
@@ -92,7 +92,7 @@ function ServiceLevelEditor({ items, onChange }: { items: ServiceLevel[]; onChan
         <div key={i} className="grid grid-cols-4 gap-2 p-2 bg-white/3 border border-border/50 rounded-lg items-start">
           {(["priority", "issueType", "response", "resolution"] as const).map(field => (
             <input key={field}
-              className="bg-white/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal"
+              className="bg-foreground/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal"
               value={row[field]}
               onChange={e => { const n = [...items]; n[i] = { ...n[i], [field]: e.target.value }; onChange(n); }} />
           ))}
@@ -112,11 +112,11 @@ function PaymentTermsEditor({ items, onChange }: { items: PaymentTermRow[]; onCh
       {items.map((row, i) => (
         <div key={i} className="flex gap-2 items-start p-2 bg-white/3 border border-border/50 rounded-lg">
           <input placeholder="Item"
-            className="w-36 shrink-0 bg-white/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal"
+            className="w-36 shrink-0 bg-foreground/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal"
             value={row.item}
             onChange={e => { const n = [...items]; n[i] = { ...n[i], item: e.target.value }; onChange(n); }} />
           <textarea placeholder="Detail"
-            className="flex-1 bg-white/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal resize-none min-h-[52px]"
+            className="flex-1 bg-foreground/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal resize-none min-h-[52px]"
             value={row.detail}
             onChange={e => { const n = [...items]; n[i] = { ...n[i], detail: e.target.value }; onChange(n); }} />
           <button type="button" onClick={() => onChange(items.filter((_, j) => j !== i))}
@@ -196,11 +196,12 @@ export default function RetainerEditor({ retainerId, initialName = "", initialCo
     if (!name.trim()) { toast.error("Please enter a retainer name."); return; }
     if (!c.documentTitle.trim()) { toast.error("Please enter a document title for the PDF."); return; }
 
+    toast.loading(retainerId ? "Saving retainer..." : "Creating retainer...");
     startTransition(async () => {
       if (retainerId) {
         const result = await updateRetainerAction(retainerId, name, c);
         if (result?.error) { toast.error(result.error); return; }
-        toast.success("Retainer saved successfully.");
+        toast.success("Retainer saved!");
       } else {
         const result = await createRetainerAction(name, c);
         if (result?.error) { toast.error(result.error); return; }
@@ -225,7 +226,7 @@ export default function RetainerEditor({ retainerId, initialName = "", initialCo
               <button
                 type="button"
                 onClick={() => setClientOpen(o => !o)}
-                className="w-full flex items-center gap-2 bg-white/5 border border-border rounded-lg text-sm px-3 py-2 focus:outline-none focus:border-teal text-left"
+                className="w-full flex items-center gap-2 bg-foreground/5 border border-border rounded-lg text-sm px-3 py-2 focus:outline-none focus:border-teal text-left"
               >
                 <User className="h-3.5 w-3.5 text-gray-500 shrink-0" />
                 {selectedClient ? (
@@ -241,19 +242,19 @@ export default function RetainerEditor({ retainerId, initialName = "", initialCo
                     <input
                       autoFocus
                       placeholder="Search clients…"
-                      className="w-full bg-white/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal"
+                      className="w-full bg-foreground/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal"
                       value={clientSearch}
                       onChange={e => setClientSearch(e.target.value)}
                     />
                   </div>
                   <div className="max-h-48 overflow-y-auto">
                     <button type="button" onClick={() => selectClient(null)}
-                      className="w-full text-left px-3 py-2 text-xs text-gray-500 hover:bg-white/5 transition-colors">
+                      className="w-full text-left px-3 py-2 text-xs text-gray-500 hover:bg-foreground/5 transition-colors">
                       — None (no client) —
                     </button>
                     {filteredClients.map(cl => (
                       <button key={cl.id} type="button" onClick={() => selectClient(cl)}
-                        className={`w-full text-left px-3 py-2 hover:bg-white/5 transition-colors ${cl.id === c.clientId ? "bg-teal/10" : ""}`}>
+                        className={`w-full text-left px-3 py-2 hover:bg-foreground/5 transition-colors ${cl.id === c.clientId ? "bg-teal/10" : ""}`}>
                         <p className="text-sm text-foreground">{cl.name}</p>
                         <p className="text-xs text-gray-500">{cl.email}{cl.company ? ` · ${cl.company}` : ""}</p>
                       </button>
@@ -368,7 +369,7 @@ export default function RetainerEditor({ retainerId, initialName = "", initialCo
       {/* ── Sticky save bar ── */}
       <div className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-card/90 backdrop-blur-sm border-t border-border">
         <button type="button" onClick={() => router.push("/documents/retainers")}
-          className="text-sm text-gray-500 hover:text-gray-300 transition-colors">
+          className="text-sm text-gray-500 hover:text-foreground/60 transition-colors">
           ← Back to Retainers
         </button>
         <button type="button" onClick={handleSave} disabled={isPending}

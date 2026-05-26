@@ -227,7 +227,7 @@ export default async function LeadsPage() {
                         ? "bg-teal/5"
                         : lead.status === "lost"
                           ? "opacity-60"
-                          : i % 2 === 1 ? "bg-card/20" : ""
+                          : i % 2 === 1 ? "bg-foreground/3" : ""
                     }`}
                   >
                     <td className="px-5 py-3">

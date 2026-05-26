@@ -6,6 +6,185 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { validateUploadedFile, secureFileName } from "@/lib/utils";
 import type { InvoiceStatus, PaymentMethod, IncomeCategory } from "@/types/database";
+import { sendInvoiceEmail, sendReceiptEmail } from "@/lib/email";
+import { renderToBuffer } from "@react-pdf/renderer";
+import InvoicePDF from "@/components/invoices/InvoicePDF";
+import ReceiptPDF from "@/components/invoices/ReceiptPDF";
+import fs from "fs";
+import path from "path";
+
+function loadLogoBase64(): string | null {
+  try {
+    const buf = fs.readFileSync(path.join(process.cwd(), "public", "logo.png"));
+    return `data:image/png;base64,${buf.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+
+// ── Send Invoice ──────────────────────────────────────────────────────────────
+
+export async function sendInvoiceAction(id: string): Promise<{ error: string } | { ok: true }> {
+  await requireAuth();
+  const supabase = await createClient();
+
+  const { data: invoice } = await supabase
+    .from("invoices")
+    .select("*, clients(name, email, phone, company), projects(name)")
+    .eq("id", id)
+    .single();
+
+  if (!invoice) return { error: "Invoice not found." };
+
+  const client = invoice.clients as { name: string; email: string; phone: string | null; company: string | null } | null;
+  if (!client?.email) return { error: "Client has no email address." };
+
+  const { data: items } = await supabase
+    .from("invoice_items")
+    .select("description, quantity, unit_rate, amount, sort_order")
+    .eq("invoice_id", id)
+    .order("sort_order");
+
+  const lineItems = (items ?? []) as { description: string; quantity: number; unit_rate: number; amount: number; sort_order: number }[];
+
+  let pdfBuffer: Buffer | undefined;
+  try {
+    pdfBuffer = await renderToBuffer(
+      InvoicePDF({
+        docType: "invoice",
+        invoiceNumber: invoice.invoice_number,
+        status: invoice.status,
+        dueDate: invoice.due_date,
+        createdAt: invoice.created_at,
+        clientName: client.name,
+        clientEmail: client.email,
+        clientCompany: client.company,
+        clientPhone: client.phone,
+        projectName: (invoice.projects as { name: string } | null)?.name ?? null,
+        items: lineItems.map((i) => ({
+          description: i.description,
+          quantity: i.quantity,
+          unit_rate: i.unit_rate,
+          amount: i.amount,
+        })),
+        total: invoice.amount,
+        discountAmount: invoice.discount_amount ?? 0,
+        paidAmount: invoice.paid_amount,
+        notes: invoice.notes,
+        paymentPlanEnabled: invoice.payment_plan_enabled ?? false,
+        installmentCount: invoice.installment_count ?? null,
+        installmentInterval: invoice.installment_interval ?? null,
+        paymentPlanType: invoice.payment_plan_type ?? null,
+        paymentPlanSchedule: invoice.payment_plan_schedule ?? null,
+        payments: [],
+        logoSrc: loadLogoBase64(),
+      })
+    );
+  } catch {
+    // PDF failure is non-fatal
+  }
+
+  await sendInvoiceEmail({
+    to: client.email,
+    clientName: client.name,
+    invoiceNumber: invoice.invoice_number,
+    total: invoice.amount,
+    dueDate: invoice.due_date,
+    lineItems,
+    notes: invoice.notes,
+    pdfBuffer,
+    paymentPlanEnabled: invoice.payment_plan_enabled ?? false,
+    paymentPlanSchedule: invoice.payment_plan_schedule ?? null,
+    installmentNumber: invoice.installment_number ?? null,
+  }).catch(() => {});
+
+  await supabase.from("invoices").update({ sent_at: new Date().toISOString() }).eq("id", id);
+
+  // Schedule payment reminders for this invoice
+  try { await supabase.rpc("schedule_invoice_reminders", { p_invoice_id: id }); } catch { /* non-fatal */ }
+
+  revalidatePath(`/invoices/${id}`);
+  revalidatePath("/accounts-receivable/reminders");
+  return { ok: true };
+}
+
+// ── Send Receipt ─────────────────────────────────────────────────────────────
+
+export async function sendReceiptAction(paymentId: string): Promise<{ error: string } | { ok: true }> {
+  await requireAuth();
+  const supabase = await createClient();
+
+  const { data: payment } = await supabase
+    .from("payments")
+    .select("*, invoices(id, invoice_number, amount, paid_amount, quotation_id, clients(name, email, company))")
+    .eq("id", paymentId)
+    .single();
+
+  if (!payment) return { error: "Payment not found." };
+
+  const invoice = payment.invoices as {
+    id: string; invoice_number: string; amount: number; paid_amount: number; quotation_id: string | null;
+    clients: { name: string; email: string; company: string | null } | null;
+  } | null;
+
+  if (!invoice) return { error: "Invoice not found." };
+  const client = invoice.clients;
+  if (!client?.email) return { error: "Client has no email address." };
+
+  const { data: arNum } = await supabase.rpc("generate_ar_number", { p_type: "receipt" });
+
+  const balance = invoice.amount - invoice.paid_amount;
+
+  let pdfBuffer: Buffer | undefined;
+  try {
+    pdfBuffer = await renderToBuffer(
+      ReceiptPDF({
+        receiptNumber: arNum as string,
+        invoiceNumber: invoice.invoice_number,
+        clientName: client.name,
+        clientEmail: client.email,
+        clientCompany: client.company,
+        paymentAmount: payment.amount,
+        paymentMethod: payment.method,
+        paymentReference: payment.reference,
+        paymentDate: payment.paid_at,
+        invoiceTotal: invoice.amount,
+        invoicePaidTotal: invoice.paid_amount,
+        logoSrc: loadLogoBase64(),
+      })
+    );
+  } catch {
+    // PDF failure is non-fatal
+  }
+
+  await supabase.from("payment_confirmations").insert({
+    receipt_number: arNum as string,
+    invoice_id: invoice.id,
+    payment_id: paymentId,
+    quotation_id: invoice.quotation_id ?? null,
+    amount: payment.amount,
+    payment_method: payment.method,
+    payment_date: payment.paid_at.split("T")[0],
+    sent_at: new Date().toISOString(),
+    sent_to: client.email,
+  });
+
+  await sendReceiptEmail({
+    to: client.email,
+    clientName: client.name,
+    receiptNumber: arNum as string,
+    invoiceNumber: invoice.invoice_number,
+    paymentAmount: payment.amount,
+    paymentMethod: payment.method,
+    paymentDate: payment.paid_at,
+    invoiceTotal: invoice.amount,
+    balance,
+    pdfBuffer,
+  }).catch(() => {});
+
+  revalidatePath(`/invoices/${invoice.id}`);
+  return { ok: true };
+}
 
 // ── Create Invoice ────────────────────────────────────────────────────────────
 
@@ -388,4 +567,54 @@ export async function deletePaymentAction(paymentId: string, invoiceId: string) 
   revalidatePath("/accounting/income");
   revalidatePath("/accounting");
   return { success: true };
+}
+
+// ── Credit Notes ──────────────────────────────────────────────────────────────
+
+export async function createCreditNoteAction(formData: FormData): Promise<{ error: string } | { ok: true }> {
+  const user = await requireAuth();
+  const supabase = await createClient();
+
+  const invoiceId = formData.get("invoice_id") as string;
+  const reason = (formData.get("reason") as string)?.trim();
+  const amountRaw = parseFloat(formData.get("amount") as string);
+  const type = (formData.get("type") as string) || "adjustment";
+
+  if (!reason) return { error: "Reason is required." };
+  if (isNaN(amountRaw) || amountRaw <= 0) return { error: "Invalid amount." };
+
+  const amount = Math.round(amountRaw * 100);
+
+  const { data: cnNumber } = await supabase.rpc("generate_ar_number", { p_type: "credit_note" });
+
+  const { error } = await supabase.from("credit_notes").insert({
+    credit_note_number: cnNumber as string,
+    invoice_id: invoiceId,
+    type,
+    reason,
+    amount,
+    status: "issued",
+    issued_at: new Date().toISOString(),
+    created_by: user.id,
+  });
+
+  if (error) return { error: error.message };
+
+  revalidatePath(`/invoices/${invoiceId}`);
+  return { ok: true };
+}
+
+export async function voidCreditNoteAction(creditNoteId: string, invoiceId: string): Promise<{ error: string } | { ok: true }> {
+  await requireAuth();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("credit_notes")
+    .update({ status: "voided" })
+    .eq("id", creditNoteId);
+
+  if (error) return { error: error.message };
+
+  revalidatePath(`/invoices/${invoiceId}`);
+  return { ok: true };
 }

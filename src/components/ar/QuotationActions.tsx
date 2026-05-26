@@ -25,6 +25,7 @@ export default function QuotationActions({ id, action }: Props) {
     }
 
     setLoading(true);
+    toast.loading(action === "send" ? "Sending quotation..." : "Cancelling quotation...");
     try {
       const result = action === "send"
         ? await sendQuotationAction(id)
@@ -33,7 +34,7 @@ export default function QuotationActions({ id, action }: Props) {
       if (result?.error) {
         toast.error(result.error);
       } else {
-        toast.success(action === "send" ? "Quotation marked as sent" : "Quotation cancelled");
+        toast.success(action === "send" ? "Quotation sent!" : "Quotation cancelled.");
         router.refresh();
       }
     } finally {
@@ -49,7 +50,7 @@ export default function QuotationActions({ id, action }: Props) {
         className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-teal/10 text-teal border border-teal/25 hover:bg-teal/20 transition-colors text-xs font-medium disabled:opacity-50"
       >
         {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
-        Mark as Sent
+        Send Quotation
       </button>
     );
   }

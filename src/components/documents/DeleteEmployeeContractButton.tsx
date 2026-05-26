@@ -11,9 +11,11 @@ export default function DeleteEmployeeContractButton({ id, name }: { id: string;
 
   function handleDelete() {
     if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+    toast.loading("Deleting contract...");
     startTransition(async () => {
       const result = await deleteEmployeeContractAction(id);
-      if (result?.error) toast.error(result.error);
+      if (result?.error) { toast.error(result.error); return; }
+      toast.success("Contract deleted.");
     });
   }
 

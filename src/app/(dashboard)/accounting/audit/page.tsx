@@ -214,7 +214,7 @@ export default async function AuditPage({
                   <tr
                     key={`${entry.type}-${entry.id}`}
                     className={`border-b border-border/50 hover:bg-card transition-colors ${
-                      entry.flagged ? "bg-amber-950/20" : i % 2 === 1 ? "bg-card/20" : ""
+                      entry.flagged ? "bg-amber-950/20" : i % 2 === 1 ? "bg-foreground/3" : ""
                     }`}
                   >
                     {/* Flag indicator */}
@@ -236,7 +236,7 @@ export default async function AuditPage({
                         className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                           entry.type === "income"
                             ? "bg-teal/10 text-teal"
-                            : "bg-red-950 text-red-400"
+                            : "bg-red-500/15 text-red-400"
                         }`}
                       >
                         {entry.type === "income" ? "Income" : "Expense"}

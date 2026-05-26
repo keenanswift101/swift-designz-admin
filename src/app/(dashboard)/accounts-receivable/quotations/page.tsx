@@ -115,7 +115,7 @@ export default async function QuotationsPage() {
                 {quotations.map((q) => {
                   const cfg = STATUS_CONFIG[q.status] ?? STATUS_CONFIG.draft;
                   return (
-                    <tr key={q.id} className="border-b border-border/50 hover:bg-white/2 transition-colors">
+                    <tr key={q.id} className="border-b border-border/50 hover:bg-foreground/3 transition-colors">
                       <td className="px-4 py-3">
                         <span className="text-xs font-mono text-gray-400">{q.quote_number}</span>
                       </td>
@@ -142,7 +142,7 @@ export default async function QuotationsPage() {
                       <td className="px-4 py-3">
                         <Link
                           href={`/accounts-receivable/quotations/${q.id}`}
-                          className="p-1.5 rounded hover:bg-white/5 text-gray-500 hover:text-teal transition-colors flex items-center"
+                          className="p-1.5 rounded hover:bg-foreground/5 text-gray-500 hover:text-teal transition-colors flex items-center"
                         >
                           <ChevronRight className="h-4 w-4" />
                         </Link>

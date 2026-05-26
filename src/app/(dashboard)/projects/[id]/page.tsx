@@ -113,7 +113,7 @@ export default async function ProjectDetailPage({
             <Calendar className="h-3.5 w-3.5 text-teal" />
             <span className="text-xs text-gray-500 uppercase tracking-wider">Dates</span>
           </div>
-          <span className="text-xs text-gray-300">
+          <span className="text-xs text-foreground/60">
             {project.start_date ? formatDate(project.start_date) : "—"}
             {" → "}
             {project.due_date ? formatDate(project.due_date) : "—"}
@@ -151,7 +151,7 @@ export default async function ProjectDetailPage({
           {project.notes && (
             <div className="glass-card p-6">
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Notes</h2>
-              <p className="text-sm text-gray-300 whitespace-pre-wrap">{project.notes}</p>
+              <p className="text-sm text-foreground/60 whitespace-pre-wrap">{project.notes}</p>
             </div>
           )}
         </div>
@@ -169,13 +169,13 @@ export default async function ProjectDetailPage({
               {project.service && (
                 <div className="flex justify-between items-center">
                   <dt className="text-xs text-gray-500">Service</dt>
-                  <dd className="text-sm text-gray-300">{project.service}</dd>
+                  <dd className="text-sm text-foreground/60">{project.service}</dd>
                 </div>
               )}
               {project.package && (
                 <div className="flex justify-between items-center">
                   <dt className="text-xs text-gray-500">Package</dt>
-                  <dd className="text-sm text-gray-300">{project.package}</dd>
+                  <dd className="text-sm text-foreground/60">{project.package}</dd>
                 </div>
               )}
               <div className="flex justify-between items-center">

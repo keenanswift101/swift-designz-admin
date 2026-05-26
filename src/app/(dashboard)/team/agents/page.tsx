@@ -157,7 +157,7 @@ export default async function AgentsPage() {
                     <tr
                       key={agent.id}
                       className={`border-b border-border/50 hover:bg-card transition-colors group ${
-                        isInactive ? "opacity-50" : i % 2 === 1 ? "bg-card/20" : ""
+                        isInactive ? "opacity-50" : i % 2 === 1 ? "bg-foreground/3" : ""
                       }`}
                     >
                       <td className="px-5 py-3">

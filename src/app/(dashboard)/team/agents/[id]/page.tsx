@@ -67,7 +67,7 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ id
           {agent.config_notes && (
             <div className="glass-card p-6">
               <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">Configuration Notes</h2>
-              <p className="text-sm text-gray-300 whitespace-pre-wrap" style={{ overflowWrap: "break-word" }}>{agent.config_notes}</p>
+              <p className="text-sm text-foreground/60 whitespace-pre-wrap" style={{ overflowWrap: "break-word" }}>{agent.config_notes}</p>
             </div>
           )}
         </div>

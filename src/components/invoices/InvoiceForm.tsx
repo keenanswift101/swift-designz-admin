@@ -410,7 +410,7 @@ export default function InvoiceForm({
                         className="w-full bg-transparent border-0 text-sm text-foreground text-center focus:outline-none"
                       />
                     </td>
-                    <td className="px-3 py-2 text-right text-sm text-gray-300 font-mono">
+                    <td className="px-3 py-2 text-right text-sm text-foreground/60 font-mono">
                       {formatCurrency(lineAmount)}
                     </td>
                     <td className="px-2 py-2 text-center">

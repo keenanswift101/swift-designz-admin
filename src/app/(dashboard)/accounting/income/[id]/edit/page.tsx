@@ -219,7 +219,7 @@ export default async function EditIncomePage({
                   <tbody className="divide-y divide-border">
                     {invoicePayments.map((pay) => (
                       <tr key={pay.id} className="hover:bg-card/50">
-                        <td className="px-5 py-3 text-sm text-gray-300">{formatDate(pay.paid_at)}</td>
+                        <td className="px-5 py-3 text-sm text-foreground/60">{formatDate(pay.paid_at)}</td>
                         <td className="px-3 py-3 text-sm text-gray-400 capitalize">{pay.method}</td>
                         <td className="px-3 py-3 text-sm text-gray-500 font-mono">
                           {pay.reference || "—"}
@@ -246,7 +246,7 @@ export default async function EditIncomePage({
             {invoice.notes && (
               <div className="glass-card p-5">
                 <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Notes</h3>
-                <p className="text-sm text-gray-300 whitespace-pre-wrap">{invoice.notes}</p>
+                <p className="text-sm text-foreground/60 whitespace-pre-wrap">{invoice.notes}</p>
               </div>
             )}
 

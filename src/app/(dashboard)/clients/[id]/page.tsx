@@ -76,7 +76,7 @@ export default async function ClientDetailPage({
                     <Link
                       href={`/api/docs/${id}/${t.slug}`}
                       target="_blank"
-                      className="flex-1 text-sm text-gray-300 hover:text-foreground transition-colors"
+                      className="flex-1 text-sm text-foreground/60 hover:text-foreground transition-colors"
                     >
                       {t.label}
                     </Link>
@@ -141,7 +141,7 @@ export default async function ClientDetailPage({
             {client.notes && (
               <div className="mt-4 pt-4 border-t border-border">
                 <dt className="text-xs text-gray-500 mb-1">Notes</dt>
-                <dd className="text-sm text-gray-300 whitespace-pre-wrap">{client.notes}</dd>
+                <dd className="text-sm text-foreground/60 whitespace-pre-wrap">{client.notes}</dd>
               </div>
             )}
           </div>
@@ -180,7 +180,7 @@ export default async function ClientDetailPage({
                         {p.service && <p className="text-xs text-gray-500 mt-0.5">{p.service}</p>}
                       </td>
                       <td className="px-6 py-3"><StatusBadge status={p.status} /></td>
-                      <td className="px-6 py-3 text-sm text-gray-300">
+                      <td className="px-6 py-3 text-sm text-foreground/60">
                         {p.quoted_amount ? formatCurrency(p.quoted_amount) : "—"}
                       </td>
                       <td className="px-6 py-3 text-sm text-gray-500">
@@ -220,7 +220,7 @@ export default async function ClientDetailPage({
                   {invoices.map((inv) => (
                     <tr key={inv.id} className="hover:bg-card transition-colors">
                       <td className="px-6 py-3 text-sm font-medium text-foreground">{inv.invoice_number}</td>
-                      <td className="px-6 py-3 text-sm text-gray-300">{formatCurrency(inv.amount)}</td>
+                      <td className="px-6 py-3 text-sm text-foreground/60">{formatCurrency(inv.amount)}</td>
                       <td className="px-6 py-3"><StatusBadge status={inv.status} /></td>
                       <td className="px-6 py-3 text-sm text-gray-500">{formatDate(inv.due_date)}</td>
                     </tr>
@@ -270,11 +270,11 @@ export default async function ClientDetailPage({
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-gray-500">Source</span>
-                  <span className="text-sm text-gray-300">{linkedLead.source.replace("_", " ")}</span>
+                  <span className="text-sm text-foreground/60">{linkedLead.source.replace("_", " ")}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-gray-500">Converted</span>
-                  <span className="text-sm text-gray-300">{formatDate(linkedLead.created_at)}</span>
+                  <span className="text-sm text-foreground/60">{formatDate(linkedLead.created_at)}</span>
                 </div>
               </div>
             </div>

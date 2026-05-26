@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 const INVESTOR_ALLOWED_PATHS = ["/", "/investors", "/projects", "/accounting/reports", "/equipment", "/documents"];
-const PUBLIC_PATHS = ["/login", "/auth/callback", "/auth/set-password", "/auth/magic"];
+const PUBLIC_PATHS = ["/login", "/auth/callback", "/auth/set-password", "/auth/magic", "/accept", "/api/accept", "/api/docs/quotations", "/api/leads"];
 const INVESTOR_ONBOARDING_PATH = "/investors/onboarding";
 const STATIC_FILE_RE = /\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js|map|txt|xml|html|pdf)$/i;
 

@@ -93,7 +93,7 @@ export default async function LeadDetailPage({ params }: Props) {
               {details.map(({ label, value }) => (
                 <div key={label}>
                   <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">{label}</dt>
-                  <dd className="mt-1 text-sm text-gray-300">{value || "—"}</dd>
+                  <dd className="mt-1 text-sm text-foreground/60">{value || "—"}</dd>
                 </div>
               ))}
             </dl>
@@ -103,7 +103,7 @@ export default async function LeadDetailPage({ params }: Props) {
           {typedLead.message && (
             <div className="glass-card p-6">
               <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Message</h3>
-              <p className="text-sm text-gray-300 whitespace-pre-wrap">{typedLead.message}</p>
+              <p className="text-sm text-foreground/60 whitespace-pre-wrap">{typedLead.message}</p>
             </div>
           )}
 
@@ -111,7 +111,7 @@ export default async function LeadDetailPage({ params }: Props) {
           {typedLead.notes && (
             <div className="glass-card p-6">
               <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Notes</h3>
-              <p className="text-sm text-gray-300 whitespace-pre-wrap">{typedLead.notes}</p>
+              <p className="text-sm text-foreground/60 whitespace-pre-wrap">{typedLead.notes}</p>
             </div>
           )}
         </div>

@@ -104,7 +104,7 @@ export default function SopModal({ item, isSigned }: Props) {
                 {(item.sections ?? []).map((section, i) => (
                   <div key={i}>
                     <h3 className="text-sm font-semibold text-teal mb-2">{section.heading}</h3>
-                    <div className="text-sm text-gray-300 leading-relaxed whitespace-pre-line">
+                    <div className="text-sm text-foreground/60 leading-relaxed whitespace-pre-line">
                       {section.body}
                     </div>
                   </div>
@@ -130,7 +130,7 @@ export default function SopModal({ item, isSigned }: Props) {
                         onChange={(e) => setAgreed(e.target.checked)}
                         className="mt-0.5 h-4 w-4 rounded border-border accent-teal cursor-pointer"
                       />
-                      <span className="text-sm text-gray-300">
+                      <span className="text-sm text-foreground/60">
                         I have read and understood this document and agree to comply with its requirements.
                       </span>
                     </label>

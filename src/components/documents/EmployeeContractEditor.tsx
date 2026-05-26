@@ -13,7 +13,7 @@ function Field({ label, value, onChange, textarea, placeholder }: {
   label: string; value: string; onChange: (v: string) => void;
   textarea?: boolean; placeholder?: string;
 }) {
-  const base = "w-full bg-white/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal placeholder:text-gray-600 resize-none";
+  const base = "w-full bg-foreground/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal placeholder:text-gray-600 resize-none";
   return (
     <div className="flex flex-col gap-1">
       <label className="text-xs text-gray-500 font-medium">{label}</label>
@@ -31,7 +31,7 @@ function BulletListEditor({ items, onChange }: { items: string[]; onChange: (v: 
         <div key={i} className="flex gap-2 items-start">
           <span className="text-teal mt-2.5 shrink-0 text-base">›</span>
           <textarea
-            className="flex-1 bg-white/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal resize-none min-h-[56px]"
+            className="flex-1 bg-foreground/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal resize-none min-h-[56px]"
             value={item}
             onChange={e => { const n = [...items]; n[i] = e.target.value; onChange(n); }}
           />
@@ -119,14 +119,16 @@ export default function EmployeeContractEditor({ contractId, initialName = "", i
     if (!name.trim()) { toast.error("Please enter a contract name."); return; }
     if (!c.employeeName.trim()) { toast.error("Please enter the employee name."); return; }
 
+    toast.loading(contractId ? "Saving contract..." : "Creating contract...");
     startTransition(async () => {
       if (contractId) {
         const result = await updateEmployeeContractAction(contractId, name, c);
         if (result?.error) { toast.error(result.error); return; }
-        toast.success("Contract saved successfully.");
+        toast.success("Contract saved!");
       } else {
         const result = await createEmployeeContractAction(name, "temp", c);
         if (result?.error) { toast.error(result.error); return; }
+        toast.success("Contract created!");
       }
     });
   }
@@ -161,7 +163,7 @@ export default function EmployeeContractEditor({ contractId, initialName = "", i
             <label className="text-xs text-gray-500 font-medium">Link to team member (optional)</label>
             <div className="relative">
               <button type="button" onClick={() => setEmpOpen(o => !o)}
-                className="w-full flex items-center gap-2 bg-white/5 border border-border rounded-lg text-sm px-3 py-2 focus:outline-none focus:border-teal text-left">
+                className="w-full flex items-center gap-2 bg-foreground/5 border border-border rounded-lg text-sm px-3 py-2 focus:outline-none focus:border-teal text-left">
                 <User className="h-3.5 w-3.5 text-gray-500 shrink-0" />
                 {selectedEmployee
                   ? <span className="flex-1 text-foreground truncate">{selectedEmployee.name} — {selectedEmployee.role}</span>
@@ -172,17 +174,17 @@ export default function EmployeeContractEditor({ contractId, initialName = "", i
                 <div className="absolute z-50 mt-1 w-full bg-card border border-border rounded-lg shadow-xl overflow-hidden">
                   <div className="p-2 border-b border-border">
                     <input autoFocus placeholder="Search by name or role…"
-                      className="w-full bg-white/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal"
+                      className="w-full bg-foreground/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal"
                       value={empSearch} onChange={e => setEmpSearch(e.target.value)} />
                   </div>
                   <div className="max-h-48 overflow-y-auto">
                     <button type="button" onClick={() => selectEmployee(null)}
-                      className="w-full text-left px-3 py-2 text-xs text-gray-500 hover:bg-white/5 transition-colors">
+                      className="w-full text-left px-3 py-2 text-xs text-gray-500 hover:bg-foreground/5 transition-colors">
                       — None —
                     </button>
                     {filteredEmployees.map(emp => (
                       <button key={emp.id} type="button" onClick={() => selectEmployee(emp)}
-                        className={`w-full text-left px-3 py-2 hover:bg-white/5 transition-colors ${emp.id === c.employeeDbId ? "bg-teal/10" : ""}`}>
+                        className={`w-full text-left px-3 py-2 hover:bg-foreground/5 transition-colors ${emp.id === c.employeeDbId ? "bg-teal/10" : ""}`}>
                         <p className="text-sm text-foreground">{emp.name}</p>
                         <p className="text-xs text-gray-500">{emp.role} · {emp.department}</p>
                       </button>
@@ -295,7 +297,7 @@ export default function EmployeeContractEditor({ contractId, initialName = "", i
       {/* ── Sticky save bar ── */}
       <div className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-card/90 backdrop-blur-sm border-t border-border">
         <button type="button" onClick={() => router.push("/documents/employee-contracts")}
-          className="text-sm text-gray-500 hover:text-gray-300 transition-colors">
+          className="text-sm text-gray-500 hover:text-foreground/60 transition-colors">
           ← Back to Contracts
         </button>
         <button type="button" onClick={handleSave} disabled={isPending}

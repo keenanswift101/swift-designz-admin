@@ -3,7 +3,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
-import type { QuotationLineItem, DiscountType } from "@/types/accounts-receivable";
+import { sendQuotationEmail } from "@/lib/email";
+import { renderToBuffer } from "@react-pdf/renderer";
+import QuotationPDF from "@/components/documents/QuotationPDF";
+import type { QuotationLineItem, DiscountType, PaymentPlanInstallment } from "@/types/accounts-receivable";
 
 interface QuotationPayload {
   clientId: string;
@@ -15,6 +18,7 @@ interface QuotationPayload {
   terms: string;
   paymentPlanEnabled: boolean;
   paymentPlanType: string | null;
+  paymentPlanSchedule: PaymentPlanInstallment[] | null;
 }
 
 function computeTotals(items: QuotationLineItem[], discountType: DiscountType, discountValue: number) {
@@ -53,6 +57,7 @@ export async function createQuotationAction(payload: QuotationPayload): Promise<
       terms: payload.terms || null,
       payment_plan_enabled: payload.paymentPlanEnabled,
       payment_plan_type: payload.paymentPlanType || null,
+      payment_plan_schedule: payload.paymentPlanSchedule ?? null,
       created_by: user.id,
       updated_by: user.id,
     })
@@ -101,6 +106,7 @@ export async function updateQuotationAction(
     terms: payload.terms || null,
     payment_plan_enabled: payload.paymentPlanEnabled,
     payment_plan_type: payload.paymentPlanType || null,
+    payment_plan_schedule: payload.paymentPlanSchedule ?? null,
     updated_by: user.id,
   }).eq("id", id);
 
@@ -149,6 +155,74 @@ export async function sendQuotationAction(id: string): Promise<{ error: string }
   }).eq("id", id).eq("status", "draft");
 
   if (error) return { error: error.message };
+
+  // Fetch quotation data for email + PDF generation
+  const { data: quote } = await supabase
+    .from("quotations")
+    .select(`
+      quote_number, total, subtotal, discount_type, discount_value, discount_amount,
+      acceptance_token, notes, terms, payment_plan_enabled, payment_plan_type,
+      payment_plan_schedule, created_at,
+      clients(name, email, phone, company),
+      projects(name),
+      quotation_line_items(description, quantity, unit_rate, amount, sort_order)
+    `)
+    .eq("id", id)
+    .single();
+
+  if (quote) {
+    const client = quote.clients as unknown as { name: string; email: string; phone: string | null; company: string | null } | null;
+    const project = quote.projects as unknown as { name: string } | null;
+    const lineItems = (quote.quotation_line_items as { description: string; quantity: number; unit_rate: number; amount: number; sort_order: number }[] ?? [])
+      .sort((a, b) => a.sort_order - b.sort_order);
+
+    if (client?.email) {
+      // Generate PDF attachment (non-fatal if it fails)
+      let pdfBuffer: Buffer | undefined;
+      try {
+        pdfBuffer = await renderToBuffer(
+          QuotationPDF({
+            quoteNumber: quote.quote_number,
+            clientName: client.name,
+            clientEmail: client.email,
+            clientCompany: client.company,
+            clientPhone: client.phone,
+            projectName: project?.name,
+            lineItems,
+            subtotal: quote.subtotal,
+            discountType: quote.discount_type,
+            discountValue: quote.discount_value,
+            discountAmount: quote.discount_amount,
+            total: quote.total,
+            notes: quote.notes,
+            terms: quote.terms,
+            paymentPlanEnabled: quote.payment_plan_enabled,
+            paymentPlanType: quote.payment_plan_type,
+            paymentPlanSchedule: quote.payment_plan_schedule as { label: string; amount_cents: number; due_date?: string }[] | null,
+            createdAt: quote.created_at,
+            expiresAt: expiresAt.toISOString(),
+          })
+        );
+      } catch {
+        // PDF generation failure is non-fatal
+      }
+
+      await sendQuotationEmail({
+        to: client.email,
+        clientName: client.name,
+        quoteNumber: quote.quote_number,
+        total: quote.total,
+        expiresAt: expiresAt.toISOString(),
+        acceptanceToken: quote.acceptance_token as string,
+        lineItems,
+        notes: quote.notes,
+        pdfBuffer,
+      }).catch(() => {
+        // Email failure is non-fatal — quotation is already marked sent
+      });
+    }
+  }
+
   revalidatePath("/accounts-receivable/quotations");
   revalidatePath(`/accounts-receivable/quotations/${id}`);
 }
@@ -163,4 +237,106 @@ export async function cancelQuotationAction(id: string): Promise<{ error: string
   if (error) return { error: error.message };
   revalidatePath("/accounts-receivable/quotations");
   revalidatePath(`/accounts-receivable/quotations/${id}`);
+}
+
+export async function convertToInvoiceAction(quotationId: string): Promise<{ error: string } | { invoiceId: string }> {
+  const user = await requireAdmin();
+  const supabase = await createClient();
+
+  const { data: quote } = await supabase
+    .from("quotations")
+    .select("*, quotation_line_items(description, quantity, unit_rate, amount, sort_order), clients(name)")
+    .eq("id", quotationId)
+    .eq("status", "accepted")
+    .single();
+
+  if (!quote) return { error: "Quotation not found or not in accepted status." };
+
+  type PlanInstallment = { label: string; amount_cents: number; due_date: string; installment_number: number };
+  const schedule = (quote.payment_plan_schedule ?? []) as PlanInstallment[];
+  const hasInstallments = quote.payment_plan_enabled && schedule.length > 1;
+
+  // Amount for this invoice: first installment if plan exists, otherwise full total
+  const invoiceAmount = hasInstallments ? schedule[0].amount_cents : quote.total;
+  const installmentNumber = hasInstallments ? 1 : null;
+
+  // Due date: first installment's due_date if plan exists, otherwise +14 days
+  const defaultDue = new Date();
+  defaultDue.setDate(defaultDue.getDate() + 14);
+  const dueDate = hasInstallments && schedule[0].due_date
+    ? schedule[0].due_date
+    : defaultDue.toISOString().split("T")[0];
+
+  const { data: arNum } = await supabase.rpc("generate_ar_number", { p_type: "invoice" });
+
+  const { data: invoice, error: invError } = await supabase
+    .from("invoices")
+    .insert({
+      invoice_number: arNum as string,
+      ar_number: arNum as string,
+      client_id: quote.client_id,
+      project_id: quote.project_id || null,
+      quotation_id: quotationId,
+      doc_type: "invoice",
+      category: "web_dev",
+      amount: invoiceAmount,
+      discount_amount: hasInstallments ? 0 : (quote.discount_amount ?? 0),
+      discount_type: quote.discount_type,
+      status: "sent",
+      due_date: dueDate,
+      notes: quote.notes || null,
+      created_by: user.id,
+      payment_plan_enabled: quote.payment_plan_enabled,
+      payment_plan_type: quote.payment_plan_type || null,
+      payment_plan_schedule: quote.payment_plan_schedule || null,
+      installment_number: installmentNumber,
+    })
+    .select("id")
+    .single();
+
+  if (invError || !invoice) return { error: invError?.message ?? "Failed to create invoice." };
+
+  const lineItems = (quote.quotation_line_items as { description: string; quantity: number; unit_rate: number; amount: number; sort_order: number }[])
+    .sort((a, b) => a.sort_order - b.sort_order);
+
+  if (lineItems.length > 0) {
+    const { error: itemsError } = await supabase.from("invoice_items").insert(
+      lineItems.map((item) => ({
+        invoice_id: invoice.id,
+        description: item.description,
+        quantity: item.quantity,
+        unit_rate: item.unit_rate,
+        amount: item.amount,
+        sort_order: item.sort_order,
+      }))
+    );
+    if (itemsError) return { error: itemsError.message };
+  }
+
+  // Schedule notifications for remaining installments
+  if (hasInstallments && schedule.length > 1) {
+    const clientName = (quote.clients as { name: string } | null)?.name ?? "Client";
+    const fmtR = (c: number) => `R${(c / 100).toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const remaining = schedule.slice(1);
+    await supabase.from("notifications").insert(
+      remaining.map((inst) => ({
+        type: "installment_due",
+        title: `Installment ${inst.installment_number} due — ${clientName}`,
+        body: `${inst.label}: ${fmtR(inst.amount_cents)} — send the next invoice for this payment plan.`,
+        link: `/invoices/${invoice.id}`,
+        scheduled_for: new Date(inst.due_date + "T08:00:00").toISOString(),
+      }))
+    );
+  }
+
+  await supabase.from("quotations").update({
+    status: "converted",
+    updated_by: user.id,
+  }).eq("id", quotationId);
+
+  revalidatePath("/accounts-receivable/quotations");
+  revalidatePath(`/accounts-receivable/quotations/${quotationId}`);
+  revalidatePath("/invoices");
+
+  return { invoiceId: invoice.id };
 }

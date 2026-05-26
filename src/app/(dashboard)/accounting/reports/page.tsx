@@ -220,7 +220,7 @@ export default async function ReportsPage() {
                 const total = Object.values(vals).reduce((s, v) => s + v, 0);
                 return (
                   <tr key={`inc-${cat}`} className="border-b border-border/50 hover:bg-card">
-                    <td className="px-5 py-2.5 text-sm text-gray-300 sticky left-0 bg-background">{incomeCategoryLabels[cat] ?? cat}</td>
+                    <td className="px-5 py-2.5 text-sm text-foreground/60 sticky left-0 bg-background">{incomeCategoryLabels[cat] ?? cat}</td>
                     {sortedMonths.map((m) => (
                       <td key={m} className="px-4 py-2.5 text-sm text-gray-400 text-right font-mono">{vals[m] ? formatCurrency(vals[m]) : "—"}</td>
                     ))}
@@ -258,7 +258,7 @@ export default async function ReportsPage() {
                 const total = Object.values(vals).reduce((s, v) => s + v, 0);
                 return (
                   <tr key={`exp-${cat}`} className="border-b border-border/50 hover:bg-card">
-                    <td className="px-5 py-2.5 text-sm text-gray-300 sticky left-0 bg-background">{expenseCategoryLabels[cat] ?? cat}</td>
+                    <td className="px-5 py-2.5 text-sm text-foreground/60 sticky left-0 bg-background">{expenseCategoryLabels[cat] ?? cat}</td>
                     {sortedMonths.map((m) => (
                       <td key={m} className="px-4 py-2.5 text-sm text-gray-400 text-right font-mono">{vals[m] ? formatCurrency(vals[m]) : "—"}</td>
                     ))}

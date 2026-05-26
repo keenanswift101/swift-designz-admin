@@ -11,7 +11,7 @@ import type { EstoreRetainerContent, ServiceItem, ServiceLevel, PaymentTermRow }
 function Field({ label, value, onChange, textarea }: {
   label: string; value: string; onChange: (v: string) => void; textarea?: boolean;
 }) {
-  const base = "w-full bg-white/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal placeholder:text-gray-600 resize-none";
+  const base = "w-full bg-foreground/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal placeholder:text-gray-600 resize-none";
   return (
     <div className="flex flex-col gap-1">
       <label className="text-xs text-gray-500 font-medium">{label}</label>
@@ -32,7 +32,7 @@ function BulletListEditor({ label, items, onChange }: {
         <div key={i} className="flex gap-2 items-start">
           <span className="text-teal mt-2.5 shrink-0">›</span>
           <textarea
-            className="flex-1 bg-white/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal resize-none min-h-[60px]"
+            className="flex-1 bg-foreground/5 border border-border rounded-lg text-sm text-foreground px-3 py-2 focus:outline-none focus:border-teal resize-none min-h-[60px]"
             value={item}
             onChange={e => { const n = [...items]; n[i] = e.target.value; onChange(n); }}
           />
@@ -67,13 +67,13 @@ function ServiceItemEditor({ label, items, onChange }: {
           <div className="flex-1 flex flex-col gap-2">
             <input
               placeholder="Service name"
-              className="bg-white/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal"
+              className="bg-foreground/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal"
               value={item.title}
               onChange={e => { const n = [...items]; n[i] = { ...n[i], title: e.target.value }; onChange(n); }}
             />
             <textarea
               placeholder="Description"
-              className="bg-white/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal resize-none min-h-[52px]"
+              className="bg-foreground/5 border border-border rounded-md text-sm text-foreground px-3 py-1.5 focus:outline-none focus:border-teal resize-none min-h-[52px]"
               value={item.description}
               onChange={e => { const n = [...items]; n[i] = { ...n[i], description: e.target.value }; onChange(n); }}
             />
@@ -113,7 +113,7 @@ function ServiceLevelEditor({ items, onChange }: {
           {(["priority", "issueType", "response", "resolution"] as const).map(field => (
             <input
               key={field}
-              className="bg-white/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal"
+              className="bg-foreground/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal"
               value={row[field]}
               onChange={e => { const n = [...items]; n[i] = { ...n[i], [field]: e.target.value }; onChange(n); }}
             />
@@ -140,13 +140,13 @@ function PaymentTermsEditor({ items, onChange }: {
         <div key={i} className="flex gap-2 items-start p-2 bg-white/3 border border-border/50 rounded-lg">
           <input
             placeholder="Item"
-            className="w-36 shrink-0 bg-white/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal"
+            className="w-36 shrink-0 bg-foreground/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal"
             value={row.item}
             onChange={e => { const n = [...items]; n[i] = { ...n[i], item: e.target.value }; onChange(n); }}
           />
           <textarea
             placeholder="Detail"
-            className="flex-1 bg-white/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal resize-none min-h-[52px]"
+            className="flex-1 bg-foreground/5 border border-border rounded-md text-xs text-foreground px-2 py-1.5 focus:outline-none focus:border-teal resize-none min-h-[52px]"
             value={row.detail}
             onChange={e => { const n = [...items]; n[i] = { ...n[i], detail: e.target.value }; onChange(n); }}
           />
@@ -202,10 +202,11 @@ export default function EstoreRetainerEditor({ initialContent }: { initialConten
   }
 
   function handleSave() {
+    toast.loading("Saving document...");
     startTransition(async () => {
       try {
         await saveEstoreRetainerOverride(c);
-        toast.success("Document saved. PDF will regenerate on next view.");
+        toast.success("Document saved!");
       } catch {
         toast.error("Failed to save. Please try again.");
       }

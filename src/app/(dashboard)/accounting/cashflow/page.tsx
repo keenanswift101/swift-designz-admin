@@ -233,7 +233,7 @@ export default async function CashFlowPage() {
             <div className="flex justify-between items-center pt-3">
               <span className="text-sm text-gray-400">Collection Rate</span>
               <div className="flex items-center gap-2">
-                <div className="w-28 h-2 bg-card rounded-full overflow-hidden">
+                <div className="w-28 h-2 bg-foreground/10 rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all ${
                       collectionRate >= 80
@@ -279,7 +279,7 @@ export default async function CashFlowPage() {
                 className="flex items-center justify-between py-2.5 border-b border-border/30"
               >
                 <div>
-                  <span className="text-sm text-gray-300">{label}</span>
+                  <span className="text-sm text-foreground/60">{label}</span>
                   {count > 0 && (
                     <span className="ml-2 text-xs text-gray-600">({count})</span>
                   )}
@@ -350,7 +350,7 @@ export default async function CashFlowPage() {
                     <td className="px-5 py-2.5 text-sm font-mono text-foreground">
                       {inv.invoice_number}
                     </td>
-                    <td className="px-4 py-2.5 text-sm text-gray-300">
+                    <td className="px-4 py-2.5 text-sm text-foreground/60">
                       {inv.client?.name ?? "—"}
                     </td>
                     <td className="px-4 py-2.5 text-sm font-mono text-gray-400 text-right">
@@ -370,7 +370,7 @@ export default async function CashFlowPage() {
                         <span
                           className={`text-xs font-medium px-2 py-1 rounded-full ${
                             inv.daysOverdue > 60
-                              ? "bg-red-950 text-red-400"
+                              ? "bg-red-500/15 text-red-400"
                               : inv.daysOverdue > 30
                                 ? "bg-orange-950 text-orange-400"
                                 : "bg-amber-950 text-amber-400"

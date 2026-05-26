@@ -166,7 +166,7 @@ export default async function LiabilitiesPage() {
                     <tr
                       key={l.id}
                       className={`border-b border-border/50 hover:bg-card transition-colors group ${
-                        isSettled ? "opacity-50" : isOverdue ? "bg-red-950/20" : i % 2 === 1 ? "bg-card/20" : ""
+                        isSettled ? "opacity-50" : isOverdue ? "bg-red-500/8" : i % 2 === 1 ? "bg-foreground/3" : ""
                       }`}
                     >
                       <td className="px-5 py-3">

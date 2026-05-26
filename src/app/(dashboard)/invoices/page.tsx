@@ -103,7 +103,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                 {collectionRate}%
               </span>
             </div>
-            <div className="h-2 bg-card rounded-full overflow-hidden">
+            <div className="h-2 bg-foreground/10 rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all ${
                   collectionRate >= 80 ? "bg-teal" : collectionRate >= 50 ? "bg-amber-400" : "bg-red-400"
@@ -220,7 +220,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                     <tr
                       key={inv.id}
                       className={`border-b border-border/50 hover:bg-card transition-colors ${
-                        isOverdue ? "bg-red-950/20" : i % 2 === 1 ? "bg-card/20" : ""
+                        isOverdue ? "bg-red-500/8" : i % 2 === 1 ? "bg-foreground/3" : ""
                       }`}
                     >
                       <td className="px-5 py-3">
@@ -232,7 +232,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                           <ArrowUpRight className="h-3 w-3 opacity-0 group-hover:opacity-100" />
                         </Link>
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-300">
+                      <td className="px-4 py-3 text-sm text-foreground/60">
                         {inv.clients?.name ?? "—"}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
@@ -243,7 +243,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <div className="flex-1 h-1.5 bg-card rounded-full overflow-hidden">
+                          <div className="flex-1 h-1.5 bg-foreground/10 rounded-full overflow-hidden">
                             <div
                               className={`h-full rounded-full ${paidPct === 100 ? "bg-teal" : "bg-teal/50"}`}
                               style={{ width: `${paidPct}%` }}

@@ -159,7 +159,7 @@ export default function LeadForm({ lead, action, submitLabel }: Props) {
         </button>
         <a
           href={lead ? `/leads/${lead.id}` : "/leads"}
-          className="px-6 py-2.5 bg-border hover:bg-dark-gray text-gray-300 text-sm font-medium rounded-lg border border-border transition-colors"
+          className="px-6 py-2.5 bg-border hover:bg-dark-gray text-foreground/60 text-sm font-medium rounded-lg border border-border transition-colors"
         >
           Cancel
         </a>

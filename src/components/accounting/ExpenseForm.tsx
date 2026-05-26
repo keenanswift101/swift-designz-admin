@@ -115,7 +115,7 @@ export default function ExpenseForm({ expense, action, submitLabel }: ExpenseFor
             onChange={(e) => setRecurring(e.target.checked)}
             className="h-4 w-4 rounded border-border bg-card text-teal focus:ring-teal"
           />
-          <span className="text-sm text-gray-300">Recurring expense</span>
+          <span className="text-sm text-foreground/60">Recurring expense</span>
         </label>
 
         {recurring && (

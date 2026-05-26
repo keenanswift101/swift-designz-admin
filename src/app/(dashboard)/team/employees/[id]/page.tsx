@@ -106,7 +106,7 @@ export default async function EmployeeDetailPage({
             {employee.notes && (
               <div className="mt-4 pt-4 border-t border-border">
                 <dt className="text-xs text-gray-500 mb-1">Notes</dt>
-                <dd className="text-sm text-gray-300 whitespace-pre-wrap">{employee.notes}</dd>
+                <dd className="text-sm text-foreground/60 whitespace-pre-wrap">{employee.notes}</dd>
               </div>
             )}
           </div>

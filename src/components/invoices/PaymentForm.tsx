@@ -126,7 +126,7 @@ export default function PaymentForm({ invoiceId, outstandingCents }: PaymentForm
           name="proof"
           type="file"
           accept=".pdf,.png,.jpg,.jpeg,.webp"
-          className="w-full text-xs text-gray-400 file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border file:border-border file:bg-card file:text-sm file:text-gray-300 file:cursor-pointer hover:file:border-teal transition-colors"
+          className="w-full text-xs text-gray-400 file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border file:border-border file:bg-card file:text-sm file:text-foreground/60 file:cursor-pointer hover:file:border-teal transition-colors"
         />
       </div>
 

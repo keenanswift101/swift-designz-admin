@@ -5,6 +5,10 @@ import PageHeader from "@/components/ui/PageHeader";
 import StatusBadge from "@/components/ui/StatusBadge";
 import DeleteInvoiceButton from "@/components/invoices/DeleteInvoiceButton";
 import PaymentForm from "@/components/invoices/PaymentForm";
+import SendInvoiceButton from "@/components/invoices/SendInvoiceButton";
+import SendReceiptButton from "@/components/invoices/SendReceiptButton";
+import CreditNoteForm from "@/components/invoices/CreditNoteForm";
+import VoidCreditNoteButton from "@/components/invoices/VoidCreditNoteButton";
 import { deletePaymentAction } from "@/app/(dashboard)/invoices/actions";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Edit, Download, ExternalLink, Trash2 } from "lucide-react";
@@ -40,6 +44,31 @@ export default async function InvoiceDetailPage({
       .order("paid_at", { ascending: false }),
   ]);
 
+  // Fetch credit notes
+  const { data: creditNotes } = await supabase
+    .from("credit_notes")
+    .select("id, credit_note_number, type, reason, amount, status, issued_at")
+    .eq("invoice_id", id)
+    .order("issued_at", { ascending: false });
+
+  // Fetch which payments already have receipts
+  const { data: confirmations } = await supabase
+    .from("payment_confirmations")
+    .select("payment_id")
+    .eq("invoice_id", id);
+  const receiptSentSet = new Set((confirmations ?? []).map((c) => c.payment_id));
+
+  // Fetch linked quotation if this invoice was converted from one
+  let linkedQuotation: { id: string; quote_number: string } | null = null;
+  if (invoice?.quotation_id) {
+    const { data: q } = await supabase
+      .from("quotations")
+      .select("id, quote_number")
+      .eq("id", invoice.quotation_id)
+      .single();
+    linkedQuotation = q ?? null;
+  }
+
   if (!invoice) notFound();
 
   const client = invoice.clients as { id: string; name: string; email: string; phone: string | null; company: string | null } | null;
@@ -59,10 +88,11 @@ export default async function InvoiceDetailPage({
         backHref="/invoices"
         actions={
           <div className="flex items-center gap-2 flex-wrap">
+            {!isQuotation && <SendInvoiceButton invoiceId={id} />}
             <Link
               href={`/api/invoices/${id}/pdf`}
               target="_blank"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-teal border border-teal/40 hover:border-teal rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-foreground border border-border hover:border-teal rounded-lg transition-colors"
             >
               <Download className="h-3.5 w-3.5" />
               Download PDF
@@ -161,7 +191,7 @@ export default async function InvoiceDetailPage({
                   <tbody className="divide-y divide-border">
                     {(payments as Payment[]).map((pay) => (
                       <tr key={pay.id} className="hover:bg-card">
-                        <td className="px-6 py-3 text-sm text-gray-300">{formatDate(pay.paid_at)}</td>
+                        <td className="px-6 py-3 text-sm text-foreground/60">{formatDate(pay.paid_at)}</td>
                         <td className="px-4 py-3 text-sm text-gray-400 capitalize">{pay.method}</td>
                         <td className="px-4 py-3 text-sm text-gray-500 font-mono">
                           {pay.reference || "—"}
@@ -178,18 +208,69 @@ export default async function InvoiceDetailPage({
                         </td>
                         <td className="px-4 py-3 text-sm text-foreground text-right font-mono font-medium">{formatCurrency(pay.amount)}</td>
                         <td className="px-2 py-3 text-center">
-                          <form action={async () => {
-                            "use server";
-                            await deletePaymentAction(pay.id, id);
-                          }}>
-                            <button
-                              type="submit"
-                              className="text-gray-600 hover:text-red-400 transition-colors"
-                              title="Delete payment"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
-                          </form>
+                          <div className="flex items-center justify-center gap-1">
+                            {!receiptSentSet.has(pay.id) && <SendReceiptButton paymentId={pay.id} />}
+                            <form action={async () => {
+                              "use server";
+                              await deletePaymentAction(pay.id, id);
+                            }}>
+                              <button
+                                type="submit"
+                                className="p-1 rounded text-gray-600 hover:text-red-400 transition-colors"
+                                title="Delete payment"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </form>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
+
+          {/* Credit Notes — invoices only */}
+          {!isQuotation && (
+            <div className="glass-card overflow-hidden">
+              <div className="px-6 py-4 border-b border-border flex items-center justify-between">
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Credit Notes</h2>
+                <CreditNoteForm invoiceId={id} />
+              </div>
+              {(!creditNotes || creditNotes.length === 0) ? (
+                <p className="px-6 py-8 text-sm text-center text-gray-500">No credit notes issued.</p>
+              ) : (
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Number</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
+                      <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                      <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th className="w-10" />
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {(creditNotes as { id: string; credit_note_number: string; type: string; reason: string; amount: number; status: string; issued_at: string | null }[]).map((cn) => (
+                      <tr key={cn.id} className="hover:bg-card">
+                        <td className="px-6 py-3 text-xs font-mono text-teal">{cn.credit_note_number}</td>
+                        <td className="px-4 py-3 text-xs text-gray-400 capitalize">{cn.type}</td>
+                        <td className="px-4 py-3 text-sm text-foreground/70 max-w-xs truncate">{cn.reason}</td>
+                        <td className="px-4 py-3 text-sm text-right font-mono font-medium text-red-400">-{formatCurrency(cn.amount)}</td>
+                        <td className="px-4 py-3">
+                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                            cn.status === "voided" ? "bg-red-500/10 text-red-400" :
+                            cn.status === "issued" ? "bg-teal/10 text-teal" :
+                            "bg-green-500/10 text-green-400"
+                          }`}>
+                            {cn.status}
+                          </span>
+                        </td>
+                        <td className="px-2 py-3">
+                          {cn.status !== "voided" && <VoidCreditNoteButton id={cn.id} invoiceId={id} />}
                         </td>
                       </tr>
                     ))}
@@ -203,7 +284,7 @@ export default async function InvoiceDetailPage({
           {invoice.notes && (
             <div className="glass-card p-6">
               <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Notes</h2>
-              <p className="text-sm text-gray-300 whitespace-pre-wrap">{invoice.notes}</p>
+              <p className="text-sm text-foreground/60 whitespace-pre-wrap">{invoice.notes}</p>
             </div>
           )}
         </div>
@@ -243,7 +324,7 @@ export default async function InvoiceDetailPage({
               )}
               <div className="flex justify-between items-center">
                 <dt className="text-xs text-gray-500">{isQuotation ? "Valid Until" : "Due Date"}</dt>
-                <dd className="text-sm text-gray-300">{formatDate(invoice.due_date)}</dd>
+                <dd className="text-sm text-foreground/60">{formatDate(invoice.due_date)}</dd>
               </div>
               {!isQuotation && invoice.paid_date && (
                 <div className="flex justify-between items-center">
@@ -262,6 +343,19 @@ export default async function InvoiceDetailPage({
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-teal/10 text-teal border border-teal/20">
                       {creator.full_name}
                     </span>
+                  </dd>
+                </div>
+              )}
+              {linkedQuotation && (
+                <div className="flex justify-between items-center">
+                  <dt className="text-xs text-gray-500">From quotation</dt>
+                  <dd>
+                    <Link
+                      href={`/accounts-receivable/quotations/${linkedQuotation.id}`}
+                      className="text-xs text-teal hover:underline"
+                    >
+                      {linkedQuotation.quote_number}
+                    </Link>
                   </dd>
                 </div>
               )}
@@ -302,14 +396,21 @@ export default async function InvoiceDetailPage({
                   {invoice.payment_plan_type.replace(/_/g, " ").replace(/\b2\b/, "2-").replace(/\b3\b/, "3-")}
                 </p>
               )}
-              {invoice.payment_plan_schedule && Array.isArray(invoice.payment_plan_schedule) && (invoice.payment_plan_schedule as { label: string; amount: number }[]).length > 0 ? (
+              {invoice.payment_plan_schedule && Array.isArray(invoice.payment_plan_schedule) && (invoice.payment_plan_schedule as { label: string; amount_cents?: number; amount?: number }[]).length > 0 ? (
                 <div className="space-y-2">
-                  {(invoice.payment_plan_schedule as { label: string; amount: number }[]).map((row: { label: string; amount: number }, i: number) => (
-                    <div key={i} className="flex justify-between items-center py-1.5 border-b border-border last:border-0">
-                      <span className="text-xs text-gray-400">{row.label}</span>
-                      <span className="text-sm font-semibold text-foreground font-mono">{formatCurrency(row.amount)}</span>
+                  {(invoice.payment_plan_schedule as { label: string; amount_cents?: number; amount?: number; installment_number?: number; due_date?: string }[]).map((row, i) => {
+                    const cents = row.amount_cents ?? row.amount ?? 0;
+                    const isCurrent = row.installment_number === invoice.installment_number;
+                    return (
+                    <div key={i} className={`flex justify-between items-center py-1.5 border-b border-border last:border-0 ${isCurrent ? "rounded px-1.5 bg-teal/5" : ""}`}>
+                      <span className="text-xs text-gray-400">
+                        {row.label}
+                        {isCurrent && <span className="ml-1.5 text-[10px] text-teal font-medium">← this invoice</span>}
+                      </span>
+                      <span className={`text-sm font-semibold font-mono ${isCurrent ? "text-teal" : "text-foreground"}`}>{formatCurrency(cents)}</span>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : invoice.installment_count && invoice.installment_interval ? (
                 <dl className="space-y-2">

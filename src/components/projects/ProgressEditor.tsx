@@ -74,7 +74,7 @@ export default function ProgressEditor({
           </button>
           <button
             onClick={() => setEditing(false)}
-            className="text-xs text-gray-500 hover:text-gray-300"
+            className="text-xs text-gray-500 hover:text-foreground/60"
           >
             Cancel
           </button>

@@ -7,6 +7,20 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import type { UserRole } from "@/types/database";
 import type { QuotationWithJoins, QuotationLineItem, QuotationStatus } from "@/types/accounts-receivable";
 import QuotationActions from "@/components/ar/QuotationActions";
+import ConvertToInvoiceButton from "@/components/ar/ConvertToInvoiceButton";
+
+const PAYMENT_PLAN_LABELS: Record<string, string> = {
+  standard:      "Standard",
+  full_pay:      "Full Pay",
+  "2_month_flex": "2 Month Flex",
+  "3_month_ease": "3 Month Ease",
+  custom:        "Custom",
+};
+
+function formatPaymentPlan(type: string | null | undefined): string {
+  if (!type) return "Enabled";
+  return PAYMENT_PLAN_LABELS[type] ?? type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
 const STATUS_CONFIG: Record<QuotationStatus, { label: string; color: string }> = {
   draft:     { label: "Draft",     color: "text-gray-400 bg-gray-500/10 border-gray-500/20" },
@@ -41,6 +55,17 @@ export default async function QuotationDetailPage({ params }: Props) {
       .order("sort_order"),
   ]);
 
+  // Fetch linked invoice if this quotation was converted
+  let linkedInvoice: { id: string; invoice_number: string } | null = null;
+  if (q?.status === "converted") {
+    const { data: inv } = await supabase
+      .from("invoices")
+      .select("id, invoice_number")
+      .eq("quotation_id", id)
+      .single();
+    linkedInvoice = inv ?? null;
+  }
+
   if (!q) redirect("/accounts-receivable/quotations");
 
   const quote = q as QuotationWithJoins;
@@ -49,6 +74,7 @@ export default async function QuotationDetailPage({ params }: Props) {
   const canEdit = isAdmin && !quote.locked;
   const canSend = isAdmin && quote.status === "draft";
   const canCancel = isAdmin && ["draft", "sent"].includes(quote.status);
+  const canConvert = isAdmin && quote.status === "accepted";
 
   return (
     <>
@@ -64,7 +90,7 @@ export default async function QuotationDetailPage({ params }: Props) {
           <div className="flex items-center gap-2 flex-wrap">
             <Link
               href="/accounts-receivable/quotations"
-              className="p-2 rounded-lg hover:bg-white/5 transition-colors text-gray-400 hover:text-white"
+              className="p-2 rounded-lg hover:bg-foreground/5 transition-colors text-gray-400 hover:text-white"
             >
               <ArrowLeft className="h-4 w-4" />
             </Link>
@@ -75,12 +101,13 @@ export default async function QuotationDetailPage({ params }: Props) {
               {canEdit && (
                 <Link
                   href={`/accounts-receivable/quotations/${id}/edit`}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 text-gray-300 border border-border hover:bg-white/10 transition-colors text-xs font-medium"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-foreground/5 text-foreground/60 border border-border hover:bg-foreground/8 transition-colors text-xs font-medium"
                 >
                   <Pencil className="h-3.5 w-3.5" />
                   Edit
                 </Link>
               )}
+              {canConvert && <ConvertToInvoiceButton quotationId={id} />}
               {canSend && <QuotationActions id={id} action="send" />}
               {canCancel && <QuotationActions id={id} action="cancel" />}
             </div>
@@ -111,7 +138,7 @@ export default async function QuotationDetailPage({ params }: Props) {
                 ))}
               </tbody>
             </table>
-            <div className="px-5 py-4 space-y-2 border-t border-border bg-white/2">
+            <div className="px-5 py-4 space-y-2 border-t border-border bg-foreground/3">
               <div className="flex justify-between text-sm text-gray-400">
                 <span>Subtotal</span>
                 <span className="tabular-nums">{formatCurrency(quote.subtotal)}</span>
@@ -128,6 +155,41 @@ export default async function QuotationDetailPage({ params }: Props) {
               </div>
             </div>
           </div>
+
+          {/* Payment Plan Schedule */}
+          {quote.payment_plan_enabled && Array.isArray(quote.payment_plan_schedule) && quote.payment_plan_schedule.length > 0 && (
+            <div className="glass-card overflow-hidden">
+              <div className="px-5 py-4 border-b border-border">
+                <h2 className="text-sm font-semibold text-foreground">
+                  Payment Schedule — {formatPaymentPlan(quote.payment_plan_type)}
+                </h2>
+              </div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border/50">
+                    <th className="text-left px-5 py-2.5 text-xs text-gray-500 font-medium">#</th>
+                    <th className="text-left px-3 py-2.5 text-xs text-gray-500 font-medium">Label</th>
+                    <th className="text-left px-3 py-2.5 text-xs text-gray-500 font-medium">Due Date</th>
+                    <th className="text-right px-5 py-2.5 text-xs text-gray-500 font-medium">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(quote.payment_plan_schedule as { label: string; amount_cents: number; due_date: string; installment_number: number }[]).map((inst) => (
+                    <tr key={inst.installment_number} className="border-b border-border/30 last:border-0">
+                      <td className="px-5 py-3 text-gray-500 text-xs">{inst.installment_number}</td>
+                      <td className="px-3 py-3 text-foreground">{inst.label}</td>
+                      <td className="px-3 py-3 text-gray-400 text-xs">{formatDate(inst.due_date)}</td>
+                      <td className="px-5 py-3 text-right font-semibold text-teal tabular-nums">{formatCurrency(inst.amount_cents)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="px-5 py-3 bg-foreground/3 border-t border-border text-xs text-gray-500">
+                Invoice 1 ({formatCurrency((quote.payment_plan_schedule as { amount_cents: number }[])[0].amount_cents)}) will be created on conversion.
+                {(quote.payment_plan_schedule as { amount_cents: number }[]).length > 1 && " Subsequent invoices trigger automatically on their due dates."}
+              </div>
+            </div>
+          )}
 
           {/* Terms */}
           {quote.terms && (
@@ -208,13 +270,23 @@ export default async function QuotationDetailPage({ params }: Props) {
               {quote.payment_plan_enabled && (
                 <div className="flex justify-between items-center">
                   <dt className="text-xs text-gray-500">Payment plan</dt>
-                  <dd className="text-xs text-gray-400">{quote.payment_plan_type ?? "Enabled"}</dd>
+                  <dd className="text-xs text-gray-400">{formatPaymentPlan(quote.payment_plan_type)}</dd>
                 </div>
               )}
               {quote.projects && (
                 <div className="flex justify-between items-center">
                   <dt className="text-xs text-gray-500">Project</dt>
                   <dd className="text-xs text-gray-400">{quote.projects.name}</dd>
+                </div>
+              )}
+              {linkedInvoice && (
+                <div className="flex justify-between items-center">
+                  <dt className="text-xs text-gray-500">Invoice</dt>
+                  <dd>
+                    <Link href={`/invoices/${linkedInvoice.id}`} className="text-xs text-teal hover:underline">
+                      {linkedInvoice.invoice_number}
+                    </Link>
+                  </dd>
                 </div>
               )}
             </dl>

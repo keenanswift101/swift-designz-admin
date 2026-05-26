@@ -11,9 +11,11 @@ export default function DeleteRetainerButton({ id, name }: { id: string; name: s
 
   function handleDelete() {
     if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+    toast.loading("Deleting retainer...");
     startTransition(async () => {
       try {
         await deleteRetainerAction(id);
+        toast.success("Retainer deleted.");
       } catch {
         toast.error("Failed to delete retainer.");
       }

@@ -205,7 +205,7 @@ export default async function TaxPage() {
                     key={period}
                     className={`border-b border-border/50 ${isCurrent ? "bg-teal/5" : ""}`}
                   >
-                    <td className="px-5 py-2.5 text-sm text-gray-300">
+                    <td className="px-5 py-2.5 text-sm text-foreground/60">
                       {VAT_PERIOD_LABELS[period]}
                       {isCurrent && (
                         <span className="ml-2 text-xs bg-teal/15 text-teal px-1.5 py-0.5 rounded">

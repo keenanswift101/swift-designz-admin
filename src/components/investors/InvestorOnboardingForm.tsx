@@ -33,7 +33,7 @@ export default function InvestorOnboardingForm({ action }: InvestorOnboardingFor
           href="/docs/investor-terms-and-conditions.html"
           target="_blank"
           rel="noreferrer"
-          className="block p-3 rounded-lg border border-border bg-card hover:border-teal text-sm text-gray-300 hover:text-teal transition-colors"
+          className="block p-3 rounded-lg border border-border bg-card hover:border-teal text-sm text-foreground/60 hover:text-teal transition-colors"
         >
           Read Investor Terms and Conditions
         </a>
@@ -41,14 +41,14 @@ export default function InvestorOnboardingForm({ action }: InvestorOnboardingFor
           href="/docs/investor-nda.html"
           target="_blank"
           rel="noreferrer"
-          className="block p-3 rounded-lg border border-border bg-card hover:border-teal text-sm text-gray-300 hover:text-teal transition-colors"
+          className="block p-3 rounded-lg border border-border bg-card hover:border-teal text-sm text-foreground/60 hover:text-teal transition-colors"
         >
           Read Investor Non-Disclosure Agreement (NDA)
         </a>
       </div>
 
       <div className="space-y-3">
-        <label className="flex items-start gap-3 text-sm text-gray-300">
+        <label className="flex items-start gap-3 text-sm text-foreground/60">
           <input
             type="checkbox"
             name="accept_terms"
@@ -58,7 +58,7 @@ export default function InvestorOnboardingForm({ action }: InvestorOnboardingFor
           <span>I have read and accept the Investor Terms and Conditions.</span>
         </label>
 
-        <label className="flex items-start gap-3 text-sm text-gray-300">
+        <label className="flex items-start gap-3 text-sm text-foreground/60">
           <input
             type="checkbox"
             name="accept_nda"

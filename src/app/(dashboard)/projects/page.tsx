@@ -180,13 +180,13 @@ export default async function ProjectsPage() {
                       key={project.id}
                       className={`border-b border-border/50 hover:bg-card transition-colors group ${
                         isOverdue
-                          ? "bg-red-950/20"
+                          ? "bg-red-500/8"
                           : isCompleted
                             ? "bg-teal/5"
                             : isCancelled || isOnHold
                               ? "opacity-60"
                               : i % 2 === 1
-                                ? "bg-card/20"
+                                ? "bg-foreground/3"
                                 : ""
                       }`}
                     >
@@ -214,7 +214,7 @@ export default async function ProjectsPage() {
                       <td className="px-4 py-3">
                         {progressPct !== null ? (
                           <div className="flex items-center gap-2">
-                            <div className="flex-1 h-1.5 bg-card rounded-full overflow-hidden">
+                            <div className="flex-1 h-1.5 bg-foreground/10 rounded-full overflow-hidden">
                               <div
                                 className={`h-full rounded-full ${progressPct === 100 ? "bg-teal" : "bg-teal/50"}`}
                                 style={{ width: `${progressPct}%` }}
@@ -228,7 +228,7 @@ export default async function ProjectsPage() {
                           <span className="text-xs text-gray-600">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-sm font-mono text-gray-300 text-right whitespace-nowrap">
+                      <td className="px-4 py-3 text-sm font-mono text-foreground/60 text-right whitespace-nowrap">
                         {project.quoted_amount ? formatCurrency(project.quoted_amount) : "—"}
                       </td>
                       <td className="px-5 py-3 text-right whitespace-nowrap">

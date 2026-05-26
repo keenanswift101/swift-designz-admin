@@ -61,7 +61,7 @@ export default function DocumentViewer({ slug, label, hasPdf = true, pdfPreviewU
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push("/documents")}
-            className="p-2 rounded-lg hover:bg-white/5 transition-colors text-gray-400 hover:text-white"
+            className="p-2 rounded-lg hover:bg-foreground/5 transition-colors text-gray-400 hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
           </button>
@@ -71,7 +71,7 @@ export default function DocumentViewer({ slug, label, hasPdf = true, pdfPreviewU
         {editUrl && (
           <Link
             href={editUrl}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 text-gray-300 border border-border hover:bg-white/10 transition-colors text-sm font-medium"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-foreground/5 text-foreground/60 border border-border hover:bg-foreground/8 transition-colors text-sm font-medium"
           >
             <Pencil className="h-4 w-4" />
             Edit

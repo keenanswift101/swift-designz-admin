@@ -79,7 +79,7 @@ export default async function IncomePage() {
                 {reconciledPct}%
               </span>
             </div>
-            <div className="h-2 bg-card rounded-full overflow-hidden">
+            <div className="h-2 bg-foreground/10 rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all ${reconciledPct === 100 ? "bg-teal" : "bg-amber-400"}`}
                 style={{ width: `${reconciledPct}%` }}
@@ -139,7 +139,7 @@ export default async function IncomePage() {
                   <tr
                     key={e.id}
                     className={`border-b border-border/50 hover:bg-card transition-colors ${
-                      !e.reconciled ? "bg-amber-950/10" : i % 2 === 1 ? "bg-card/20" : ""
+                      !e.reconciled ? "bg-amber-950/10" : i % 2 === 1 ? "bg-foreground/3" : ""
                     }`}
                   >
                     <td className="px-3 py-3 text-center">
