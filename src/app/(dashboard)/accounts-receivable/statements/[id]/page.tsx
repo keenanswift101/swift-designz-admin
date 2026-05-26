@@ -43,16 +43,15 @@ export default async function StatementDetailPage({ params }: { params: Promise<
   const client = stmt.clients as unknown as { id: string; name: string; email: string; phone: string | null; company: string | null } | null;
   const creator = stmt.profiles as unknown as { full_name: string } | null;
 
-  // Fetch invoices in this period for this client
+  // Fetch ALL invoices for this client up to period end (pre-period = brought forward, in-period = new)
   const { data: invoices } = await supabase
     .from("invoices")
     .select("id, invoice_number, amount, paid_amount, status, created_at, due_date")
     .eq("client_id", client?.id ?? "")
-    .gte("created_at", stmt.period_from)
     .lte("created_at", stmt.period_to + "T23:59:59")
     .order("created_at", { ascending: true });
 
-  const invoiceRows = (invoices ?? []) as {
+  type InvoiceRow = {
     id: string;
     invoice_number: string;
     amount: number;
@@ -60,7 +59,11 @@ export default async function StatementDetailPage({ params }: { params: Promise<
     status: string;
     created_at: string;
     due_date: string | null;
-  }[];
+  };
+
+  const allInvoiceRows = (invoices ?? []) as InvoiceRow[];
+  const broughtForward = allInvoiceRows.filter((i) => i.created_at < stmt.period_from && i.amount > i.paid_amount);
+  const invoiceRows = allInvoiceRows.filter((i) => i.created_at >= stmt.period_from);
 
   return (
     <>
@@ -107,6 +110,58 @@ export default async function StatementDetailPage({ params }: { params: Promise<
             </div>
           </div>
 
+          {/* Brought forward (pre-period outstanding) */}
+          {broughtForward.length > 0 && (
+            <div className="glass-card overflow-hidden">
+              <div className="px-6 py-4 border-b border-border flex items-center gap-2">
+                <FileText className="h-4 w-4 text-amber-400" />
+                <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Outstanding Brought Forward ({broughtForward.length})
+                </h2>
+              </div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice</th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                    <th className="text-right px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Outstanding</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {broughtForward.map((inv) => (
+                    <tr key={inv.id} className="hover:bg-card/50 transition-colors">
+                      <td className="px-5 py-3">
+                        <Link href={`/invoices/${inv.id}`} className="text-xs font-mono text-teal hover:underline">
+                          {inv.invoice_number}
+                        </Link>
+                      </td>
+                      <td className="px-4 py-3 text-xs text-gray-400">{formatDate(inv.created_at)}</td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs border border-border text-gray-400 capitalize">
+                          {inv.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-right text-xs tabular-nums text-foreground">{formatCurrency(inv.amount)}</td>
+                      <td className="px-5 py-3 text-right text-xs tabular-nums font-semibold text-amber-400">
+                        {formatCurrency(inv.amount - inv.paid_amount)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="border-t border-border bg-card/30">
+                    <td colSpan={4} className="px-5 py-3 text-xs font-semibold text-gray-400">Opening Balance</td>
+                    <td className="px-5 py-3 text-right text-xs font-bold text-amber-400 tabular-nums">
+                      {formatCurrency(broughtForward.reduce((s, i) => s + Math.max(0, i.amount - i.paid_amount), 0))}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          )}
+
           {/* Invoices in period */}
           <div className="glass-card overflow-hidden">
             <div className="px-6 py-4 border-b border-border flex items-center gap-2">
@@ -116,7 +171,7 @@ export default async function StatementDetailPage({ params }: { params: Promise<
               </h2>
             </div>
             {invoiceRows.length === 0 ? (
-              <p className="px-6 py-8 text-sm text-center text-gray-500">No invoices in this period.</p>
+              <p className="px-6 py-8 text-sm text-center text-gray-500">No invoices raised in this period.</p>
             ) : (
               <table className="w-full text-sm">
                 <thead>
