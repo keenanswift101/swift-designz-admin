@@ -338,7 +338,7 @@ export async function sendInvoiceEmail({
               <table cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="padding-right:12px;vertical-align:middle;">
-                    <img src="${APP_URL}/logo.png" alt="Swift Designz" width="36" height="36" style="display:block;border-radius:4px;" />
+                    <img src="${APP_URL}/logo.png" alt="Swift Designz" width="40" style="display:block;height:auto;border-radius:4px;" />
                   </td>
                   <td style="vertical-align:middle;">
                     <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#30B0B0;">Swift Designz</p>
@@ -459,7 +459,7 @@ export async function sendReceiptEmail({
               <table cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="padding-right:12px;vertical-align:middle;">
-                    <img src="${APP_URL}/logo.png" alt="Swift Designz" width="36" height="36" style="display:block;border-radius:4px;" />
+                    <img src="${APP_URL}/logo.png" alt="Swift Designz" width="40" style="display:block;height:auto;border-radius:4px;" />
                   </td>
                   <td style="vertical-align:middle;">
                     <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#30B0B0;">Swift Designz</p>
