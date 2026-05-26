@@ -523,26 +523,44 @@ CREATE POLICY "Admins manage quote versions"        ON quotation_versions     FO
 CREATE POLICY "Admins manage credit notes"          ON credit_notes           FOR ALL TO authenticated
   USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'))
   WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Viewers can manage credit notes"     ON credit_notes           FOR ALL TO authenticated
+  USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'));
 
 CREATE POLICY "Admins manage reminders"             ON payment_reminders      FOR ALL TO authenticated
   USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'))
   WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Viewers can manage reminders"        ON payment_reminders      FOR ALL TO authenticated
+  USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'));
 
 CREATE POLICY "Admins manage confirmations"         ON payment_confirmations  FOR ALL TO authenticated
   USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'))
   WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Viewers can manage confirmations"    ON payment_confirmations  FOR ALL TO authenticated
+  USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'));
 
 CREATE POLICY "Admins manage statements"            ON account_statements     FOR ALL TO authenticated
   USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'))
   WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Viewers can manage statements"       ON account_statements     FOR ALL TO authenticated
+  USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'));
 
 CREATE POLICY "Admins manage statement items"       ON account_statement_items FOR ALL TO authenticated
   USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'))
   WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Viewers can manage statement items"  ON account_statement_items FOR ALL TO authenticated
+  USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'));
 
 CREATE POLICY "Admins manage retainer subs"         ON retainer_subscriptions FOR ALL TO authenticated
   USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'))
   WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Viewers can manage retainer subs"    ON retainer_subscriptions FOR ALL TO authenticated
+  USING      (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'));
 
 -- document_sequences: read-only for authenticated; function (SECURITY DEFINER) writes it
 CREATE POLICY "Auth can read sequences"             ON document_sequences     FOR SELECT TO authenticated USING (true);

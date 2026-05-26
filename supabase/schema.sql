@@ -438,6 +438,9 @@ CREATE POLICY "Admins can manage expenses" ON expenses FOR ALL TO authenticated
   USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
 CREATE POLICY "Admins can manage income" ON income_entries FOR ALL TO authenticated
   USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Viewers can manage income" ON income_entries FOR ALL TO authenticated
+  USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'viewer'));
 CREATE POLICY "Admins can manage documents" ON documents FOR ALL TO authenticated
   USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
 CREATE POLICY "Admins can manage investors" ON investors FOR ALL TO authenticated
