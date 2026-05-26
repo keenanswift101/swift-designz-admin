@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Send, Ban } from "lucide-react";
 import { useToast } from "@/components/ui/ToastProvider";
+import { useConfirm } from "@/hooks/useConfirm";
 import { sendQuotationAction, cancelQuotationAction } from "@/app/(dashboard)/accounts-receivable/quotations/actions";
 
 interface Props {
@@ -15,13 +16,25 @@ export default function QuotationActions({ id, action }: Props) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const toast = useToast();
+  const { confirm, ConfirmDialog } = useConfirm();
 
   async function handle() {
     if (action === "cancel") {
-      if (!confirm("Cancel this quotation? This cannot be undone.")) return;
+      const ok = await confirm("Cancel this quotation? This cannot be undone.", {
+        title: "Cancel Quotation",
+        confirmLabel: "Cancel Quotation",
+        cancelLabel: "Keep",
+        variant: "danger",
+      });
+      if (!ok) return;
     }
     if (action === "send") {
-      if (!confirm("Mark this quotation as sent and lock it for editing?")) return;
+      const ok = await confirm("Mark this quotation as sent and lock it for editing? The client will receive an email with the acceptance link.", {
+        title: "Send Quotation",
+        confirmLabel: "Send",
+        variant: "send",
+      });
+      if (!ok) return;
     }
 
     setLoading(true);
@@ -44,25 +57,31 @@ export default function QuotationActions({ id, action }: Props) {
 
   if (action === "send") {
     return (
-      <button
-        onClick={handle}
-        disabled={loading}
-        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-teal/10 text-teal border border-teal/25 hover:bg-teal/20 transition-colors text-xs font-medium disabled:opacity-50"
-      >
-        {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
-        Send Quotation
-      </button>
+      <>
+        {ConfirmDialog}
+        <button
+          onClick={handle}
+          disabled={loading}
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-teal/10 text-teal border border-teal/25 hover:bg-teal/20 transition-colors text-xs font-medium disabled:opacity-50"
+        >
+          {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+          Send Quotation
+        </button>
+      </>
     );
   }
 
   return (
-    <button
-      onClick={handle}
-      disabled={loading}
-      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors text-xs font-medium disabled:opacity-50"
-    >
-      {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Ban className="h-3.5 w-3.5" />}
-      Cancel
-    </button>
+    <>
+      {ConfirmDialog}
+      <button
+        onClick={handle}
+        disabled={loading}
+        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-colors text-xs font-medium disabled:opacity-50"
+      >
+        {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Ban className="h-3.5 w-3.5" />}
+        Cancel
+      </button>
+    </>
   );
 }

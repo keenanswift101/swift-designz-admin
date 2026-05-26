@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/ToastProvider";
+import { useConfirm } from "@/hooks/useConfirm";
 import { updateRetainerStatusAction, deleteRetainerSubscriptionAction } from "@/app/(dashboard)/accounts-receivable/retainers/actions";
 
 interface Props {
@@ -15,6 +16,7 @@ export default function RetainerStatusButton({ id, status }: Props) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const toast = useToast();
+  const { confirm, ConfirmDialog } = useConfirm();
 
   async function changeStatus(newStatus: "active" | "paused" | "cancelled") {
     setLoading(true);
@@ -33,7 +35,12 @@ export default function RetainerStatusButton({ id, status }: Props) {
   }
 
   async function handleDelete() {
-    if (!confirm("Delete this retainer subscription? This cannot be undone.")) return;
+    const ok = await confirm("Delete this retainer subscription? This cannot be undone.", {
+      title: "Delete Retainer",
+      confirmLabel: "Delete",
+      variant: "danger",
+    });
+    if (!ok) return;
     setLoading(true);
     toast.loading("Deleting...");
     try {
@@ -54,39 +61,42 @@ export default function RetainerStatusButton({ id, status }: Props) {
   }
 
   return (
-    <div className="flex items-center gap-2">
-      {status === "active" && (
-        <button
-          onClick={() => changeStatus("paused")}
-          className="text-xs text-gray-500 hover:text-amber-400 transition-colors"
-        >
-          Pause
-        </button>
-      )}
-      {status === "paused" && (
-        <button
-          onClick={() => changeStatus("active")}
-          className="text-xs text-gray-500 hover:text-teal transition-colors"
-        >
-          Resume
-        </button>
-      )}
-      {status !== "cancelled" && (
-        <button
-          onClick={() => changeStatus("cancelled")}
-          className="text-xs text-gray-500 hover:text-red-400 transition-colors"
-        >
-          Cancel
-        </button>
-      )}
-      {status === "cancelled" && (
-        <button
-          onClick={handleDelete}
-          className="text-xs text-gray-600 hover:text-red-400 transition-colors"
-        >
-          Delete
-        </button>
-      )}
-    </div>
+    <>
+      {ConfirmDialog}
+      <div className="flex items-center gap-2">
+        {status === "active" && (
+          <button
+            onClick={() => changeStatus("paused")}
+            className="text-xs text-gray-500 hover:text-amber-400 transition-colors"
+          >
+            Pause
+          </button>
+        )}
+        {status === "paused" && (
+          <button
+            onClick={() => changeStatus("active")}
+            className="text-xs text-gray-500 hover:text-teal transition-colors"
+          >
+            Resume
+          </button>
+        )}
+        {status !== "cancelled" && (
+          <button
+            onClick={() => changeStatus("cancelled")}
+            className="text-xs text-gray-500 hover:text-red-400 transition-colors"
+          >
+            Cancel
+          </button>
+        )}
+        {status === "cancelled" && (
+          <button
+            onClick={handleDelete}
+            className="text-xs text-gray-600 hover:text-red-400 transition-colors"
+          >
+            Delete
+          </button>
+        )}
+      </div>
+    </>
   );
 }

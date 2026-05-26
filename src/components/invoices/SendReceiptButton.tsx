@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, X, CheckCircle2, Send } from "lucide-react";
 import { useToast } from "@/components/ui/ToastProvider";
+import { useConfirm } from "@/hooks/useConfirm";
 import { sendReceiptAction } from "@/app/(dashboard)/invoices/actions";
 import { createPortal } from "react-dom";
 
@@ -21,7 +22,7 @@ export interface ReceiptPreviewData {
 }
 
 function fmt(cents: number) {
-  return `R ${(cents / 100).toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `R ${(cents / 100).toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 function fmtDate(d: string) {
@@ -38,6 +39,7 @@ export default function SendReceiptButton({ paymentId, previewData }: Props) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const toast = useToast();
+  const { confirm, ConfirmDialog } = useConfirm();
 
   async function handleSend() {
     setLoading(true);
@@ -56,11 +58,16 @@ export default function SendReceiptButton({ paymentId, previewData }: Props) {
     }
   }
 
-  function handleClick() {
+  async function handleClick() {
     if (previewData) {
       setShowModal(true);
     } else {
-      if (!confirm("Send a payment receipt to the client?")) return;
+      const ok = await confirm("Send a payment receipt to the client by email?", {
+        title: "Send Receipt",
+        confirmLabel: "Send Receipt",
+        variant: "send",
+      });
+      if (!ok) return;
       handleSend();
     }
   }
@@ -71,6 +78,7 @@ export default function SendReceiptButton({ paymentId, previewData }: Props) {
 
   return (
     <>
+      {ConfirmDialog}
       <button
         onClick={handleClick}
         disabled={loading}
@@ -81,7 +89,7 @@ export default function SendReceiptButton({ paymentId, previewData }: Props) {
       </button>
 
       {showModal && previewData && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-9999 flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => !loading && setShowModal(false)}

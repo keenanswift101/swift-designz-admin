@@ -5,6 +5,7 @@ import { addLeadNote, deleteLeadNote } from "@/app/(dashboard)/leads/actions";
 import type { LeadNote } from "@/types/database";
 import { MessageSquare, Trash2, Send } from "lucide-react";
 import { useToast } from "@/components/ui/ToastProvider";
+import { useConfirm } from "@/hooks/useConfirm";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -17,6 +18,7 @@ export default function LeadTimeline({ leadId, notes }: Props) {
   const [pending, setPending] = useState(false);
   const toast = useToast();
   const router = useRouter();
+  const { confirm, ConfirmDialog } = useConfirm();
 
   async function handleSubmit(formData: FormData) {
     setPending(true);
@@ -29,7 +31,12 @@ export default function LeadTimeline({ leadId, notes }: Props) {
   }
 
   async function handleDelete(noteId: string) {
-    if (!confirm("Delete this note?")) return;
+    const ok = await confirm("Delete this note?", {
+      title: "Delete Note",
+      confirmLabel: "Delete",
+      variant: "danger",
+    });
+    if (!ok) return;
     toast.loading("Deleting note...");
     await deleteLeadNote(noteId, leadId);
     toast.success("Note deleted.");
@@ -47,63 +54,64 @@ export default function LeadTimeline({ leadId, notes }: Props) {
   }
 
   return (
-    <div className="glass-card p-6">
-      <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
-        <MessageSquare className="w-4 h-4" />
-        Activity
-      </h3>
+    <>
+      {ConfirmDialog}
+      <div className="glass-card p-6">
+        <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+          <MessageSquare className="w-4 h-4" />
+          Activity
+        </h3>
 
-      {/* Add note form */}
-      <form ref={formRef} onSubmit={(e) => { e.preventDefault(); void handleSubmit(new FormData(e.currentTarget)); }} className="mb-6">
-        <textarea
-          name="content"
-          rows={3}
-          required
-          placeholder="Add a note..."
-          className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder-gray-600 focus:outline-none focus:border-teal resize-none"
-        />
-        <button
-          type="submit"
-          disabled={pending}
-          className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal hover:bg-teal-hover disabled:opacity-50 text-white text-xs font-medium rounded-lg transition-colors"
-        >
-          <Send className="w-3 h-3" />
-          {pending ? "Saving..." : "Add Note"}
-        </button>
-      </form>
+        {/* Add note form */}
+        <form ref={formRef} onSubmit={(e) => { e.preventDefault(); void handleSubmit(new FormData(e.currentTarget)); }} className="mb-6">
+          <textarea
+            name="content"
+            rows={3}
+            placeholder="Add a note..."
+            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-teal resize-none"
+          />
+          <div className="flex justify-end mt-2">
+            <button
+              type="submit"
+              disabled={pending}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal/10 hover:bg-teal/20 text-teal text-xs font-medium rounded-lg border border-teal/25 transition-colors disabled:opacity-50"
+            >
+              <Send className="w-3 h-3" />
+              {pending ? "Saving..." : "Add Note"}
+            </button>
+          </div>
+        </form>
 
-      {/* Timeline */}
-      <div className="space-y-4">
+        {/* Notes list */}
         {notes.length === 0 ? (
-          <p className="text-sm text-gray-600">No notes yet.</p>
+          <p className="text-sm text-gray-600 text-center py-4">No activity yet.</p>
         ) : (
-          notes.map((note) => (
-            <div key={note.id} className="relative pl-4 border-l border-border">
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <p className="text-xs text-gray-500">
-                    <span className="text-gray-400 font-medium">
-                      {note.profiles?.full_name ?? "Unknown"}
-                    </span>
-                    {" · "}
-                    {formatTime(note.created_at)}
-                  </p>
-                  <p className="text-sm text-foreground/60 mt-1 whitespace-pre-wrap wrap-break-word">
-                    {note.content}
-                  </p>
+          <div className="space-y-3">
+            {notes.map((note) => (
+              <div key={note.id} className="flex gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-teal/40 mt-2 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="text-sm text-gray-300 leading-relaxed">{note.content}</p>
+                      <p className="text-xs text-gray-600 mt-0.5">
+                        {note.profiles?.full_name ?? "Unknown"} · {formatTime(note.created_at)}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleDelete(note.id)}
+                      className="p-1 rounded text-gray-700 hover:text-red-400 transition-colors shrink-0"
+                      title="Delete note"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  </div>
                 </div>
-                <button
-                  onClick={() => handleDelete(note.id)}
-                  className="shrink-0 p-1 text-gray-600 hover:text-red-400 transition-colors"
-                  title="Delete note"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
