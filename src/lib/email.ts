@@ -80,7 +80,7 @@ export async function sendDocumentEmail({
 
 // ── Quotation email ───────────────────────────────────────────────────────────
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://admin.swiftdesignz.co.za";
+const APP_URL = process.env.EMAIL_BASE_URL ?? "https://admin.swiftdesignz.co.za";
 
 interface QuotationLineItem {
   description: string;
