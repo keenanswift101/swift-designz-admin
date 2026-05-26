@@ -98,6 +98,7 @@ function PageHeader({ logoSrc, c }: { logoSrc?: string | null; c: EstoreRetainer
     <>
       <View style={s.header}>
         <View style={s.brandRow}>
+          {/* eslint-disable-next-line jsx-a11y/alt-text */}
           {logoSrc && <Image src={logoSrc} style={s.logo} />}
           <View>
             <Text style={s.brandName}>Swift Designz</Text>

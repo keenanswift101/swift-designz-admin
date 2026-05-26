@@ -38,9 +38,9 @@ serve(async (req) => {
     }
 
     const lead = payload.record;
-    const notificationEmail = Deno.env.get("NOTIFICATION_EMAIL") ?? "keenan@swiftdesignz.co.za";
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const _notificationEmail = Deno.env.get("NOTIFICATION_EMAIL") ?? "keenan@swiftdesignz.co.za";
+    const _supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const _serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
     // Use Supabase's built-in email (via Auth admin API) or log for now
     // For production, integrate with Resend, SendGrid, or similar.

@@ -4,7 +4,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { deleteIncomeAction } from "./actions";
 import ReconcileToggle from "@/components/accounting/ReconcileToggle";
 import Link from "next/link";
-import { Trash2, TrendingUp, DollarSign, Hash, Tag, CheckCircle2, Receipt } from "lucide-react";
+import { Trash2, TrendingUp, Hash, Tag, CheckCircle2, Receipt } from "lucide-react";
 import type { IncomeEntry } from "@/types/database";
 
 const categoryLabels: Record<string, string> = {
@@ -32,7 +32,6 @@ export default async function IncomePage() {
   const reconciledPct = entries.length > 0
     ? Math.round((reconciledEntries.length / entries.length) * 100)
     : 0;
-  const avgIncome = entries.length > 0 ? Math.round(totalIncome / entries.length) : 0;
   const categoryTotals = entries.reduce<Record<string, number>>((acc, e) => {
     acc[e.category] = (acc[e.category] ?? 0) + e.amount;
     return acc;

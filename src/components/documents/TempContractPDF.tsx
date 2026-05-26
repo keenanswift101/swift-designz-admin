@@ -113,6 +113,7 @@ export default function TempContractPDF({ logoSrc, content }: TempContractPDFPro
         {/* Header */}
         <View style={s.header}>
           <View style={s.brandRow}>
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
             {logoSrc && <Image src={logoSrc} style={s.logo} />}
             <View>
               <Text style={s.brandName}>Swift Designz</Text>

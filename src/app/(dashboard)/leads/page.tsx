@@ -138,7 +138,6 @@ export default async function LeadsPage() {
           {stageOrder.map((stage, i) => {
             const count = counts[stage] ?? 0;
             const cfg = stageConfig[stage];
-            const isLast = i === stageOrder.length - 1;
             const isSeparator = stage === "lost" && i > 0;
             return (
               <div key={stage} className="flex items-center gap-1">

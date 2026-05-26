@@ -527,16 +527,27 @@ export async function deletePaymentAction(paymentId: string, invoiceId: string) 
 
   if (!payment) return { error: "Payment not found." };
 
+  // Delete by ID first so we can match the income entry before it's gone
+  const { data: incomeEntry } = await supabase
+    .from("income_entries")
+    .select("id")
+    .eq("invoice_id", invoiceId)
+    .eq("amount", payment.amount)
+    .limit(1)
+    .maybeSingle();
+
   const { error } = await supabase.from("payments").delete().eq("id", paymentId);
   if (error) return { error: error.message };
 
-  // Delete the auto-created income entry for this payment
-  await supabase.from("income_entries").delete().eq("invoice_id", invoiceId).eq("amount", payment.amount);
+  // Delete only the single matched income entry (avoid wiping duplicates with same amount)
+  if (incomeEntry) {
+    await supabase.from("income_entries").delete().eq("id", incomeEntry.id);
+  }
 
   // Recalculate invoice totals
   const { data: invoice } = await supabase
     .from("invoices")
-    .select("amount, paid_amount")
+    .select("amount, paid_amount, paid_date")
     .eq("id", invoiceId)
     .single();
 
@@ -556,7 +567,7 @@ export async function deletePaymentAction(paymentId: string, invoiceId: string) 
       .from("invoices")
       .update({
         paid_amount: newPaidAmount,
-        paid_date: newPaidAmount >= invoice.amount ? invoice.paid_amount.toString() : null,
+        paid_date: newPaidAmount >= invoice.amount ? invoice.paid_date : null,
         status: newStatus,
       })
       .eq("id", invoiceId);

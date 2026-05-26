@@ -7,7 +7,7 @@ import {
   Building2, Code2, Palette, TrendingUp, DollarSign,
   Users, LineChart, FileText, Briefcase, Eye, ArrowLeft,
 } from "lucide-react";
-import { getCategoryBySlug, getCategoriesForRole } from "@/lib/sop-definitions";
+import { getCategoriesForRole } from "@/lib/sop-definitions";
 import type { UserRole } from "@/types/database";
 
 const ICON_MAP: Record<string, React.ElementType> = {

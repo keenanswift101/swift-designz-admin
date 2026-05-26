@@ -209,6 +209,7 @@ export default function InvoicePDF({
         {/* Header */}
         <View style={s.header}>
           <View style={s.brandRow}>
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
             {logoSrc && <Image src={logoSrc} style={s.logo} />}
             <View style={s.brand}>
               <Text style={s.brandName}>Swift Designz</Text>

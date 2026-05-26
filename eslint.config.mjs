@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Deno edge functions and one-off migration scripts — not Next.js code
+    "supabase/functions/**",
+    "supabase/migrate-*.ts",
   ]),
 ]);
 

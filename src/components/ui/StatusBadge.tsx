@@ -1,12 +1,5 @@
 import { cn } from "@/lib/utils";
 
-type BadgeVariant =
-  | "new" | "contacted" | "quoted" | "won" | "lost"
-  | "active" | "draft" | "sent" | "paid" | "partial" | "overdue"
-  | "planning" | "in_progress" | "review" | "completed" | "on_hold" | "cancelled"
-  | "prospective" | "exited" | "inactive" | "terminated" | "paused" | "retired"
-  | "default";
-
 interface StatusBadgeProps {
   status: string;
   className?: string;

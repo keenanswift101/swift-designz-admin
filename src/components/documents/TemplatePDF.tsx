@@ -198,6 +198,7 @@ export default function TemplatePDF({ doc, logoSrc }: Props) {
         {/* Header */}
         <View style={ds.header} fixed>
           <View style={ds.brandRow}>
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
             {logoSrc && <Image src={logoSrc} style={ds.logo} />}
             <View>
               <Text style={ds.brandName}>Swift Designz</Text>

@@ -2,7 +2,7 @@ const url = "https://nxuvzdrqgrmureejigpf.supabase.co";
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 async function runSQL(sql: string) {
-  const res = await fetch(`${url}/rest/v1/rpc/`, {
+  const _res = await fetch(`${url}/rest/v1/rpc/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
