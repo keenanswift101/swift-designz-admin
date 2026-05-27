@@ -19,10 +19,10 @@ const s = StyleSheet.create({
   header: { flexDirection: "row", justifyContent: "space-between", marginBottom: 28 },
   brandRow: { flexDirection: "row", alignItems: "center", gap: 10 },
   logo: { width: 36, height: 36 },
-  brandName: { fontSize: 15, fontWeight: 700, letterSpacing: 3, color: teal, textTransform: "uppercase" as const },
-  brandSub: { fontSize: 7, color: "#208080", letterSpacing: 2, marginTop: 2, textTransform: "uppercase" as const },
+  brandName: { fontSize: 11, fontWeight: 700, letterSpacing: 1, color: teal, textTransform: "uppercase" as const },
+  brandSub: { fontSize: 7, color: "#208080", letterSpacing: 1, marginTop: 2, textTransform: "uppercase" as const },
   docTitle: { textAlign: "right" as const },
-  docLabel: { fontSize: 18, fontWeight: 700, color: "#111", letterSpacing: 2, textTransform: "uppercase" as const },
+  docLabel: { fontSize: 16, fontWeight: 700, color: "#111", letterSpacing: 1, textTransform: "uppercase" as const },
   docMeta: { fontSize: 8, color: "#777", marginTop: 3 },
   docMetaVal: { color: "#333", fontWeight: 600 },
 
