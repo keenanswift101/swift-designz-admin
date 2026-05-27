@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import PageHeader from "@/components/ui/PageHeader";
 import Link from "next/link";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { ArrowLeft, FileText, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, FileText, CheckCircle2, Download } from "lucide-react";
 
 const PERIOD_LABELS: Record<string, string> = {
   custom: "Custom Period",
@@ -80,6 +80,16 @@ export default async function StatementDetailPage({ params }: { params: Promise<
       <PageHeader
         title={stmt.statement_number}
         description={`${PERIOD_LABELS[stmt.period_type] ?? stmt.period_type} · ${formatDate(stmt.period_from)} to ${formatDate(stmt.period_to)}`}
+        actions={
+          <a
+            href={`/api/docs/account-statements/${id}`}
+            download
+            className="inline-flex items-center gap-2 px-4 py-2 bg-teal hover:bg-teal-hover text-white text-sm font-medium rounded-lg transition-colors"
+          >
+            <Download className="h-4 w-4" />
+            Download PDF
+          </a>
+        }
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
