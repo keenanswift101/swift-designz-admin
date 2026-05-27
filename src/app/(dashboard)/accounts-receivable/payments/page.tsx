@@ -90,10 +90,15 @@ export default async function PaymentsPage() {
                     </td>
                     <td className="px-4 py-3">
                       {receipt ? (
-                        <div className="flex items-center gap-1.5">
+                        <a
+                          href={`/api/docs/receipts/${pay.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 hover:opacity-80 transition-opacity"
+                        >
                           <CheckCircle2 className="h-3.5 w-3.5 text-teal shrink-0" />
-                          <span className="text-xs text-gray-400 font-mono">{receipt.receiptNumber}</span>
-                        </div>
+                          <span className="text-xs text-teal font-mono underline underline-offset-2">{receipt.receiptNumber}</span>
+                        </a>
                       ) : (
                         <div className="flex items-center gap-1.5">
                           <Clock className="h-3.5 w-3.5 text-gray-600 shrink-0" />
