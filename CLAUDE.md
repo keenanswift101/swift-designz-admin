@@ -225,3 +225,15 @@ Template logic lives in src/lib/document-templates.ts; content in src/lib/docume
 ## Domain
 - admin.swiftdesignz.co.za (Netlify, @netlify/plugin-nextjs)
 - Main site: swiftdesignz.co.za (separate repo)
+
+## Company Registration
+- **Legal name:** Swift Designz Investments CC
+- **CC Registration:** CC/2026/055589
+- **NamRA TIN:** 16271273 (Tax Type: ITX 16271273-011)
+- **Physical:** Erf 55 Kenneth McArthur Street, Auas Blick, Windhoek, Namibia
+- **Postal:** P.O. Box 4655, Rehoboth, Namibia
+- **Email:** info@swiftdesignz.co.za
+- **Financial year end:** Last day of February each year
+- **Registration effective:** 12 May 2026
+- **Director:** Keenan Husselmann
+- **Accounting officer:** Rachel N. Kashala (SAIBA 4132)

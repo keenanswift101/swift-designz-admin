@@ -167,7 +167,7 @@ export default function AccountStatementPDF({
             {companyAddress && <Text style={s.partyLine}>{companyAddress}</Text>}
             {companyPhone && <Text style={s.partyLine}>{companyPhone}</Text>}
             {companyEmail && <Text style={s.partyLine}>{companyEmail}</Text>}
-            {companyVat && <Text style={s.partyLine}>VAT: {companyVat}</Text>}
+            {companyVat && <Text style={s.partyLine}>Tax No: {companyVat}</Text>}
           </View>
           <View style={s.party}>
             <Text style={s.partyLabel}>Client</Text>

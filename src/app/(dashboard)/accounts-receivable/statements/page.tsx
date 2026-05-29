@@ -34,12 +34,13 @@ const TRIGGER_LABELS: Record<string, string> = {
 export default async function StatementsPage() {
   const supabase = await createClient();
 
-  const [{ data: statements }, { data: clients }] = await Promise.all([
+  const [{ data: statements }, { data: clients }, { data: projects }] = await Promise.all([
     supabase
       .from("account_statements")
       .select("id, statement_number, period_type, period_from, period_to, trigger_type, opening_balance, total_invoiced, total_paid, closing_balance, sent_at, created_at, clients(name, company)")
       .order("created_at", { ascending: false }),
     supabase.from("clients").select("id, name, company").order("name"),
+    supabase.from("projects").select("id, name, client_id, start_date, due_date").order("name"),
   ]);
 
   const rows = (statements ?? []) as unknown as Statement[];
@@ -146,7 +147,7 @@ export default async function StatementsPage() {
               <Plus className="h-4 w-4 text-teal" />
               <h2 className="text-sm font-semibold text-foreground">Generate Statement</h2>
             </div>
-            <GenerateStatementForm clients={clients ?? []} />
+            <GenerateStatementForm clients={clients ?? []} projects={projects ?? []} />
           </div>
         </div>
       </div>

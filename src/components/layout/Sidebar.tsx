@@ -17,6 +17,7 @@ import {
   BarChart2,
   ClipboardList,
   Bell,
+  DollarSign,
   CreditCard,
   FileText,
   RefreshCw,
@@ -62,7 +63,7 @@ const SECTIONS: NavSection[] = [
     label: "Accounts Receivable",
     items: [
       { href: "/accounts-receivable/quotations", label: "Quotations", icon: ClipboardList, countKey: "quotations" },
-      { href: "/invoices",                       label: "Billing",    icon: Bell,          countKey: "invoices" },
+      { href: "/invoices",                       label: "Billing",    icon: DollarSign,    countKey: "invoices" },
       { href: "/accounts-receivable/payments",   label: "Payments",   icon: CreditCard,    countKey: "payments" },
       { href: "/accounts-receivable/reminders",  label: "Reminders",  icon: Bell,          countKey: "payment_reminders" },
       { href: "/accounts-receivable/statements", label: "Statements", icon: FileText,      countKey: "account_statements" },

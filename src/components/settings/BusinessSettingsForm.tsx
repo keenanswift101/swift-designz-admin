@@ -89,12 +89,12 @@ export default function BusinessSettingsForm({ settings, action }: BusinessSetti
         <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">Registration</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="vat_number" className="block text-xs text-gray-500 mb-1">VAT Number</label>
+            <label htmlFor="vat_number" className="block text-xs text-gray-500 mb-1">NamRA Tax No (TIN)</label>
             <input id="vat_number" name="vat_number" type="text" defaultValue={settings.vat_number || ""}
               className="w-full px-3 py-2 bg-card border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-teal" />
           </div>
           <div>
-            <label htmlFor="registration_number" className="block text-xs text-gray-500 mb-1">Company Registration (CIPC)</label>
+            <label htmlFor="registration_number" className="block text-xs text-gray-500 mb-1">CC Registration No</label>
             <input id="registration_number" name="registration_number" type="text" defaultValue={settings.registration_number || ""}
               className="w-full px-3 py-2 bg-card border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-teal" />
           </div>

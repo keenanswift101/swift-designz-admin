@@ -161,6 +161,7 @@ export interface Expense {
   recurring: boolean;
   recurring_interval: RecurringInterval | null;
   receipt_url: string | null;
+  invoice_url: string | null;
   notes: string | null;
   created_at: string;
   updated_at: string;

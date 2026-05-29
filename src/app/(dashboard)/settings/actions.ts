@@ -73,7 +73,7 @@ export async function updateBusinessSettingsAction(formData: FormData) {
   if (!existing) return { error: "Business settings not found." };
 
   const updates = {
-    company_name: (formData.get("company_name") as string)?.trim() || "Swift Designz",
+    company_name: (formData.get("company_name") as string)?.trim() || "Swift Designz Investments CC",
     tagline: (formData.get("tagline") as string)?.trim() || null,
     email: (formData.get("email") as string)?.trim() || null,
     phone: (formData.get("phone") as string)?.trim() || null,

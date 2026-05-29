@@ -4,7 +4,7 @@ import StatusBadge from "@/components/ui/StatusBadge";
 import DeleteInvoiceButton from "@/components/invoices/DeleteInvoiceButton";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import Link from "next/link";
-import { TrendingUp, Clock, AlertTriangle, CheckCircle2, ArrowUpRight, FileText, Plus } from "lucide-react";
+import { TrendingUp, Clock, AlertTriangle, CheckCircle2, ArrowUpRight, FileText } from "lucide-react";
 import type { Invoice } from "@/types/database";
 
 type InvoiceWithClient = Invoice & { clients: { name: string } | null };
@@ -67,15 +67,6 @@ export default async function InvoicesPage({ searchParams }: Props) {
       <PageHeader
         title="Billing"
         description="Invoices, payment tracking, and collection overview"
-        actions={
-          <Link
-            href="/invoices/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-teal/10 text-teal border border-teal/25 hover:bg-teal/20 text-sm font-medium rounded-lg transition-colors"
-          >
-            <Plus className="h-4 w-4" />
-            New Invoice
-          </Link>
-        }
       />
 
       {/* Hero */}
@@ -192,7 +183,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
           </h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border">
                 <th className="text-left px-5 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice #</th>
@@ -205,7 +196,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
                 <th className="px-5 py-3 w-10" />
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-border">
               {visibleInvoices.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="px-5 py-12 text-center text-sm text-gray-500">
@@ -213,15 +204,13 @@ export default async function InvoicesPage({ searchParams }: Props) {
                   </td>
                 </tr>
               ) : (
-                visibleInvoices.map((inv, i) => {
+                visibleInvoices.map((inv) => {
                   const paidPct = inv.amount > 0 ? Math.min(Math.round((inv.paid_amount / inv.amount) * 100), 100) : 0;
                   const isOverdue = inv.status === "overdue";
                   return (
                     <tr
                       key={inv.id}
-                      className={`border-b border-border/50 hover:bg-card transition-colors ${
-                        isOverdue ? "bg-red-500/8" : i % 2 === 1 ? "bg-foreground/3" : ""
-                      }`}
+                      className={`hover:bg-card/50 transition-colors ${isOverdue ? "bg-red-500/5" : ""}`}
                     >
                       <td className="px-5 py-3">
                         <Link

@@ -1,9 +1,18 @@
-# Swift Designz Admin Portal
+# Swift Designz Investments CC — Admin Portal
 
-Internal business management portal for Swift Designz — handles the full client lifecycle from lead capture through quotation, invoicing, payments, and account statements.
+Internal business management portal for **Swift Designz Investments CC** — handles the full client lifecycle from lead capture through quotation, invoicing, payments, and account statements.
 
 **Production:** https://admin.swiftdesignz.co.za
 **Supabase project:** nxuvzdrqgrmureejigpf
+
+| | |
+|---|---|
+| **Legal name** | Swift Designz Investments CC |
+| **CC Registration** | CC/2026/055589 |
+| **NamRA TIN** | 16271273 (ITX 16271273-011) |
+| **Physical** | Erf 55 Kenneth McArthur Street, Auas Blick, Windhoek, Namibia |
+| **Financial year end** | Last day of February |
+| **Effective** | 12 May 2026 |
 
 ---
 

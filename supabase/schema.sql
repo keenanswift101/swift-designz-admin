@@ -153,6 +153,7 @@ CREATE TABLE expenses (
   recurring BOOLEAN NOT NULL DEFAULT false,
   recurring_interval recurring_interval,
   receipt_url TEXT,
+  invoice_url TEXT,
   notes TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -477,11 +478,13 @@ CREATE POLICY "Anon can insert leads" ON leads FOR INSERT TO anon
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 INSERT INTO storage.buckets (id, name, public) VALUES ('documents', 'documents', false);
-INSERT INTO storage.buckets (id, name, public) VALUES ('receipts', 'receipts', false);
+INSERT INTO storage.buckets (id, name, public, file_size_limit) VALUES ('receipts', 'receipts', true, 10485760);
 
 CREATE POLICY "Auth users can read documents bucket" ON storage.objects FOR SELECT TO authenticated
   USING (bucket_id IN ('documents', 'receipts'));
 CREATE POLICY "Admins can upload to documents bucket" ON storage.objects FOR INSERT TO authenticated
-  WITH CHECK (bucket_id IN ('documents', 'receipts') AND EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+  WITH CHECK (bucket_id = 'documents' AND EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Auth users can upload to receipts bucket" ON storage.objects FOR INSERT TO authenticated
+  WITH CHECK (bucket_id = 'receipts' AND EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'viewer')));
 CREATE POLICY "Admins can delete from documents bucket" ON storage.objects FOR DELETE TO authenticated
   USING (bucket_id IN ('documents', 'receipts') AND EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));

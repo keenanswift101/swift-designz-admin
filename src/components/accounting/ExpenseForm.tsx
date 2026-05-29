@@ -135,23 +135,42 @@ export default function ExpenseForm({ expense, action, submitLabel }: ExpenseFor
         )}
       </div>
 
-      {/* Receipt upload */}
-      <div>
-        <label htmlFor="receipt" className="block text-xs font-medium text-gray-400 mb-1.5">
-          Receipt {expense?.receipt_url ? "(replace existing)" : "(optional)"}
-        </label>
-        <input
-          id="receipt"
-          name="receipt"
-          type="file"
-          accept=".pdf,.png,.jpg,.jpeg,.webp"
-          className="w-full text-sm text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border file:border-border file:bg-card file:text-sm file:text-foreground file:cursor-pointer hover:file:border-teal"
-        />
-        {expense?.receipt_url && (
-          <a href={expense.receipt_url} target="_blank" rel="noopener noreferrer" className="text-xs text-teal hover:underline mt-1 inline-block">
-            View current receipt
-          </a>
-        )}
+      {/* Uploads */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="receipt" className="block text-xs font-medium text-gray-400 mb-1.5">
+            Proof of Payment {expense?.receipt_url ? "(replace)" : "(optional)"}
+          </label>
+          <input
+            id="receipt"
+            name="receipt"
+            type="file"
+            accept=".pdf,.png,.jpg,.jpeg,.webp"
+            className="w-full text-sm text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border file:border-border file:bg-card file:text-sm file:text-foreground file:cursor-pointer hover:file:border-teal"
+          />
+          {expense?.receipt_url && (
+            <a href={expense.receipt_url} target="_blank" rel="noopener noreferrer" className="text-xs text-teal hover:underline mt-1 inline-block">
+              View current ↗
+            </a>
+          )}
+        </div>
+        <div>
+          <label htmlFor="invoice_doc" className="block text-xs font-medium text-gray-400 mb-1.5">
+            Supplier Invoice {expense?.invoice_url ? "(replace)" : "(optional)"}
+          </label>
+          <input
+            id="invoice_doc"
+            name="invoice_doc"
+            type="file"
+            accept=".pdf,.png,.jpg,.jpeg,.webp"
+            className="w-full text-sm text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border file:border-border file:bg-card file:text-sm file:text-foreground file:cursor-pointer hover:file:border-teal"
+          />
+          {expense?.invoice_url && (
+            <a href={expense.invoice_url} target="_blank" rel="noopener noreferrer" className="text-xs text-teal hover:underline mt-1 inline-block">
+              View current ↗
+            </a>
+          )}
+        </div>
       </div>
 
       <div>

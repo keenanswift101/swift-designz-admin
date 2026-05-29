@@ -109,7 +109,7 @@ export async function GET() {
 
   // ── Workbook ──────────────────────────────────────────────
   const wb = new ExcelJS.Workbook();
-  wb.creator = "Swift Designz Admin";
+  wb.creator = "Swift Designz Investments CC Admin";
   wb.created = now;
   wb.modified = now;
 
@@ -128,7 +128,7 @@ export async function GET() {
   // ── Header band ──
   ws1.mergeCells(1, 1, 1, totalCols);
   const title = ws1.getCell(1, 1);
-  title.value = "SWIFT DESIGNZ — PROFIT & LOSS STATEMENT";
+  title.value = "SWIFT DESIGNZ INVESTMENTS CC — PROFIT & LOSS STATEMENT";
   title.font = { name: "Calibri", size: 16, bold: true, color: { argb: WHITE } };
   title.fill = { type: "pattern", pattern: "solid", fgColor: { argb: TEAL } };
   title.alignment = { horizontal: "center", vertical: "middle" };
@@ -266,7 +266,7 @@ export async function GET() {
 
   ws2.mergeCells("A1:D1");
   const ws2Title = ws2.getCell("A1");
-  ws2Title.value = "SWIFT DESIGNZ — INCOME DETAIL";
+  ws2Title.value = "SWIFT DESIGNZ INVESTMENTS CC — INCOME DETAIL";
   ws2Title.font = { name: "Calibri", size: 14, bold: true, color: { argb: WHITE } };
   ws2Title.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF16a34a" } };
   ws2Title.alignment = { horizontal: "center", vertical: "middle" };
@@ -326,7 +326,7 @@ export async function GET() {
 
   ws3.mergeCells("A1:D1");
   const ws3Title = ws3.getCell("A1");
-  ws3Title.value = "SWIFT DESIGNZ — EXPENSE DETAIL";
+  ws3Title.value = "SWIFT DESIGNZ INVESTMENTS CC — EXPENSE DETAIL";
   ws3Title.font = { name: "Calibri", size: 14, bold: true, color: { argb: WHITE } };
   ws3Title.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFdc2626" } };
   ws3Title.alignment = { horizontal: "center", vertical: "middle" };
