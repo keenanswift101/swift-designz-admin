@@ -285,7 +285,7 @@ function CoverLetterPage() {
         I am Keenan Husselmann, a 31-year-old Namibian citizen and sole director of Swift Designz Investments CC. I hereby apply for a loan of N$524,930 under the National Youth Development Fund through the Development Bank of Namibia. My business is registered as Close Corporation CC/2026/055589, effective 12 May 2026, and headquartered in Windhoek, Khomas Region.
       </Text>
       <Text style={bl}>
-        Swift Designz Investments CC is a technology and digital services company. We build websites, e-commerce stores, web and mobile applications, and we provide AI training and technical consulting to businesses across Namibia. Before formal registration, I operated the business as a freelancer under the same brand from January 2026, generating an average of N$8,000 per month in revenue. The CC registration in May 2026 marks the transition from solo freelance work to a full team-based agency.
+        Swift Designz Investments CC is a technology and digital services company. We build websites, e-commerce stores, web and mobile applications, and we provide AI training and technical consulting to businesses across Namibia. Before formal registration, I operated as a freelancer under the same brand from January 2026, generating N$41,000 in confirmed income over 5 months with current recurring monthly revenue of N$7,000 from retainer subscriptions, investor income, and client deposits. The CC registration in May 2026 marks the transition from solo freelance work to a full team-based agency.
       </Text>
       <Text style={bl}>
         This loan will do three things: get Apple hardware into the business so we can build and test for iOS and macOS users for the first time; fund six staff salaries for 12 months while we grow the client base; and cover professional and legal setup costs for the new CC. We are fully remote, overhead is low, and we are already generating revenue in both Namibia and South Africa.
@@ -325,7 +325,7 @@ function ExecutiveSummaryPage() {
 
       <H2 num="WHO WE ARE" title="About Swift Designz Investments CC" />
       <Text style={s.p}>
-        My name is Keenan Husselmann. I am 31 years old, a Namibian citizen, and I hold a Bachelor of Computer Science degree in Software Development from NUST. I started building websites and digital products professionally in early 2026. Since January 2026 I have been trading under the Swift Designz brand as a freelancer, generating an average of N$8,000 per month from website builds, e-commerce stores, retainer clients, and consulting. On 12 May 2026 I registered Swift Designz Investments CC to formalise the business and begin building a proper team.
+        My name is Keenan Husselmann. I am 31 years old, a Namibian citizen, and I hold a Bachelor of Computer Science degree in Software Development from NUST. I started building websites and digital products professionally in early 2026. Since January 2026 I have been trading under the Swift Designz brand, generating N$41,000 in confirmed income over 5 months against approximately N$5,000 in expenses. Current monthly recurring revenue is N$7,000 from 3 active retainer clients on 1-year contracts, an investor contribution, and ongoing client project deposits. On 12 May 2026 I registered Swift Designz Investments CC to formalise the business and begin building a proper team.
       </Text>
       <Text style={s.p}>
         The business already serves active clients in both Namibia and South Africa. We build websites, e-commerce stores, web and mobile applications, and provide technical training and consulting. We operate fully remotely, which keeps our overhead low and allows us to serve clients anywhere without the cost of a physical office.
@@ -587,7 +587,7 @@ function ManagementPlanPage2() {
       <H2 num="2.1.2" title="Experience and Technical Ability" />
       <Text style={s.h3}>Keenan Husselmann - Director and Lead Developer</Text>
       <Text style={s.p}>
-        I hold a Bachelor of Computer Science degree in Software Development from NUST (Namibia University of Science and Technology). I have been building websites, web applications, and digital solutions since my studies and have been trading as a freelancer under the Swift Designz brand since January 2026. In four months of active trading I generated an average of N$8,000 per month in revenue from website development, maintenance retainers, and consulting.
+        I hold a Bachelor of Computer Science degree in Software Development from NUST (Namibia University of Science and Technology). I started building professionally in early 2026 and have been trading under the Swift Designz brand since January 2026. Over the first 5 months of trading I generated N$41,000 in total income with approximately N$5,000 in expenses, achieving an 88% profit margin. Current monthly recurring revenue is N$7,000, made up of 3 active retainer clients on 1-year contracts, 1 investor, and ongoing client project deposits.
       </Text>
       <Text style={s.p}>
         As evidence of my technical capability, I designed and built the full administrative management platform used to run Swift Designz. This system, accessible at admin.swiftdesignz.co.za, is a custom Next.js and React application backed by a PostgreSQL database. It handles client relationship management, project tracking, full accounts receivable (quotations, invoices, payments, reminders, statements, retainers), payroll tracking, equipment management, investor management, and automated email communication. Building this system from scratch demonstrates not only technical depth but the ability to understand business requirements and translate them into working software.
@@ -658,7 +658,7 @@ function FinancialPage1() {
           <Text style={[s.th, { flex: 1 }]}>Activities</Text>
         </View>
         {[
-          ["Pre-Approval", "Now - Approval\n(Estimated 4-8 weeks)", "Keenan operates solo. Existing clients continue to be served. Revenue maintained at N$8,000 to N$10,000 per month. Team candidates are identified and on standby. Employment contracts are drafted in preparation. No formal hiring until funds are confirmed."],
+          ["Pre-Approval", "Now - Approval\n(Estimated 4-8 weeks)", "Keenan operates solo. Existing clients continue to be served. Revenue maintained at approximately N$7,000 per month from retainers, investor, and client deposits. Team candidates are identified and on standby. Employment contracts are drafted in preparation. No formal hiring until funds are confirmed."],
           ["Phase 1", "Month 1 to 2\n(Post-disbursement)", "Loan funds received. Formal employment commences for all 5 positions. All staff registered with Social Security Commission within the first week. Hardware equipment procured from approved suppliers with quotations attached. Professional and legal fees paid. Team onboarded and remote workflows established."],
           ["Phase 2", "Month 3 to 6", "Full team operational. Active client acquisition begins. Marketing Officer launches social media campaigns and paid advertising. Target 5 new clients per month. Establish initial retainer base targeting 8 active retainer clients by end of Month 6."],
           ["Phase 3", "Month 7 to 12", "Scale operations. Target 15 or more active clients and 15 or more retainer subscriptions. Revenue should reach or exceed N$60,000 per month."],
@@ -674,15 +674,23 @@ function FinancialPage1() {
       <View style={s.div} />
       <H2 num="3.2" title="Pre-Registration Trading History" />
       <Text style={s.p}>
-        Prior to formal CC registration on 12 May 2026, the business operated as a sole proprietor under the Swift Designz brand from January 2026. During this four-month period:
+        Prior to formal CC registration on 12 May 2026, the business operated as a sole proprietor under the Swift Designz brand from January 2026. The following figures are confirmed from the business own accounting records:
       </Text>
-      <Bullet text="Average monthly revenue: N$8,000" />
-      <Bullet text="Revenue sources: website development projects, maintenance retainers, and ad hoc consulting services" />
-      <Bullet text="One private investor committed, contributing N$2,000 per month" />
-      <Bullet text="Live business website operational (swiftdesignz.co.za) with active lead intake" />
-      <Bullet text="Full internal management platform built and deployed (admin.swiftdesignz.co.za)" />
+      <Bullet text="Total income (January to May 2026, 5 months): N$41,000" />
+      <Bullet text="Total expenses (January to May 2026): approximately N$5,000" />
+      <Bullet text="Net profit over 5 months: N$36,000 (approximately 88% profit margin)" />
+      <Bullet text="Average monthly gross revenue: N$8,200" />
       <Text style={s.p}>
-        This demonstrates that the business has a real, functioning market base to grow from, not a concept seeking its first client.
+        Current monthly revenue of N$7,000 to N$7,300 is made up of three recurring sources:
+      </Text>
+      <Bullet text="3 active retainer clients on 1-year service contracts: N$2,800 per month combined" />
+      <Bullet text="1 private investor contribution: N$2,000 per month (5-year commitment)" />
+      <Bullet text="Client project deposit payments at 50% upfront on projects averaging N$5,000 in total value: approximately N$2,500 per month" />
+      <Text style={s.p}>
+        Two additional retainer clients are currently in the activation pipeline. Once confirmed, they will add approximately N$1,800 per month to the recurring revenue base. All retainer clients are on 1-year contracts, providing stable and predictable monthly income regardless of project volume in any given month.
+      </Text>
+      <Text style={s.p}>
+        This demonstrates that the business already has proven, recurring revenue streams. This is not a concept seeking its first client. It is an operating business seeking the funding to grow its capacity and serve a wider client base.
       </Text>
       <View style={s.div} />
       <H2 num="3.3" title="Loan Use Breakdown" />
@@ -752,26 +760,27 @@ function FinancialPage1() {
 
 function FinancialPage2() {
   const months = [
-    ["Month 1 (post-funding)", "10,000", "34,140", "(24,140)"],
-    ["Month 2", "10,000", "34,140", "(24,140)"],
-    ["Month 3", "14,000", "34,140", "(20,140)"],
-    ["Month 4", "18,000", "34,140", "(16,140)"],
-    ["Month 5", "23,000", "34,140", "(11,140)"],
-    ["Month 6", "28,000", "34,140", "(6,140)"],
-    ["Month 7", "34,000", "34,140", "(140)"],
-    ["Month 8", "40,000", "34,140", "5,860"],
-    ["Month 9", "46,000", "34,140", "11,860"],
-    ["Month 10", "51,000", "34,140", "16,860"],
-    ["Month 11", "56,000", "34,140", "21,860"],
+    ["Month 1 (post-funding)", "7,000", "34,140", "(27,140)"],
+    ["Month 2", "7,000", "34,140", "(27,140)"],
+    ["Month 3", "11,000", "34,140", "(23,140)"],
+    ["Month 4", "15,000", "34,140", "(19,140)"],
+    ["Month 5", "20,000", "34,140", "(14,140)"],
+    ["Month 6", "25,000", "34,140", "(9,140)"],
+    ["Month 7", "31,000", "34,140", "(3,140)"],
+    ["Month 8", "37,000", "34,140", "2,860"],
+    ["Month 9", "43,000", "34,140", "8,860"],
+    ["Month 10", "49,000", "34,140", "14,860"],
+    ["Month 11", "55,000", "34,140", "20,860"],
     ["Month 12", "60,000", "34,140", "25,860"],
   ];
   return (
     <Page size="A4" style={s.page}>
       <RunHead section="Section 03 - Financial Information (continued)" />
       <H2 num="3.3.1" title="Key Financial Assumptions" />
-      <Bullet text="Revenue in Month 1 and Month 2 is N$10,000 (N$8,000 existing freelance base plus N$2,000 investor). No additional project revenue is expected while the team is onboarding and settling in." />
-      <Bullet text="New project revenue begins from Month 3 and grows by approximately N$4,000 to N$6,000 per month as the team becomes productive and marketing ramps up" />
-      <Bullet text="Timing note: the pre-approval period before disbursement is not counted in these 12 months. Month 1 begins on the date funds are received." />
+      <Bullet text="Revenue in Month 1 and Month 2 is N$7,000, which is the current confirmed monthly base. This includes: retainer subscriptions from 3 clients on 1-year contracts (N$2,800), investor contribution (N$2,000), and client project deposits (N$2,500). No additional new project revenue is assumed while the team is onboarding." />
+      <Bullet text="Two additional retainer clients are pending activation. These are not included in the projections and represent upside if they activate during the loan period." />
+      <Bullet text="New project revenue begins from Month 3 and grows as the team becomes productive. Marketing ramps up from Month 3 through the Marketing Officer." />
+      <Bullet text="Timing note: the pre-approval period is not counted in these 12 months. Month 1 begins on the date funds are received and employment commences." />
       <Bullet text="Monthly operating costs are fixed at N$34,140 covering payroll and employer costs at N$32,640 and other operational expenses at N$1,500. Software licences are covered by the director outside the loan." />
       <Bullet text="Hardware equipment (N$114,250) and the professional and legal reserve (N$50,000) are funded upfront from the loan at the start of Month 1" />
       <Bullet text="All employees provide their own devices. The company covers team software licences only, including Google Workspace for all staff (~N$650 per month for 6 users, included in the N$1,500 monthly operational budget)" />
@@ -802,14 +811,14 @@ function FinancialPage2() {
         ))}
         <View style={s.tblRTotal}>
           <Text style={[s.tdb, { width: 75 }]}>TOTALS</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>390,000</Text>
+          <Text style={[s.tdbr, { flex: 1 }]}>360,000</Text>
           <Text style={[s.tdbr, { flex: 1 }]}>409,680</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>(19,680)</Text>
+          <Text style={[s.tdbr, { flex: 1 }]}>(49,680)</Text>
         </View>
       </View>
       <View style={s.box}>
         <Text style={s.boxText}>
-          Month 1 and Month 2 show the highest deficit because the team is onboarding and no new project revenue has started yet. From Month 3 the business ramps up steadily and reaches operational breakeven at Month 8. The full-year operating deficit of N$19,680, combined with the hardware cost of N$114,250 and the professional reserve of N$50,000, gives a total Year 1 loan draw of approximately N$193,930. The remaining N$332,000 of the N$524,930 loan provides a strong buffer as repayments begin in Year 2.
+          Month 1 and Month 2 show the highest deficit because the team is onboarding and new project revenue has not started yet. The N$7,000 base in those months reflects the current confirmed recurring income: retainer subscriptions, investor contribution, and existing client deposits. From Month 3 new project revenue kicks in and the business ramps steadily, reaching operational breakeven at Month 8. The full-year operating deficit of N$49,680, combined with the hardware cost of N$114,250 and the professional reserve of N$50,000, gives a total Year 1 loan draw of approximately N$213,930. The remaining N$311,000 of the N$524,930 loan provides a solid buffer as repayments begin in Year 2.
         </Text>
       </View>
       <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 03 - Financial Information" />
@@ -830,12 +839,12 @@ function FinancialPage3() {
           <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Year 3 (2028/29)</Text>
         </View>
         {[
-          ["Annual Revenue (N$)", "390,000", "1,044,000", "1,560,000"],
-          ["Monthly Revenue (average)", "32,500", "87,000", "130,000"],
+          ["Annual Revenue (N$)", "360,000", "1,044,000", "1,560,000"],
+          ["Monthly Revenue (average)", "30,000", "87,000", "130,000"],
           ["Annual Operating Costs (N$)", "409,680", "480,000", "528,000"],
           ["Loan Repayment (annual)", "none", "146,400", "146,400"],
           ["Total Annual Costs (N$)", "409,680", "626,400", "674,400"],
-          ["Net Profit or (Loss) (N$)", "(19,680)", "417,600", "885,600"],
+          ["Net Profit or (Loss) (N$)", "(49,680)", "417,600", "885,600"],
           ["Staff headcount (year-end)", "6", "9", "12"],
         ].map(([item, y1, y2, y3], i) => (
           <View key={item} style={i % 2 === 0 ? s.tblR : s.tblRA}>
@@ -853,7 +862,7 @@ function FinancialPage3() {
         Year 1 note: The operating deficit is fully covered by the NYDF loan. Equipment purchase is not included in the operating costs above as it is a one-time upfront cost.
       </Text>
       <Text style={[s.p, { marginBottom: 14 }]}>
-        Year 2 revenue growth is driven by an established team at full capacity, an active retainer base of 15 or more clients, continued growth in the existing South Africa client base, and growth from the established N$8,000 per month revenue foundation.
+        Year 2 revenue growth is driven by an established team at full capacity, an active retainer base of 15 or more clients, continued growth in the existing South Africa client base, and growth from the established N$7,000 per month recurring revenue base including retainer contracts, investor income, and client deposits.
       </Text>
       <View style={s.div} />
       <H2 num="3.3.4" title="Loan Repayment Projection" />
@@ -884,7 +893,7 @@ function FinancialPage3() {
       </View>
       <View style={s.box}>
         <Text style={s.boxText}>
-          By Month 13 when repayments begin, the business projects monthly revenue of N$70,000 to N$90,000 based on the Year 1 growth trajectory ending at N$60,000 in Month 12. Monthly operating costs at that point will be approximately N$40,000, giving a monthly surplus of N$30,000 to N$50,000 from which to service the repayment of N$12,200 per month. The business will be profitable and able to repay the loan from operational income.
+          By Month 13 when repayments begin, the business projects monthly revenue of N$65,000 to N$85,000 based on the Year 1 growth trajectory ending at N$60,000 in Month 12. The recurring revenue base (retainers, investor, and deposits) will continue at or above N$7,000 per month minimum throughout. Monthly operating costs at that point will be approximately N$40,000, giving a monthly surplus of N$25,000 to N$45,000 from which to service the repayment of N$12,200 per month. The business will be profitable and able to repay the loan from operational income.
         </Text>
       </View>
       <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 03 - Financial Information" />
