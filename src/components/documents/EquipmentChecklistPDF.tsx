@@ -313,114 +313,6 @@ const EQUIPMENT: Category[] = [
       },
     ],
   },
-  {
-    title: "Software Licences (Annual)",
-    items: [
-      {
-        item: "Adobe Creative Cloud (All Apps)",
-        description: "Photoshop, Illustrator, Premiere, XD, and full design suite",
-        importance: "CRITICAL",
-        avgPrice: "N$11,000 - 15,000/yr",
-        notes: "Single-seat licence. Get a quote from Adobe for NAD pricing",
-      },
-      {
-        item: "Figma (Professional seat)",
-        description: "UI/UX design, prototyping, and client handoff tool",
-        importance: "CRITICAL",
-        avgPrice: "N$5,000 - 7,000/yr",
-        notes: "Figma is billed in USD. Budget for exchange rate movement",
-      },
-      {
-        item: "Microsoft 365 Business Standard",
-        description: "Outlook, Word, Excel, Teams, SharePoint for the full team",
-        importance: "CRITICAL",
-        avgPrice: "N$4,000 - 7,500/yr",
-        notes: "Covers up to 6 users. Get a local reseller quote",
-      },
-      {
-        item: "GitHub Copilot and Pro",
-        description: "Code hosting, CI/CD pipelines, and AI coding assistant",
-        importance: "RECOMMENDED",
-        avgPrice: "N$4,000 - 5,000/yr",
-        notes: "Billed in USD. Essential for development productivity",
-      },
-      {
-        item: "Project Management Tool",
-        description: "Task tracking, sprint boards, and client project visibility",
-        importance: "RECOMMENDED",
-        avgPrice: "N$0 - 5,000/yr",
-        notes: "Linear (free tier is strong) or Asana. Start free, upgrade as needed",
-      },
-      {
-        item: "Antivirus and Security Suite",
-        description: "Business endpoint protection across all team devices",
-        importance: "CRITICAL",
-        avgPrice: "N$1,500 - 3,000/yr",
-        notes: "ESET or Kaspersky Business. Get a multi-device licence",
-      },
-      {
-        item: "Cloud Backup Service",
-        description: "Off-site automated backup of all work in progress",
-        importance: "RECOMMENDED",
-        avgPrice: "N$800 - 2,000/yr",
-        notes: "Backblaze B2 or Google Workspace with Drive",
-      },
-      {
-        item: "Password Manager (Team)",
-        description: "Secure shared credential management for all team accounts",
-        importance: "RECOMMENDED",
-        avgPrice: "N$700 - 1,500/yr",
-        notes: "1Password Teams or Bitwarden Business",
-      },
-    ],
-  },
-  {
-    title: "Office and Workspace",
-    items: [
-      {
-        item: "Sit-Stand Desk",
-        description: "Ergonomic workspace that supports long daily work sessions",
-        importance: "RECOMMENDED",
-        avgPrice: "N$7,000 - 16,000",
-        notes: "A height-adjustable desk significantly reduces fatigue",
-      },
-      {
-        item: "Ergonomic Chair",
-        description: "Lumbar support for 8+ hours of seated work",
-        importance: "CRITICAL",
-        avgPrice: "N$5,000 - 13,000",
-        notes: "Do not cut corners on this. A bad chair causes real injury",
-      },
-      {
-        item: "Printer and Scanner",
-        description: "For contracts, invoices, and physical document handling",
-        importance: "RECOMMENDED",
-        avgPrice: "N$2,500 - 5,500",
-        notes: "HP LaserJet or Brother multifunction units are reliable",
-      },
-      {
-        item: "Ring Light and Studio Lighting",
-        description: "Professional appearance in video calls and content recordings",
-        importance: "RECOMMENDED",
-        avgPrice: "N$900 - 2,500",
-        notes: "Makes a visible difference in client-facing video quality",
-      },
-      {
-        item: "Whiteboard (large)",
-        description: "Visual planning, architecture diagrams, and brainstorming",
-        importance: "RECOMMENDED",
-        avgPrice: "N$400 - 1,800",
-        notes: "Magnetic whiteboards double as notice boards",
-      },
-      {
-        item: "Surge Protector and Power Strip",
-        description: "Protected multi-outlet power for the full desk setup",
-        importance: "CRITICAL",
-        avgPrice: "N$350 - 700",
-        notes: "Required at every workstation. Buy one per desk minimum",
-      },
-    ],
-  },
 ];
 
 const EXTRA_EQUIPMENT: Category[] = [
@@ -621,7 +513,7 @@ function Page1() {
         <View style={s.headerRule} />
         <View style={s.instructionBox}>
           <Text style={s.instructionText}>
-            Instructions: Use this checklist when collecting supplier quotations. Tick the box on the left once a written quotation has been received for that item. All items marked CRITICAL must have a quotation attached to the loan application. Items marked RECOMMENDED and OPTIONAL can be included or excluded based on your final budget. Prices are average Namibian market estimates and will vary by supplier.{"\n\n"}
+            Instructions: Use this checklist when collecting supplier quotations. Tick the box on the left once a written quotation has been received. All items marked CRITICAL must have a quotation attached to the loan application. Software licences and office furniture are not included in the loan and do not need quotations for the application. Prices are average Namibian market estimates and will vary by supplier.{"\n\n"}
             Importance key: CRITICAL = cannot operate without this | RECOMMENDED = significant impact on productivity or quality | OPTIONAL = useful but can be deferred
           </Text>
         </View>
@@ -725,18 +617,18 @@ function Page3() {
       <View style={s.summaryBox}>
         <View style={s.summaryCol}>
           <Text style={s.summaryLabel}>Critical Items Only (min. budget)</Text>
-          <Text style={s.summaryVal}>N$80,000 - 110,000</Text>
-          <Text style={s.summaryValSub}>Laptop, webcam, mic, UPS x2, router, chair, antivirus, surge protectors, M365</Text>
+          <Text style={s.summaryVal}>N$55,000 - 75,000</Text>
+          <Text style={s.summaryValSub}>Laptop, webcam, mic, UPS, router — bare minimum to operate</Text>
         </View>
         <View style={s.summaryCol}>
           <Text style={s.summaryLabel}>Full Core List (mid-range estimates)</Text>
-          <Text style={s.summaryVal}>N$178,800</Text>
-          <Text style={s.summaryValSub}>All items in this section at mid-range pricing</Text>
+          <Text style={s.summaryVal}>N$127,750</Text>
+          <Text style={s.summaryValSub}>All hardware items at mid-range pricing. Software and office excluded from loan.</Text>
         </View>
         <View style={s.summaryCol}>
           <Text style={s.summaryLabel}>Full Core List (top-end estimates)</Text>
-          <Text style={s.summaryVal}>N$240,000+</Text>
-          <Text style={s.summaryValSub}>All items at high-end specifications</Text>
+          <Text style={s.summaryVal}>N$170,000+</Text>
+          <Text style={s.summaryValSub}>All hardware items at high-end specifications</Text>
         </View>
       </View>
 
@@ -757,7 +649,7 @@ function Page4() {
         <Text style={s.extrasBannerText}>Suggested Additional Equipment</Text>
       </View>
       <Text style={s.extrasNote}>
-        The items below are not included in the original loan budget of N$539,480 but are strongly recommended for a 6-person remote agency. Review this list and decide which items to include before finalising your quotations and submitting your application. Adding team laptops in particular will likely be necessary if your staff do not have their own devices.
+        The items below are not included in the loan budget of N$538,430 but are worth considering. Software licences and office furniture are covered separately by the director. Review this list and decide which items to add before finalising your quotations. Adding team laptops is the most critical consideration if your staff do not have their own devices.
       </Text>
 
       <View style={s.tblHead}>
@@ -795,8 +687,8 @@ function Page4() {
           <Text style={s.summaryValSub}>Including team devices, redundancy, and productivity items</Text>
         </View>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Revised Loan if Extras Added</Text>
-          <Text style={s.summaryVal}>~N$620,000</Text>
+          <Text style={s.summaryLabel}>Revised Loan if Team Laptops Added</Text>
+          <Text style={s.summaryVal}>~N$598,000</Text>
           <Text style={s.summaryValSub}>Still within the N$1,000,000 NYDF entrepreneurial tier</Text>
         </View>
       </View>
