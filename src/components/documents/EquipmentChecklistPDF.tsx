@@ -192,79 +192,32 @@ const EQUIPMENT: Category[] = [
     title: "Computing Hardware",
     items: [
       {
-        item: "Development Laptop",
-        description: "Primary workstation for all development and design",
+        item: "Mac Studio (M4, 16GB RAM)",
+        description: "Primary workstation for all development, design, and video work",
         importance: "CRITICAL",
-        avgPrice: "N$30,000 - 40,000",
-        notes: "HP ProBook, Lenovo ThinkPad, or Dell XPS recommended",
-      },
-      {
-        item: "Desktop Workstation",
-        description: "High-performance machine for rendering, compilation, heavy tasks",
-        importance: "RECOMMENDED",
-        avgPrice: "N$22,000 - 30,000",
-        notes: "Can be deferred if laptop covers initial workload",
-      },
-      {
-        item: "External Monitor x2",
-        description: "Extended display setup for productivity and design work",
-        importance: "RECOMMENDED",
-        avgPrice: "N$4,000 - 7,000 each",
-        notes: "27-inch IPS panel is the sweet spot",
-      },
-      {
-        item: "External SSD (1-2 TB)",
-        description: "Fast portable backup and project file storage",
-        importance: "RECOMMENDED",
-        avgPrice: "N$1,500 - 2,200",
-        notes: "Samsung T7 or SanDisk Extreme",
+        avgPrice: "N$38,000 - 55,000",
+        notes: "Mac Studio does NOT include keyboard or mouse. Get a quote from iStore Windhoek or an authorised Apple reseller. Note: Mac Studio M4 base is approximately N$38,000-42,000 locally.",
       },
       {
         item: "USB-C Docking Station",
-        description: "Single-cable connection for all peripherals to laptop",
-        importance: "RECOMMENDED",
-        avgPrice: "N$1,200 - 2,000",
-        notes: "Essential if using laptop as daily driver with monitors",
-      },
-    ],
-  },
-  {
-    title: "Peripherals",
-    items: [
-      {
-        item: "Mechanical Keyboard",
-        description: "Ergonomic and responsive typing for long coding sessions",
-        importance: "RECOMMENDED",
-        avgPrice: "N$1,800 - 3,500",
-        notes: "Keychron K series is good value",
-      },
-      {
-        item: "Ergonomic Mouse",
-        description: "Reduces wrist strain during extended daily use",
-        importance: "RECOMMENDED",
-        avgPrice: "N$600 - 2,500",
-        notes: "Logitech MX Master 3 recommended",
-      },
-      {
-        item: "Webcam (1080p or above)",
-        description: "Professional-quality video for client calls and recordings",
+        description: "Single-cable hub to connect monitors, drives, and peripherals to the Mac Studio",
         importance: "CRITICAL",
-        avgPrice: "N$1,500 - 2,800",
-        notes: "Logitech C920 is the standard choice",
+        avgPrice: "N$1,200 - 2,200",
+        notes: "Ensure it supports Thunderbolt 4 for full Mac Studio bandwidth. CalDigit TS4 is highly rated.",
       },
       {
-        item: "USB Microphone or Headset",
-        description: "Clear audio for calls, recordings, and remote meetings",
+        item: "External Monitors x2 (27-inch, 4K)",
+        description: "Dual display setup for productivity, design, and code review",
         importance: "CRITICAL",
-        avgPrice: "N$800 - 4,000",
-        notes: "Blue Yeti (desk mic) or Logitech H390 (headset)",
+        avgPrice: "N$5,000 - 9,000 each",
+        notes: "LG 27UK850 or Dell UltraSharp 27 4K. Mac Studio drives 2 monitors natively.",
       },
       {
-        item: "Drawing Tablet (Wacom)",
-        description: "Precision input for UI/UX design and digital artwork",
+        item: "External SSD (1TB)",
+        description: "Fast portable backup and project file storage",
         importance: "RECOMMENDED",
-        avgPrice: "N$3,000 - 7,000",
-        notes: "Wacom Intuos is sufficient for most design work",
+        avgPrice: "N$1,500 - 2,200",
+        notes: "Samsung T7 or SanDisk Extreme Pro. Keep one copy offsite.",
       },
     ],
   },
@@ -272,18 +225,18 @@ const EQUIPMENT: Category[] = [
     title: "Mobile Devices",
     items: [
       {
-        item: "Business Smartphone",
-        description: "Client communication, mobile testing, and on-the-go work",
-        importance: "RECOMMENDED",
-        avgPrice: "N$8,000 - 20,000",
-        notes: "Samsung Galaxy A series is good value in Namibia",
+        item: "iPhone 16 (128GB)",
+        description: "Business communication, mobile app testing, and content creation",
+        importance: "CRITICAL",
+        avgPrice: "N$18,000 - 23,000",
+        notes: "Get a quote from Trustco Mobile or MTC. iPhone 16 is best for app testing across iOS and for professional content.",
       },
       {
-        item: "Tablet or iPad",
-        description: "Design reviews, presentations, and note-taking with clients",
-        importance: "OPTIONAL",
-        avgPrice: "N$10,000 - 22,000",
-        notes: "iPad 10th gen is the most practical option",
+        item: "iPad (model to be confirmed)",
+        description: "Client presentations, design reviews, and note-taking",
+        importance: "RECOMMENDED",
+        avgPrice: "N$8,000 - 20,000",
+        notes: "iPad 10th gen (~N$9,000) is sufficient. iPad Air M2 (~N$15,000) is better for design work. Confirm model before quoting.",
       },
     ],
   },
@@ -317,30 +270,67 @@ const EQUIPMENT: Category[] = [
 
 const EXTRA_EQUIPMENT: Category[] = [
   {
-    title: "Team Equipment (Suggested Additions)",
+    title: "Mac Studio Peripherals (Required - Not Included in Box)",
     items: [
       {
-        item: "Budget Laptops for Team Members (x5)",
-        description: "One device per remote staff member for independent working",
+        item: "Apple Magic Keyboard with Touch ID",
+        description: "Mac Studio does not come with a keyboard. This is required to use the machine.",
         importance: "CRITICAL",
-        avgPrice: "N$10,000 - 14,000 each",
-        notes: "Lenovo IdeaPad or HP 250 series. Budget N$60,000 for all 5",
+        avgPrice: "N$2,500 - 3,800",
+        notes: "Get the version with Touch ID for secure login. Available from iStore or Apple authorised resellers.",
         isExtra: true,
       },
       {
-        item: "Headset for each team member (x5)",
-        description: "Clear audio for daily remote standups and client calls",
+        item: "Apple Magic Mouse or Magic Trackpad",
+        description: "Mac Studio does not come with a mouse. Required for basic operation.",
+        importance: "CRITICAL",
+        avgPrice: "N$2,800 - 4,500",
+        notes: "Magic Trackpad is recommended for design work. Magic Mouse for general use. Both are excellent on Mac.",
+        isExtra: true,
+      },
+      {
+        item: "Ring Light or Key Light",
+        description: "Professional lighting for video calls and content recording. You have the webcam - good lighting completes the setup.",
+        importance: "RECOMMENDED",
+        avgPrice: "N$900 - 3,500",
+        notes: "Elgato Key Light Air (~N$2,500) is the best desk option. Basic ring lights from N$900 at Makro or online.",
+        isExtra: true,
+      },
+      {
+        item: "Drawing Tablet (Wacom Intuos)",
+        description: "Precision input for UI/UX design and digital illustrations",
+        importance: "OPTIONAL",
+        avgPrice: "N$3,000 - 7,000",
+        notes: "Worth adding if doing heavy design work. Wacom Intuos Small is N$3,000-3,500 at most tech retailers.",
+        isExtra: true,
+      },
+    ],
+  },
+  {
+    title: "Remote Team Support (Staff Use Own Devices)",
+    items: [
+      {
+        item: "USB Headset for each team member (x5)",
+        description: "Consistent audio quality on all team standups and client calls",
         importance: "RECOMMENDED",
         avgPrice: "N$400 - 900 each",
-        notes: "Logitech H390 USB headsets. Total budget around N$3,500",
+        notes: "Logitech H390 USB headsets. Total budget N$2,500-4,500 for the full team. Affordable and reliable.",
         isExtra: true,
       },
       {
-        item: "Webcam for each team member (x5)",
-        description: "Professional video presence on all team calls",
-        importance: "RECOMMENDED",
+        item: "External SSD per team member (x5)",
+        description: "For sharing large project files without relying on internet upload speeds",
+        importance: "OPTIONAL",
         avgPrice: "N$800 - 1,500 each",
-        notes: "Basic Logitech C270 is sufficient for team members",
+        notes: "Samsung T7 Shield or similar. Useful for design assets and video files that are too large to upload quickly.",
+        isExtra: true,
+      },
+      {
+        item: "Portable Power Bank per team member (x5)",
+        description: "Load-shedding protection for devices during remote working hours",
+        importance: "RECOMMENDED",
+        avgPrice: "N$350 - 800 each",
+        notes: "Particularly important in Namibia. A 20,000mAh bank keeps a laptop going for an extra 1-2 hours.",
         isExtra: true,
       },
     ],
@@ -617,18 +607,18 @@ function Page3() {
       <View style={s.summaryBox}>
         <View style={s.summaryCol}>
           <Text style={s.summaryLabel}>Critical Items Only (min. budget)</Text>
-          <Text style={s.summaryVal}>N$55,000 - 75,000</Text>
-          <Text style={s.summaryValSub}>Laptop, webcam, mic, UPS, router — bare minimum to operate</Text>
+          <Text style={s.summaryVal}>N$55,000 - 72,000</Text>
+          <Text style={s.summaryValSub}>Mac Studio base + 2 monitors + iPhone 16 + UPS + router</Text>
         </View>
         <View style={s.summaryCol}>
           <Text style={s.summaryLabel}>Full Core List (mid-range estimates)</Text>
-          <Text style={s.summaryVal}>N$127,750</Text>
-          <Text style={s.summaryValSub}>All hardware items at mid-range pricing. Software and office excluded from loan.</Text>
+          <Text style={s.summaryVal}>N$103,650</Text>
+          <Text style={s.summaryValSub}>All hardware at mid-range. Software and Mac peripherals are separate from this loan.</Text>
         </View>
         <View style={s.summaryCol}>
           <Text style={s.summaryLabel}>Full Core List (top-end estimates)</Text>
-          <Text style={s.summaryVal}>N$170,000+</Text>
-          <Text style={s.summaryValSub}>All hardware items at high-end specifications</Text>
+          <Text style={s.summaryVal}>N$145,000+</Text>
+          <Text style={s.summaryValSub}>Mac Studio Pro + iPad Pro + top-spec monitors + high-end networking</Text>
         </View>
       </View>
 
@@ -687,8 +677,8 @@ function Page4() {
           <Text style={s.summaryValSub}>Including team devices, redundancy, and productivity items</Text>
         </View>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Revised Loan if Team Laptops Added</Text>
-          <Text style={s.summaryVal}>~N$598,000</Text>
+          <Text style={s.summaryLabel}>Revised Loan if Mac Peripherals + Team Support Added</Text>
+          <Text style={s.summaryVal}>~N$525,000</Text>
           <Text style={s.summaryValSub}>Still within the N$1,000,000 NYDF entrepreneurial tier</Text>
         </View>
       </View>

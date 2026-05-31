@@ -241,7 +241,7 @@ function CoverPage() {
       </View>
       <View style={s.kvRow}>
         <Text style={s.coverDT}>Loan Amount Requested</Text>
-        <Text style={s.coverDD}>N$538,430</Text>
+        <Text style={s.coverDD}>N$514,330</Text>
       </View>
       <View style={s.kvRow}>
         <Text style={s.coverDT}>Repayment Period</Text>
@@ -282,7 +282,7 @@ function CoverLetterPage() {
       <Text style={[bl, { marginBottom: 14 }]}>Dear Sir / Madam,</Text>
 
       <Text style={bl}>
-        I am Keenan Husselmann, a 31-year-old Namibian citizen and sole director of Swift Designz Investments CC. I hereby apply for a loan of N$538,430 under the National Youth Development Fund through the Development Bank of Namibia. My business is registered as Close Corporation CC/2026/055589, effective 12 May 2026, and headquartered in Windhoek, Khomas Region.
+        I am Keenan Husselmann, a 31-year-old Namibian citizen and sole director of Swift Designz Investments CC. I hereby apply for a loan of N$514,330 under the National Youth Development Fund through the Development Bank of Namibia. My business is registered as Close Corporation CC/2026/055589, effective 12 May 2026, and headquartered in Windhoek, Khomas Region.
       </Text>
       <Text style={bl}>
         Swift Designz Investments CC is a technology and digital services company. We build websites, e-commerce stores, web and mobile applications, and we provide AI training and technical consulting to businesses across Namibia. Before formal registration, I operated the business as a freelancer under the same brand from January 2026, generating an average of N$8,000 per month in revenue. The CC registration in May 2026 marks the transition from solo freelance work to a full team-based agency.
@@ -324,7 +324,7 @@ function ExecutiveSummaryPage() {
       </View>
       <View style={s.box}>
         <Text style={s.boxText}>
-          Swift Designz Investments CC is a Namibian-registered technology and digital services company applying for a loan of N$538,430 through the National Youth Development Fund. This funding will be used to purchase professional hardware equipment, cover professional and legal setup costs, and fund the salaries of six staff members during the first twelve months of structured operations.
+          Swift Designz Investments CC is a Namibian-registered technology and digital services company applying for a loan of N$514,330 through the National Youth Development Fund. This funding will be used to purchase professional hardware equipment, cover professional and legal setup costs, and fund the salaries of six staff members during the first twelve months of structured operations.
         </Text>
       </View>
       <H2 num="WHO WE ARE" title="About Swift Designz Investments CC" />
@@ -690,9 +690,8 @@ function FinancialPage1() {
           <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Cost (N$)</Text>
         </View>
         {[
-          ["Computing Hardware", "Development laptop, desktop workstation, 2x monitors, SSD, docking station", "71,450"],
-          ["Peripherals", "Keyboard, mouse, webcam, headset and microphone, drawing tablet (Wacom)", "11,550"],
-          ["Mobile Devices", "Business smartphone and tablet/iPad", "29,500"],
+          ["Computing", "Mac Studio (M4), USB-C docking station, 2x 27-inch monitors, external SSD 1TB", "56,400"],
+          ["Mobile Devices", "iPhone 16 (128GB), iPad (model to be confirmed per quotation)", "32,000"],
           ["Networking", "Wi-Fi 6 business router, UPS battery backup, NAS network storage", "15,250"],
           ["Professional and Legal Reserve", "Lawyer fees, accounting and audit fees, business insurance premiums", "50,000"],
         ].map(([cat, items, cost], i) => (
@@ -704,7 +703,7 @@ function FinancialPage1() {
         ))}
         <View style={s.tblRTotal}>
           <Text style={[s.tdb, { flex: 3.2 }]}>Subtotal: Hardware and Professional Reserve</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>177,750</Text>
+          <Text style={[s.tdbr, { flex: 1 }]}>153,650</Text>
         </View>
       </View>
       <View style={s.tbl}>
@@ -732,7 +731,7 @@ function FinancialPage1() {
       <View style={s.tbl}>
         <View style={s.tblRTotal}>
           <Text style={[s.tdb, { flex: 2 }]}>Total Funding Requirement</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>N$ 578,430</Text>
+          <Text style={[s.tdbr, { flex: 1 }]}>N$ 554,330</Text>
         </View>
         <View style={s.tblR}>
           <Text style={[s.td, { flex: 2 }]}>Less: Own Contribution (existing equipment, in-kind)</Text>
@@ -740,7 +739,7 @@ function FinancialPage1() {
         </View>
         <View style={s.tblRTotal}>
           <Text style={[s.tdb, { flex: 2 }]}>LOAN AMOUNT REQUESTED</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>N$ 538,430</Text>
+          <Text style={[s.tdbr, { flex: 1 }]}>N$ 514,330</Text>
         </View>
       </View>
       <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 03 - Financial Information" />
@@ -771,7 +770,7 @@ function FinancialPage2() {
       <Bullet text="New project revenue begins from Month 3 and grows by approximately N$4,000 to N$6,000 per month as the team becomes productive and marketing ramps up" />
       <Bullet text="Timing note: the pre-approval period before disbursement is not counted in these 12 months. Month 1 begins on the date funds are received." />
       <Bullet text="Monthly operating costs are fixed at N$34,140 covering payroll and employer costs at N$32,640 and other operational expenses at N$1,500. Software licences are covered by the director outside the loan." />
-      <Bullet text="Hardware equipment (N$127,750) and the professional and legal reserve (N$50,000) are funded upfront from the loan at the start of Month 1" />
+      <Bullet text="Hardware equipment (N$103,650) and the professional and legal reserve (N$50,000) are funded upfront from the loan at the start of Month 1" />
       <Bullet text="Business operates with no rent or office costs as the team is fully remote" />
       <Bullet text="Grace period of 12 months means no loan repayments during Year 1" />
       <Bullet text="Loan interest rate assumed at 4% per annum (conservative estimate) for repayment calculations" />
@@ -806,7 +805,7 @@ function FinancialPage2() {
       </View>
       <View style={s.box}>
         <Text style={s.boxText}>
-          Month 1 and Month 2 show the highest deficit because the team is onboarding and no new project revenue has started yet. From Month 3 the business ramps up steadily and reaches operational breakeven at Month 8. The full-year operating deficit of N$19,680, combined with the hardware cost of N$127,750 and the professional reserve of N$50,000, gives a total Year 1 loan draw of approximately N$206,430. The remaining N$332,000 of the N$538,430 loan provides a strong buffer as repayments begin in Year 2.
+          Month 1 and Month 2 show the highest deficit because the team is onboarding and no new project revenue has started yet. From Month 3 the business ramps up steadily and reaches operational breakeven at Month 8. The full-year operating deficit of N$19,680, combined with the hardware cost of N$103,650 and the professional reserve of N$50,000, gives a total Year 1 loan draw of approximately N$182,330. The remaining N$332,000 of the N$514,330 loan provides a strong buffer as repayments begin in Year 2.
         </Text>
       </View>
       <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 03 - Financial Information" />
@@ -863,7 +862,7 @@ function FinancialPage3() {
           <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Amount</Text>
         </View>
         {[
-          ["Principal (loan amount)", "N$ 538,430"],
+          ["Principal (loan amount)", "N$ 514,330"],
           ["Grace period", "12 months (no repayments)"],
           ["Repayment period after grace", "48 months"],
           ["Total repayment period", "60 months (5 years)"],
@@ -1111,18 +1110,12 @@ function OperationsPage2() {
           <Text style={[s.th, { flex: 0.8, textAlign: "right" as const }]}>Est. Cost (N$)</Text>
         </View>
         {[
-          ["Computing", "Development Laptop", "Primary developer workstation", "32,500"],
-          ["Computing", "Desktop Workstation", "High-performance rendering and compilation", "25,000"],
-          ["Computing", "External Monitors x2", "Extended display for productivity and design", "11,000"],
-          ["Computing", "External SSD (2TB)", "Project backups and portable storage", "1,650"],
-          ["Computing", "USB-C Docking Station", "Connect peripherals to laptop", "1,300"],
-          ["Peripherals", "Mechanical Keyboard", "Ergonomic typing for long sessions", "2,250"],
-          ["Peripherals", "Ergonomic Mouse", "Reduced wrist strain", "1,550"],
-          ["Peripherals", "Webcam (1080p+)", "Professional video calls and client meetings", "1,650"],
-          ["Peripherals", "USB Microphone and Headset", "Clear audio for calls and recordings", "2,350"],
-          ["Peripherals", "Drawing Tablet (Wacom)", "Precise design input for UI/UX work", "3,750"],
-          ["Mobile", "Business Smartphone", "Client communication and mobile testing", "16,500"],
-          ["Mobile", "Tablet and iPad", "Design reviews, presentations, note-taking", "13,000"],
+          ["Computing", "Mac Studio (M4, 16GB)", "Primary workstation for all development and design", "42,000"],
+          ["Computing", "USB-C Docking Station", "Single-cable connection to all monitors and peripherals", "1,600"],
+          ["Computing", "External Monitors x2 (27-inch)", "Extended dual-display for productivity and design work", "11,000"],
+          ["Computing", "External SSD (1TB)", "Fast project backups and portable file storage", "1,800"],
+          ["Mobile", "iPhone 16 (128GB)", "Client communication, mobile app testing, content creation", "22,000"],
+          ["Mobile", "iPad (model per quotation)", "Design reviews, client presentations, and note-taking", "10,000"],
           ["Networking", "Wi-Fi 6 Business Router", "Fast, stable internet for home office", "4,000"],
           ["Networking", "UPS Battery Backup", "Equipment protection during power outages", "3,250"],
           ["Networking", "NAS Network Storage", "Centralised file server and backups", "8,000"],
@@ -1137,7 +1130,7 @@ function OperationsPage2() {
         ))}
         <View style={s.tblRTotal}>
           <Text style={[s.tdb, { flex: 4.8 }]}>Total Hardware and Reserve</Text>
-          <Text style={[s.tdbr, { flex: 0.8 }]}>177,750</Text>
+          <Text style={[s.tdbr, { flex: 0.8 }]}>153,650</Text>
         </View>
       </View>
       <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 05 - Operations and Technology" />
