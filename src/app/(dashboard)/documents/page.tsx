@@ -69,6 +69,42 @@ export default async function DocumentsPage() {
         </div>
       </div>
 
+      {/* NYDF loan documents */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <a
+          href="/api/docs/business-plan"
+          download
+          className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal/10">
+              <FileText className="h-5 w-5 text-teal" />
+            </span>
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">NYDF Business Plan 2026</h3>
+              <p className="text-xs text-gray-500 mt-0.5">Full business plan PDF for DBN loan application</p>
+            </div>
+          </div>
+          <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
+        </a>
+        <a
+          href="/api/docs/equipment-checklist"
+          download
+          className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10">
+              <FileText className="h-5 w-5 text-amber-400" />
+            </span>
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">Equipment Procurement Checklist</h3>
+              <p className="text-xs text-gray-500 mt-0.5">Printable checklist with prices and quotation tick boxes</p>
+            </div>
+          </div>
+          <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
+        </a>
+      </div>
+
       {/* Dynamic contract builders */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <Link
