@@ -325,7 +325,7 @@ function ExecutiveSummaryPage() {
 
       <H2 num="WHO WE ARE" title="About Swift Designz Investments CC" />
       <Text style={s.p}>
-        My name is Keenan Husselmann. I am 31 years old, a Namibian citizen, and I hold a Bachelor of Computer Science degree in Software Development from NUST. I have been building websites, web applications, and digital products professionally for several years. Since January 2026 I have been trading under the Swift Designz brand as a freelancer, generating an average of N$8,000 per month from website builds, e-commerce stores, retainer clients, and consulting. On 12 May 2026 I registered Swift Designz Investments CC to formalise the business and begin building a proper team.
+        My name is Keenan Husselmann. I am 31 years old, a Namibian citizen, and I hold a Bachelor of Computer Science degree in Software Development from NUST. I started building websites and digital products professionally in early 2026. Since January 2026 I have been trading under the Swift Designz brand as a freelancer, generating an average of N$8,000 per month from website builds, e-commerce stores, retainer clients, and consulting. On 12 May 2026 I registered Swift Designz Investments CC to formalise the business and begin building a proper team.
       </Text>
       <Text style={s.p}>
         The business already serves active clients in both Namibia and South Africa. We build websites, e-commerce stores, web and mobile applications, and provide technical training and consulting. We operate fully remotely, which keeps our overhead low and allows us to serve clients anywhere without the cost of a physical office.
