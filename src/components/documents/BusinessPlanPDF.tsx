@@ -643,6 +643,11 @@ function FinancialPage1() {
         <View style={s.pageTitleRule} />
       </View>
       <H2 num="3.1" title="Implementation Plan" />
+      <View style={s.box}>
+        <Text style={s.boxText}>
+          Important: Loan funds will not be received on the same day the application is submitted. The pre-approval period typically takes several weeks to months. During this time, Keenan Husselmann continues to operate the business as a sole practitioner, serving existing clients and maintaining current revenue. No staff will be formally employed until loan funds are confirmed and disbursed. Team members have been identified and are on standby, and may assist on a voluntary basis during this period, but formal employment, Social Security registration, and salary payments begin only after funding is received.
+        </Text>
+      </View>
       <View style={s.tbl}>
         <View style={s.tblH}>
           <Text style={[s.th, { width: 80 }]}>Phase</Text>
@@ -650,10 +655,11 @@ function FinancialPage1() {
           <Text style={[s.th, { flex: 1 }]}>Activities</Text>
         </View>
         {[
-          ["Phase 1", "Month 1 to 2\nJun to Jul 2026", "Post job vacancies, conduct interviews, and hire 5 staff members. Register all staff with Social Security Commission. Sign employment contracts. Procure all equipment and software licences. Onboard team and set up remote workflows."],
-          ["Phase 2", "Month 3 to 6\nAug to Nov 2026", "Full team operational. Begin active client acquisition. Shakira to launch social media campaigns and paid advertising. Target 5 new clients per month. Establish initial retainer base targeting 8 active retainer clients by end of Month 6."],
-          ["Phase 3", "Month 7 to 12\nDec 2026 to May 2027", "Scale operations. Target 15 or more active clients and 15 or more retainer subscriptions. Revenue should reach or exceed N$60,000 per month. Begin groundwork for South Africa market entry."],
-          ["Phase 4", "Year 2\nJun 2027 onward", "Commence NYDF loan repayments. Hire additional developers as revenue allows. Scale both Namibia and South Africa client bases. Register for PAYE and VAT as thresholds are reached."],
+          ["Pre-Approval", "Now - Approval\n(Estimated 4-8 weeks)", "Keenan operates solo. Existing clients continue to be served. Revenue maintained at N$8,000 to N$10,000 per month. Team candidates are identified and on standby. Employment contracts are drafted in preparation. No formal hiring until funds are confirmed."],
+          ["Phase 1", "Month 1 to 2\n(Post-disbursement)", "Loan funds received. Formal employment commences for all 5 positions. All staff registered with Social Security Commission within the first week. Hardware equipment procured from approved suppliers with quotations attached. Professional and legal fees paid. Team onboarded and remote workflows established."],
+          ["Phase 2", "Month 3 to 6", "Full team operational. Active client acquisition begins. Marketing Officer launches social media campaigns and paid advertising. Target 5 new clients per month. Establish initial retainer base targeting 8 active retainer clients by end of Month 6."],
+          ["Phase 3", "Month 7 to 12", "Scale operations. Target 15 or more active clients and 15 or more retainer subscriptions. Revenue should reach or exceed N$60,000 per month."],
+          ["Phase 4", "Year 2 onward", "Commence NYDF loan repayments. Hire additional developers as revenue allows. Scale both Namibia and South Africa client bases. Register for PAYE and VAT as thresholds are reached."],
         ].map(([ph, tl, act], i) => (
           <View key={ph} style={i % 2 === 0 ? s.tblR : s.tblRA}>
             <Text style={[s.tdb, { width: 80 }]}>{ph}</Text>
@@ -744,25 +750,26 @@ function FinancialPage1() {
 
 function FinancialPage2() {
   const months = [
-    ["Jun 2026", "12,000", "34,140", "(22,140)"],
-    ["Jul 2026", "15,000", "34,140", "(19,140)"],
-    ["Aug 2026", "18,000", "34,140", "(16,140)"],
-    ["Sep 2026", "22,000", "34,140", "(12,140)"],
-    ["Oct 2026", "26,000", "34,140", "(8,140)"],
-    ["Nov 2026", "30,000", "34,140", "(4,140)"],
-    ["Dec 2026", "35,000", "34,140", "860"],
-    ["Jan 2027", "40,000", "34,140", "5,860"],
-    ["Feb 2027", "45,000", "34,140", "10,860"],
-    ["Mar 2027", "50,000", "34,140", "15,860"],
-    ["Apr 2027", "55,000", "34,140", "20,860"],
-    ["May 2027", "60,000", "34,140", "25,860"],
+    ["Month 1 (post-funding)", "10,000", "34,140", "(24,140)"],
+    ["Month 2", "10,000", "34,140", "(24,140)"],
+    ["Month 3", "14,000", "34,140", "(20,140)"],
+    ["Month 4", "18,000", "34,140", "(16,140)"],
+    ["Month 5", "23,000", "34,140", "(11,140)"],
+    ["Month 6", "28,000", "34,140", "(6,140)"],
+    ["Month 7", "34,000", "34,140", "(140)"],
+    ["Month 8", "40,000", "34,140", "5,860"],
+    ["Month 9", "46,000", "34,140", "11,860"],
+    ["Month 10", "51,000", "34,140", "16,860"],
+    ["Month 11", "56,000", "34,140", "21,860"],
+    ["Month 12", "60,000", "34,140", "25,860"],
   ];
   return (
     <Page size="A4" style={s.page}>
       <RunHead section="Section 03 - Financial Information (continued)" />
       <H2 num="3.3.1" title="Key Financial Assumptions" />
-      <Bullet text="Revenue starts at N$12,000 in Month 1 (N$8,000 existing freelance base, N$2,000 investor, and N$2,000 initial new work)" />
-      <Bullet text="New project revenue grows by approximately N$3,000 to N$5,000 per month as the team becomes productive and marketing ramps up" />
+      <Bullet text="Revenue in Month 1 and Month 2 is N$10,000 (N$8,000 existing freelance base plus N$2,000 investor). No additional project revenue is expected while the team is onboarding and settling in." />
+      <Bullet text="New project revenue begins from Month 3 and grows by approximately N$4,000 to N$6,000 per month as the team becomes productive and marketing ramps up" />
+      <Bullet text="Timing note: the pre-approval period before disbursement is not counted in these 12 months. Month 1 begins on the date funds are received." />
       <Bullet text="Monthly operating costs are fixed at N$34,140 covering payroll and employer costs at N$32,640 and other operational expenses at N$1,500. Software licences are covered by the director outside the loan." />
       <Bullet text="Hardware equipment (N$127,750) and the professional and legal reserve (N$50,000) are funded upfront from the loan at the start of Month 1" />
       <Bullet text="Business operates with no rent or office costs as the team is fully remote" />
@@ -792,14 +799,14 @@ function FinancialPage2() {
         ))}
         <View style={s.tblRTotal}>
           <Text style={[s.tdb, { width: 75 }]}>TOTALS</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>408,000</Text>
+          <Text style={[s.tdbr, { flex: 1 }]}>390,000</Text>
           <Text style={[s.tdbr, { flex: 1 }]}>409,680</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>(1,680)</Text>
+          <Text style={[s.tdbr, { flex: 1 }]}>(19,680)</Text>
         </View>
       </View>
       <View style={s.box}>
         <Text style={s.boxText}>
-          With no office overhead and no software costs drawn from the loan, the operating deficit across the full 12 months is only N$1,680. The business reaches monthly breakeven at Month 7. Combined with the one-time hardware cost of N$127,750 and the professional reserve of N$50,000, the total Year 1 loan draw is N$179,430. The remaining N$359,000 sits as a strong buffer going into Year 2 when repayments begin.
+          Month 1 and Month 2 show the highest deficit because the team is onboarding and no new project revenue has started yet. From Month 3 the business ramps up steadily and reaches operational breakeven at Month 8. The full-year operating deficit of N$19,680, combined with the hardware cost of N$127,750 and the professional reserve of N$50,000, gives a total Year 1 loan draw of approximately N$206,430. The remaining N$332,000 of the N$538,430 loan provides a strong buffer as repayments begin in Year 2.
         </Text>
       </View>
       <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 03 - Financial Information" />
@@ -820,12 +827,12 @@ function FinancialPage3() {
           <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Year 3 (2028/29)</Text>
         </View>
         {[
-          ["Annual Revenue (N$)", "408,000", "1,044,000", "1,560,000"],
-          ["Monthly Revenue (average)", "34,000", "87,000", "130,000"],
+          ["Annual Revenue (N$)", "390,000", "1,044,000", "1,560,000"],
+          ["Monthly Revenue (average)", "32,500", "87,000", "130,000"],
           ["Annual Operating Costs (N$)", "409,680", "480,000", "528,000"],
           ["Loan Repayment (annual)", "none", "146,400", "146,400"],
           ["Total Annual Costs (N$)", "409,680", "626,400", "674,400"],
-          ["Net Profit or (Loss) (N$)", "(1,680)", "417,600", "885,600"],
+          ["Net Profit or (Loss) (N$)", "(19,680)", "417,600", "885,600"],
           ["Staff headcount (year-end)", "6", "9", "12"],
         ].map(([item, y1, y2, y3], i) => (
           <View key={item} style={i % 2 === 0 ? s.tblR : s.tblRA}>
@@ -874,7 +881,7 @@ function FinancialPage3() {
       </View>
       <View style={s.box}>
         <Text style={s.boxText}>
-          By Month 13 when repayments begin, the business projects monthly revenue of N$75,000 to N$90,000 based on the Year 1 growth trajectory. Monthly operating costs at that point will be approximately N$40,000, giving a monthly surplus of N$35,000 to N$50,000 from which to service the repayment of N$12,200 per month. The business will be profitable and able to repay the loan comfortably from operational income.
+          By Month 13 when repayments begin, the business projects monthly revenue of N$70,000 to N$90,000 based on the Year 1 growth trajectory ending at N$60,000 in Month 12. Monthly operating costs at that point will be approximately N$40,000, giving a monthly surplus of N$30,000 to N$50,000 from which to service the repayment of N$12,200 per month. The business will be profitable and able to repay the loan from operational income.
         </Text>
       </View>
       <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 03 - Financial Information" />
