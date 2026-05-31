@@ -232,11 +232,11 @@ const EQUIPMENT: Category[] = [
         notes: "Get a quote from Trustco Mobile or MTC. iPhone 16 is best for app testing across iOS and for professional content.",
       },
       {
-        item: "iPad (model to be confirmed)",
-        description: "Client presentations, design reviews, and note-taking",
+        item: "iPad Air M2 or M3 (11-inch)",
+        description: "Client presentations, design reviews, and note-taking. Same product class as the iPhone 16.",
         importance: "RECOMMENDED",
-        avgPrice: "N$8,000 - 20,000",
-        notes: "iPad 10th gen (~N$9,000) is sufficient. iPad Air M2 (~N$15,000) is better for design work. Confirm model before quoting.",
+        avgPrice: "N$14,000 - 18,000",
+        notes: "iPad Air 11-inch M2 is the right tier to match iPhone 16. Available at iStore or authorised Apple resellers.",
       },
     ],
   },
@@ -307,30 +307,30 @@ const EXTRA_EQUIPMENT: Category[] = [
     ],
   },
   {
-    title: "Remote Team Support (Staff Use Own Devices)",
+    title: "Workspace Add-ons",
     items: [
       {
-        item: "USB Headset for each team member (x5)",
-        description: "Consistent audio quality on all team standups and client calls",
-        importance: "RECOMMENDED",
-        avgPrice: "N$400 - 900 each",
-        notes: "Logitech H390 USB headsets. Total budget N$2,500-4,500 for the full team. Affordable and reliable.",
-        isExtra: true,
-      },
-      {
-        item: "External SSD per team member (x5)",
-        description: "For sharing large project files without relying on internet upload speeds",
+        item: "Dual Monitor Arm",
+        description: "Holds both external monitors on a single arm, freeing desk space and allowing ideal screen positioning",
         importance: "OPTIONAL",
-        avgPrice: "N$800 - 1,500 each",
-        notes: "Samsung T7 Shield or similar. Useful for design assets and video files that are too large to upload quickly.",
+        avgPrice: "N$800 - 2,000",
+        notes: "Ergotron LX Dual Stacking Arm is the most popular. Requires monitors with VESA mount holes.",
         isExtra: true,
       },
       {
-        item: "Portable Power Bank per team member (x5)",
-        description: "Load-shedding protection for devices during remote working hours",
+        item: "Document Shredder",
+        description: "Secure disposal of client contracts and sensitive paperwork",
         importance: "RECOMMENDED",
-        avgPrice: "N$350 - 800 each",
-        notes: "Particularly important in Namibia. A 20,000mAh bank keeps a laptop going for an extra 1-2 hours.",
+        avgPrice: "N$800 - 2,000",
+        notes: "Required for POPIA compliance when handling physical client documents. Cross-cut shredder minimum.",
+        isExtra: true,
+      },
+      {
+        item: "Green Screen and Backdrop Stand",
+        description: "Professional virtual background for video calls, client recordings, and content creation",
+        importance: "OPTIONAL",
+        avgPrice: "N$700 - 1,800",
+        notes: "Collapsible green screen kits are widely available online. Works well with the existing webcam and ring light setup.",
         isExtra: true,
       },
     ],
@@ -503,7 +503,8 @@ function Page1() {
         <View style={s.headerRule} />
         <View style={s.instructionBox}>
           <Text style={s.instructionText}>
-            Instructions: Use this checklist when collecting supplier quotations. Tick the box on the left once a written quotation has been received. All items marked CRITICAL must have a quotation attached to the loan application. Software licences and office furniture are not included in the loan and do not need quotations for the application. Prices are average Namibian market estimates and will vary by supplier.{"\n\n"}
+            Instructions: Use this checklist when collecting supplier quotations. Tick the box on the left once a written quotation has been received. All items marked CRITICAL must have a quotation attached to the loan application. Prices are average Namibian market estimates and will vary by supplier.{"\n\n"}
+            Equipment policy: Employees are required to provide their own devices (laptop, phone, accessories). The company covers team software licences only (Google Workspace, project management tools, and shared platforms). Personal hardware is each employee{"'"}s own responsibility.{"\n\n"}
             Importance key: CRITICAL = cannot operate without this | RECOMMENDED = significant impact on productivity or quality | OPTIONAL = useful but can be deferred
           </Text>
         </View>
