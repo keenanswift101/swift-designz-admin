@@ -19,9 +19,7 @@ const s = StyleSheet.create({
     fontSize: 9,
     color: "#111111",
   },
-
-  // Header
-  header: { marginBottom: 20 },
+  header: { marginBottom: 16 },
   headerTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 10 },
   headerTitle: { fontSize: 20, fontWeight: 700, color: "#111111" },
   headerSub: { fontSize: 8.5, color: "#555555", marginTop: 2 },
@@ -32,22 +30,18 @@ const s = StyleSheet.create({
     borderLeftWidth: 3,
     borderLeftColor: "#111111",
     padding: 9,
-    marginBottom: 16,
+    marginBottom: 12,
   },
-  instructionText: { fontSize: 8, color: "#333333", lineHeight: 1.65 },
-
-  // Running header on subsequent pages
+  instructionText: { fontSize: 7.8, color: "#333333", lineHeight: 1.65 },
   runHead: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 18,
+    marginBottom: 14,
     borderBottomWidth: 1,
     borderColor: "#dddddd",
     paddingBottom: 7,
   },
   runHeadText: { fontSize: 7.5, color: "#aaaaaa" },
-
-  // Footer
   footer: {
     position: "absolute",
     bottom: 24,
@@ -60,19 +54,9 @@ const s = StyleSheet.create({
     justifyContent: "space-between",
   },
   footerText: { fontSize: 7, color: "#aaaaaa" },
-
-  // Category header
-  catHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 14,
-    marginBottom: 4,
-    gap: 8,
-  },
-  catTitle: { fontSize: 10, fontWeight: 700, color: "#111111", letterSpacing: 0.5 },
+  catHeader: { flexDirection: "row", alignItems: "center", marginTop: 12, marginBottom: 3, gap: 8 },
+  catTitle: { fontSize: 9.5, fontWeight: 700, color: "#111111", letterSpacing: 0.5 },
   catRule: { flex: 1, borderBottomWidth: 1, borderColor: "#cccccc", marginTop: 4 },
-
-  // Table
   tblHead: {
     flexDirection: "row",
     backgroundColor: "#eeeeee",
@@ -112,64 +96,30 @@ const s = StyleSheet.create({
     minHeight: 26,
     backgroundColor: "#fcfcfc",
   },
-
-  // Columns
   colTick: { width: 22, alignItems: "center" as const },
   colItem: { flex: 2.4 },
   colImportance: { width: 82 },
   colPrice: { width: 88, textAlign: "right" as const },
   colNotes: { flex: 1.4 },
-
-  // Tick box (printable empty square)
-  tickBox: {
-    width: 12,
-    height: 12,
-    borderWidth: 1,
-    borderColor: "#555555",
-    borderRadius: 1,
-  },
-
-  // Text styles
+  tickBox: { width: 12, height: 12, borderWidth: 1, borderColor: "#555555", borderRadius: 1 },
   th: { fontSize: 7, fontWeight: 700, color: "#111111", textTransform: "uppercase" as const, letterSpacing: 0.8 },
   tdItem: { fontSize: 8.5, fontWeight: 700, color: "#111111" },
   tdItemSub: { fontSize: 7.5, color: "#666666", marginTop: 1.5, lineHeight: 1.5 },
   tdText: { fontSize: 8.5, color: "#333333" },
   tdNote: { fontSize: 7.5, color: "#555555", lineHeight: 1.5 },
   tdPrice: { fontSize: 8.5, color: "#111111", fontWeight: 700, textAlign: "right" as const },
-
-  // Importance badge styles (text only, B&W)
   impCritical: { fontSize: 7.5, fontWeight: 700, color: "#111111", textTransform: "uppercase" as const, letterSpacing: 0.5 },
   impRecommended: { fontSize: 7.5, fontWeight: 600, color: "#444444", textTransform: "uppercase" as const, letterSpacing: 0.5 },
   impOptional: { fontSize: 7.5, color: "#888888", textTransform: "uppercase" as const, letterSpacing: 0.5 },
-
-  // Suggested extras section marker
-  extrasBanner: {
-    backgroundColor: "#111111",
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    marginTop: 18,
-    marginBottom: 4,
-  },
+  extrasBanner: { backgroundColor: "#111111", paddingVertical: 6, paddingHorizontal: 10, marginTop: 16, marginBottom: 4 },
   extrasBannerText: { fontSize: 9, fontWeight: 700, color: "#ffffff", letterSpacing: 1, textTransform: "uppercase" as const },
   extrasNote: { fontSize: 8, color: "#555555", marginBottom: 10, lineHeight: 1.6 },
-
-  // Summary box
-  summaryBox: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    padding: 10,
-    marginTop: 14,
-    marginBottom: 4,
-    flexDirection: "row",
-    gap: 20,
-  },
+  summaryBox: { borderWidth: 1, borderColor: "#cccccc", padding: 10, marginTop: 14, marginBottom: 4, flexDirection: "row", gap: 16 },
   summaryCol: { flex: 1 },
   summaryLabel: { fontSize: 7, fontWeight: 700, color: "#888888", textTransform: "uppercase" as const, letterSpacing: 0.8, marginBottom: 3 },
   summaryVal: { fontSize: 11, fontWeight: 700, color: "#111111" },
   summaryValSub: { fontSize: 7.5, color: "#555555", marginTop: 1 },
 });
-
-// ── Data ──────────────────────────────────────────────────────
 
 type Importance = "CRITICAL" | "RECOMMENDED" | "OPTIONAL";
 
@@ -189,35 +139,70 @@ interface Category {
 
 const EQUIPMENT: Category[] = [
   {
-    title: "Computing Hardware",
+    title: "Mac Setup and Workspace",
     items: [
       {
-        item: "Mac Studio (M4, 16GB RAM)",
-        description: "Primary workstation for all development, design, and video work",
+        item: "iMac 24-inch M4 (10-core CPU and GPU, 24GB, 512GB, Green)",
+        description: "Full kit. Includes built-in 24-inch 4.5K Retina display, Magic Keyboard with Touch ID, and Magic Mouse. No separate display, keyboard, or mouse needed.",
         importance: "CRITICAL",
-        avgPrice: "N$38,000 - 55,000",
-        notes: "Mac Studio does NOT include keyboard or mouse. Get a quote from iStore Windhoek or an authorised Apple reseller. Note: Mac Studio M4 base is approximately N$38,000-42,000 locally.",
+        avgPrice: "N$45,899",
+        notes: "Exact price confirmed. Get quote from iStore Windhoek or authorised Apple reseller. This is the complete out-of-box kit.",
       },
       {
-        item: "USB-C Docking Station",
-        description: "Single-cable hub to connect monitors, drives, and peripherals to the Mac Studio",
-        importance: "CRITICAL",
-        avgPrice: "N$1,200 - 2,200",
-        notes: "Ensure it supports Thunderbolt 4 for full Mac Studio bandwidth. CalDigit TS4 is highly rated.",
-      },
-      {
-        item: "External Monitors x2 (27-inch, 4K)",
-        description: "Dual display setup for productivity, design, and code review",
-        importance: "CRITICAL",
-        avgPrice: "N$5,000 - 9,000 each",
-        notes: "LG 27UK850 or Dell UltraSharp 27 4K. Mac Studio drives 2 monitors natively.",
+        item: "1x External Monitor (27-inch, 4K)",
+        description: "Extended display alongside the built-in iMac screen for dual-monitor productivity",
+        importance: "RECOMMENDED",
+        avgPrice: "N$5,000 - 8,000",
+        notes: "LG 27UK850 or Dell UltraSharp 27 4K. The iMac already provides one 24-inch Retina display.",
       },
       {
         item: "External SSD (1TB)",
-        description: "Fast portable backup and project file storage",
+        description: "Fast portable project backups and file transfer between devices",
         importance: "RECOMMENDED",
         avgPrice: "N$1,500 - 2,200",
         notes: "Samsung T7 or SanDisk Extreme Pro. Keep one copy offsite.",
+      },
+      {
+        item: "USB-C Hub",
+        description: "Expands the iMac ports for connecting extra drives and peripherals simultaneously",
+        importance: "RECOMMENDED",
+        avgPrice: "N$800 - 1,800",
+        notes: "iMac has 2x Thunderbolt 4 and 2x USB-3 ports. A hub helps when using SSD, NAS, and other devices at once.",
+      },
+      {
+        item: "Ring Light or Key Light",
+        description: "Professional studio lighting for client video calls and content recordings",
+        importance: "RECOMMENDED",
+        avgPrice: "N$900 - 3,500",
+        notes: "Already have webcam and mic. Elgato Key Light Air (~N$2,500) is a desk-friendly option. Standard ring light from Makro from N$900.",
+      },
+      {
+        item: "Drawing Tablet (Wacom Intuos)",
+        description: "Precision stylus input for UI/UX design, digital art, and precise mouse control",
+        importance: "OPTIONAL",
+        avgPrice: "N$3,000 - 7,000",
+        notes: "Wacom Intuos Small (~N$3,200) is a good entry point. Medium (~N$4,500) gives more workspace. Available at major tech retailers.",
+      },
+      {
+        item: "Monitor Arm (single, for external monitor)",
+        description: "Frees desk space and allows ideal positioning of the external monitor",
+        importance: "OPTIONAL",
+        avgPrice: "N$800 - 2,000",
+        notes: "Ergotron LX single arm is the most popular choice. Note: the iMac itself uses its built-in stand and cannot easily go on a standard arm.",
+      },
+      {
+        item: "Document Shredder",
+        description: "Secure disposal of printed client contracts and sensitive paperwork",
+        importance: "RECOMMENDED",
+        avgPrice: "N$800 - 2,000",
+        notes: "Required for POPIA compliance when handling physical client documents. Cross-cut shredder as minimum. Available at Builders Warehouse or Makro.",
+      },
+      {
+        item: "Green Screen and Backdrop Stand",
+        description: "Professional virtual background for client calls, video content, and recorded presentations",
+        importance: "OPTIONAL",
+        avgPrice: "N$700 - 1,800",
+        notes: "Collapsible green screen kits with stand are widely available. Works well with the existing webcam and ring light setup.",
       },
     ],
   },
@@ -226,17 +211,17 @@ const EQUIPMENT: Category[] = [
     items: [
       {
         item: "iPhone 16 (128GB)",
-        description: "Business communication, mobile app testing, and content creation",
+        description: "Business communication, mobile app testing, and on-the-go content creation",
         importance: "CRITICAL",
         avgPrice: "N$18,000 - 23,000",
-        notes: "Get a quote from Trustco Mobile or MTC. iPhone 16 is best for app testing across iOS and for professional content.",
+        notes: "Get quote from MTC or Trustco Mobile. iPhone 16 stays in the same Apple ecosystem as the iMac for seamless handoff and testing.",
       },
       {
         item: "iPad Air M2 or M3 (11-inch)",
-        description: "Client presentations, design reviews, and note-taking. Same product class as the iPhone 16.",
+        description: "Client presentations, design reviews, and note-taking. Same Apple chip class as iPhone 16.",
         importance: "RECOMMENDED",
         avgPrice: "N$14,000 - 18,000",
-        notes: "iPad Air 11-inch M2 is the right tier to match iPhone 16. Available at iStore or authorised Apple resellers.",
+        notes: "iPad Air 11-inch M2 is the right tier match. Available from iStore or authorised Apple resellers in Namibia.",
       },
     ],
   },
@@ -245,24 +230,24 @@ const EQUIPMENT: Category[] = [
     items: [
       {
         item: "Wi-Fi 6 Business Router",
-        description: "Fast, stable internet for the home office or shared workspace",
+        description: "Fast, stable internet for the home office setup",
         importance: "CRITICAL",
         avgPrice: "N$3,000 - 6,500",
-        notes: "TP-Link Archer AX73 or ASUS RT-AX88U",
+        notes: "TP-Link Archer AX73 or ASUS RT-AX88U. Wi-Fi 6 is a significant upgrade over standard routers for a home office.",
       },
       {
         item: "UPS Battery Backup (1000VA)",
-        description: "Protects equipment and maintains uptime during power cuts",
+        description: "Keeps iMac, router, and NAS powered during load shedding and power fluctuations",
         importance: "CRITICAL",
         avgPrice: "N$2,800 - 5,000",
-        notes: "Non-negotiable in Namibia. APC or Mecer are widely available",
+        notes: "Non-negotiable in Namibia. APC or Mecer are widely available. Size the UPS to cover the iMac (up to 150W), router, and NAS together.",
       },
       {
-        item: "NAS Network Storage",
-        description: "Centralised local file server and automatic team backup",
+        item: "NAS Network Storage (2-bay)",
+        description: "Centralised local file server with automatic backup for all project files and client assets",
         importance: "RECOMMENDED",
         avgPrice: "N$5,500 - 13,000",
-        notes: "Synology DS223 (2-bay) is a solid starting point",
+        notes: "Synology DS223 is the best value entry-level NAS. Pair with 2x 4TB WD Red drives for 4TB usable storage in mirrored backup mode.",
       },
     ],
   },
@@ -270,162 +255,30 @@ const EQUIPMENT: Category[] = [
 
 const EXTRA_EQUIPMENT: Category[] = [
   {
-    title: "Mac Studio Peripherals (Required - Not Included in Box)",
+    title: "Personal Workspace (Not in Loan - Own Cost)",
     items: [
       {
-        item: "Apple Magic Keyboard with Touch ID",
-        description: "Mac Studio does not come with a keyboard. This is required to use the machine.",
-        importance: "CRITICAL",
-        avgPrice: "N$2,500 - 3,800",
-        notes: "Get the version with Touch ID for secure login. Available from iStore or Apple authorised resellers.",
-        isExtra: true,
-      },
-      {
-        item: "Apple Magic Mouse or Magic Trackpad",
-        description: "Mac Studio does not come with a mouse. Required for basic operation.",
-        importance: "CRITICAL",
-        avgPrice: "N$2,800 - 4,500",
-        notes: "Magic Trackpad is recommended for design work. Magic Mouse for general use. Both are excellent on Mac.",
-        isExtra: true,
-      },
-      {
-        item: "Ring Light or Key Light",
-        description: "Professional lighting for video calls and content recording. You have the webcam - good lighting completes the setup.",
+        item: "Ergonomic Chair",
+        description: "Lumbar support for long daily sessions at the iMac",
         importance: "RECOMMENDED",
-        avgPrice: "N$900 - 3,500",
-        notes: "Elgato Key Light Air (~N$2,500) is the best desk option. Basic ring lights from N$900 at Makro or online.",
+        avgPrice: "N$5,000 - 13,000",
+        notes: "Not in the loan since office furniture is excluded. A quality chair is a worthwhile personal purchase for a remote-first role.",
         isExtra: true,
       },
       {
-        item: "Drawing Tablet (Wacom Intuos)",
-        description: "Precision input for UI/UX design and digital illustrations",
-        importance: "OPTIONAL",
-        avgPrice: "N$3,000 - 7,000",
-        notes: "Worth adding if doing heavy design work. Wacom Intuos Small is N$3,000-3,500 at most tech retailers.",
-        isExtra: true,
-      },
-    ],
-  },
-  {
-    title: "Workspace Add-ons",
-    items: [
-      {
-        item: "Dual Monitor Arm",
-        description: "Holds both external monitors on a single arm, freeing desk space and allowing ideal screen positioning",
-        importance: "OPTIONAL",
-        avgPrice: "N$800 - 2,000",
-        notes: "Ergotron LX Dual Stacking Arm is the most popular. Requires monitors with VESA mount holes.",
-        isExtra: true,
-      },
-      {
-        item: "Document Shredder",
-        description: "Secure disposal of client contracts and sensitive paperwork",
+        item: "Desk or Sit-Stand Desk",
+        description: "The iMac is a desktop and needs a dedicated workspace",
         importance: "RECOMMENDED",
-        avgPrice: "N$800 - 2,000",
-        notes: "Required for POPIA compliance when handling physical client documents. Cross-cut shredder minimum.",
+        avgPrice: "N$4,000 - 16,000",
+        notes: "Height-adjustable desks reduce fatigue significantly. Consider this a long-term personal investment. Brands like FlexiSpot are available online.",
         isExtra: true,
       },
       {
-        item: "Green Screen and Backdrop Stand",
-        description: "Professional virtual background for video calls, client recordings, and content creation",
+        item: "Laptop Stand (for iMac cable management)",
+        description: "Keeps the iMac workspace clean and accessible",
         importance: "OPTIONAL",
-        avgPrice: "N$700 - 1,800",
-        notes: "Collapsible green screen kits are widely available online. Works well with the existing webcam and ring light setup.",
-        isExtra: true,
-      },
-    ],
-  },
-  {
-    title: "Content and Presentation Equipment",
-    items: [
-      {
-        item: "Green Screen and Backdrop Stand",
-        description: "Professional virtual background for video content and calls",
-        importance: "OPTIONAL",
-        avgPrice: "N$700 - 1,500",
-        notes: "Useful for content creation and branded client recordings",
-        isExtra: true,
-      },
-      {
-        item: "Wireless Presentation Clicker",
-        description: "For client presentations and workshops",
-        importance: "OPTIONAL",
-        avgPrice: "N$350 - 800",
-        notes: "Logitech Spotlight or R400. Small cost, high impact in meetings",
-        isExtra: true,
-      },
-      {
-        item: "Portable Projector or Portable Monitor",
-        description: "For face-to-face client meetings and presentations",
-        importance: "OPTIONAL",
-        avgPrice: "N$3,500 - 8,000",
-        notes: "Only needed if you plan to do on-site client sessions",
-        isExtra: true,
-      },
-    ],
-  },
-  {
-    title: "Redundancy and Backup Equipment",
-    items: [
-      {
-        item: "Second UPS Battery Backup",
-        description: "Backup power for networking equipment separate from workstation",
-        importance: "RECOMMENDED",
-        avgPrice: "N$2,000 - 3,500",
-        notes: "Keep the router and NAS on a separate UPS from your workstation",
-        isExtra: true,
-      },
-      {
-        item: "Portable External Hard Drive (Offsite Backup)",
-        description: "Physical offsite backup taken home weekly for disaster recovery",
-        importance: "RECOMMENDED",
-        avgPrice: "N$1,200 - 2,000",
-        notes: "Keep one at home and one at the office. Rotate weekly",
-        isExtra: true,
-      },
-      {
-        item: "Spare Laptop Charger",
-        description: "Backup charger for the primary development laptop",
-        importance: "RECOMMENDED",
-        avgPrice: "N$400 - 900",
-        notes: "Charger failure is a common and avoidable disruption",
-        isExtra: true,
-      },
-    ],
-  },
-  {
-    title: "Productivity and Comfort",
-    items: [
-      {
-        item: "Laptop Cooling Pad",
-        description: "Prevents thermal throttling during heavy development tasks",
-        importance: "OPTIONAL",
-        avgPrice: "N$400 - 900",
-        notes: "Important if running heavy builds or AI models locally",
-        isExtra: true,
-      },
-      {
-        item: "Wrist Rest Set (keyboard and mouse)",
-        description: "Reduces repetitive strain injury risk over time",
-        importance: "OPTIONAL",
-        avgPrice: "N$250 - 600",
-        notes: "Cheap and effective long-term health investment",
-        isExtra: true,
-      },
-      {
-        item: "Monitor Arm (dual)",
-        description: "Frees up desk space and allows ideal monitor positioning",
-        importance: "OPTIONAL",
-        avgPrice: "N$800 - 2,000",
-        notes: "Dual monitor arm for the two external monitors",
-        isExtra: true,
-      },
-      {
-        item: "Document Shredder",
-        description: "Secure disposal of client contracts and sensitive paperwork",
-        importance: "RECOMMENDED",
-        avgPrice: "N$800 - 2,000",
-        notes: "POPIA compliance for client document handling",
+        avgPrice: "N$300 - 800",
+        notes: "Helps with cable routing behind the iMac. Most desk cable management trays work well.",
         isExtra: true,
       },
     ],
@@ -444,13 +297,20 @@ function Footer({ page }: { page: string }) {
 }
 
 function ImportanceLabel({ level }: { level: Importance }) {
-  const style =
-    level === "CRITICAL"
-      ? s.impCritical
-      : level === "RECOMMENDED"
-      ? s.impRecommended
-      : s.impOptional;
+  const style = level === "CRITICAL" ? s.impCritical : level === "RECOMMENDED" ? s.impRecommended : s.impOptional;
   return <Text style={style}>{level}</Text>;
+}
+
+function ColHeaders() {
+  return (
+    <View style={s.tblHead}>
+      <View style={s.colTick}><Text style={s.th}>Got</Text></View>
+      <View style={s.colItem}><Text style={s.th}>Item</Text></View>
+      <View style={s.colImportance}><Text style={s.th}>Importance</Text></View>
+      <View style={s.colPrice}><Text style={[s.th, { textAlign: "right" as const }]}>Avg Price (N$)</Text></View>
+      <View style={s.colNotes}><Text style={s.th}>Notes / Suggested Brand</Text></View>
+    </View>
+  );
 }
 
 function CategoryBlock({ cat, isExtra }: { cat: Category; isExtra?: boolean }) {
@@ -462,22 +322,14 @@ function CategoryBlock({ cat, isExtra }: { cat: Category; isExtra?: boolean }) {
       </View>
       {cat.items.map((item, i) => (
         <View key={item.item} style={i % 2 === 0 ? (isExtra ? s.tblRowExtra : s.tblRow) : s.tblRowAlt}>
-          <View style={s.colTick}>
-            <View style={s.tickBox} />
-          </View>
+          <View style={s.colTick}><View style={s.tickBox} /></View>
           <View style={s.colItem}>
             <Text style={s.tdItem}>{item.item}</Text>
             <Text style={s.tdItemSub}>{item.description}</Text>
           </View>
-          <View style={s.colImportance}>
-            <ImportanceLabel level={item.importance} />
-          </View>
-          <View style={s.colPrice}>
-            <Text style={s.tdPrice}>{item.avgPrice}</Text>
-          </View>
-          <View style={s.colNotes}>
-            <Text style={s.tdNote}>{item.notes}</Text>
-          </View>
+          <View style={s.colImportance}><ImportanceLabel level={item.importance} /></View>
+          <View style={s.colPrice}><Text style={s.tdPrice}>{item.avgPrice}</Text></View>
+          <View style={s.colNotes}><Text style={s.tdNote}>{item.notes}</Text></View>
         </View>
       ))}
     </View>
@@ -503,33 +355,15 @@ function Page1() {
         <View style={s.headerRule} />
         <View style={s.instructionBox}>
           <Text style={s.instructionText}>
-            Instructions: Use this checklist when collecting supplier quotations. Tick the box on the left once a written quotation has been received. All items marked CRITICAL must have a quotation attached to the loan application. Prices are average Namibian market estimates and will vary by supplier.{"\n\n"}
-            Equipment policy: Employees are required to provide their own devices (laptop, phone, accessories). The company covers team software licences only (Google Workspace, project management tools, and shared platforms). Personal hardware is each employee{"'"}s own responsibility.{"\n\n"}
-            Importance key: CRITICAL = cannot operate without this | RECOMMENDED = significant impact on productivity or quality | OPTIONAL = useful but can be deferred
+            Instructions: Use this checklist when collecting supplier quotations. Tick the box on the left once a written quotation has been received for that item. All CRITICAL items must have a quotation attached to the loan application. RECOMMENDED and OPTIONAL items are at your discretion. Prices are Namibian market estimates and will vary by supplier.{"\n\n"}
+            Equipment policy: The iMac is the company{"'"}s primary workstation purchased from the loan. Employees provide their own personal devices. The company covers team software licences only (Google Workspace, shared project tools). Personal hardware is each employee{"'"}s own responsibility.{"\n\n"}
+            Importance: CRITICAL = cannot operate without this | RECOMMENDED = strong productivity or compliance impact | OPTIONAL = useful but can be deferred
           </Text>
         </View>
-
-        {/* Column headers */}
-        <View style={s.tblHead}>
-          <View style={s.colTick}>
-            <Text style={s.th}>Got</Text>
-          </View>
-          <View style={s.colItem}>
-            <Text style={s.th}>Item</Text>
-          </View>
-          <View style={s.colImportance}>
-            <Text style={s.th}>Importance</Text>
-          </View>
-          <View style={s.colPrice}>
-            <Text style={[s.th, { textAlign: "right" as const }]}>Avg Price (N$)</Text>
-          </View>
-          <View style={s.colNotes}>
-            <Text style={s.th}>Notes / Suggested Brand</Text>
-          </View>
-        </View>
+        <ColHeaders />
       </View>
 
-      {EQUIPMENT.slice(0, 2).map((cat) => (
+      {EQUIPMENT.slice(0, 1).map((cat) => (
         <CategoryBlock key={cat.title} cat={cat} />
       ))}
 
@@ -543,36 +377,30 @@ function Page2() {
     <Page size="A4" style={s.page}>
       <View style={s.runHead} fixed>
         <Text style={s.runHeadText}>Swift Designz Investments CC | Equipment Checklist 2026</Text>
-        <Text style={s.runHeadText}>Core Equipment (continued)</Text>
+        <Text style={s.runHeadText}>Mobile and Networking</Text>
       </View>
 
-      <View style={s.tblHead}>
-        <View style={s.colTick}><Text style={s.th}>Got</Text></View>
-        <View style={s.colItem}><Text style={s.th}>Item</Text></View>
-        <View style={s.colImportance}><Text style={s.th}>Importance</Text></View>
-        <View style={s.colPrice}><Text style={[s.th, { textAlign: "right" as const }]}>Avg Price (N$)</Text></View>
-        <View style={s.colNotes}><Text style={s.th}>Notes / Suggested Brand</Text></View>
-      </View>
+      <ColHeaders />
 
-      {EQUIPMENT.slice(2).map((cat) => (
+      {EQUIPMENT.slice(1).map((cat) => (
         <CategoryBlock key={cat.title} cat={cat} />
       ))}
 
       <View style={s.summaryBox}>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Critical Items Only (min. budget)</Text>
-          <Text style={s.summaryVal}>N$58,000 - 75,000</Text>
-          <Text style={s.summaryValSub}>Mac Studio + 2 monitors + iPhone 16 + UPS + router. Bare minimum to operate.</Text>
+          <Text style={s.summaryLabel}>Critical Items Only (minimum budget)</Text>
+          <Text style={s.summaryVal}>N$75,000 - 90,000</Text>
+          <Text style={s.summaryValSub}>iMac + iPhone 16 + UPS + router. Bare minimum to operate.</Text>
         </View>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Full Core List (mid-range)</Text>
-          <Text style={s.summaryVal}>N$108,650</Text>
-          <Text style={s.summaryValSub}>All loan-funded hardware at mid-range pricing. Mac peripherals and software are separate.</Text>
+          <Text style={s.summaryLabel}>Full Core List (mid-range estimates)</Text>
+          <Text style={s.summaryVal}>N$112,000</Text>
+          <Text style={s.summaryValSub}>All loan-funded items at mid-range. Keyboard and mouse are included with the iMac.</Text>
         </View>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Full Core List (top-end)</Text>
-          <Text style={s.summaryVal}>N$155,000+</Text>
-          <Text style={s.summaryValSub}>Mac Studio Pro + iPad Pro + high-spec monitors + premium networking</Text>
+          <Text style={s.summaryLabel}>Full Core List (top-end estimates)</Text>
+          <Text style={s.summaryVal}>N$160,000+</Text>
+          <Text style={s.summaryValSub}>iMac + iPad Pro + premium monitor + high-end networking</Text>
         </View>
       </View>
 
@@ -586,23 +414,17 @@ function Page3() {
     <Page size="A4" style={s.page}>
       <View style={s.runHead} fixed>
         <Text style={s.runHeadText}>Swift Designz Investments CC | Equipment Checklist 2026</Text>
-        <Text style={s.runHeadText}>Additional Equipment to Consider</Text>
+        <Text style={s.runHeadText}>Personal Workspace</Text>
       </View>
 
       <View style={s.extrasBanner}>
-        <Text style={s.extrasBannerText}>Additional Equipment to Consider</Text>
+        <Text style={s.extrasBannerText}>Personal Workspace (Not in Loan)</Text>
       </View>
       <Text style={s.extrasNote}>
-        The items below are not included in the loan budget of N$519,330 but are worth adding before you finalise quotations. The Mac Studio keyboard and mouse are both CRITICAL since the machine ships with neither. The workspace add-ons are personal purchases at your own cost. Employees provide their own devices.
+        The items below are not included in the loan budget of N$524,930 and are personal purchases at your own cost. Office furniture is excluded from the loan because the business operates remotely with no company premises. These are recommended personal investments for a productive home office setup.
       </Text>
 
-      <View style={s.tblHead}>
-        <View style={s.colTick}><Text style={s.th}>Got</Text></View>
-        <View style={s.colItem}><Text style={s.th}>Item</Text></View>
-        <View style={s.colImportance}><Text style={s.th}>Importance</Text></View>
-        <View style={s.colPrice}><Text style={[s.th, { textAlign: "right" as const }]}>Avg Price (N$)</Text></View>
-        <View style={s.colNotes}><Text style={s.th}>Notes / Suggested Brand</Text></View>
-      </View>
+      <ColHeaders />
 
       {EXTRA_EQUIPMENT.map((cat) => (
         <CategoryBlock key={cat.title} cat={cat} isExtra />
@@ -610,19 +432,19 @@ function Page3() {
 
       <View style={s.summaryBox}>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Mac Peripherals Only (keyboard + mouse)</Text>
-          <Text style={s.summaryVal}>N$6,000 - 8,500</Text>
-          <Text style={s.summaryValSub}>Both CRITICAL. Mac Studio cannot be used without them.</Text>
+          <Text style={s.summaryLabel}>Loan Budget (all core hardware)</Text>
+          <Text style={s.summaryVal}>N$524,930</Text>
+          <Text style={s.summaryValSub}>iMac full kit + workspace + mobile + networking + reserve + working capital</Text>
         </View>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>All Extras (mid-range)</Text>
-          <Text style={s.summaryVal}>N$14,000 - 22,000</Text>
-          <Text style={s.summaryValSub}>Keyboard, mouse, ring light, monitor arm, shredder, green screen, drawing tablet</Text>
+          <Text style={s.summaryLabel}>Personal Workspace (own cost)</Text>
+          <Text style={s.summaryVal}>N$9,000 - 30,000</Text>
+          <Text style={s.summaryValSub}>Chair + desk. Not in loan. Personal investment in your home office.</Text>
         </View>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Revised Loan if Mac Peripherals Added</Text>
-          <Text style={s.summaryVal}>~N$527,000</Text>
-          <Text style={s.summaryValSub}>Still well within the N$1,000,000 NYDF entrepreneurial tier</Text>
+          <Text style={s.summaryLabel}>NYDF Loan Tier</Text>
+          <Text style={s.summaryVal}>Entrepreneurial</Text>
+          <Text style={s.summaryValSub}>N$200,000 to N$1,000,000 tier. This application is well within range.</Text>
         </View>
       </View>
 
@@ -630,8 +452,6 @@ function Page3() {
     </Page>
   );
 }
-
-// ── DOCUMENT ──────────────────────────────────────────────────
 
 export default function EquipmentChecklistPDF() {
   return (
