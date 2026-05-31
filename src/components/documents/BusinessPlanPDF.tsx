@@ -288,7 +288,7 @@ function CoverLetterPage() {
         Swift Designz Investments CC is a technology and digital services company. We build websites, e-commerce stores, web and mobile applications, and we provide AI training and technical consulting to businesses across Namibia. Before formal registration, I operated the business as a freelancer under the same brand from January 2026, generating an average of N$8,000 per month in revenue. The CC registration in May 2026 marks the transition from solo freelance work to a full team-based agency.
       </Text>
       <Text style={bl}>
-        The loan I am requesting will be used for two things: first, to purchase the professional equipment and software licences we need to operate a proper digital agency; and second, to fund the salaries of six staff members during our first year as we grow our client base to the point where revenue can sustain the team independently. We are fully remote, which means our overhead costs are low and our ability to grow our client base across both Namibia and South Africa is strong.
+        This loan will do three things: get Apple hardware into the business so we can build and test for iOS and macOS users for the first time; fund six staff salaries for 12 months while we grow the client base; and cover professional and legal setup costs for the new CC. We are fully remote, overhead is low, and we are already generating revenue in both Namibia and South Africa.
       </Text>
       <Text style={bl}>
         I believe this application speaks directly to the NYDF goals. Six young Namibians will be formally employed, registered with Social Security, and given real career experience in the technology sector. The business is innovation-driven, scalable, and rooted in Namibia. We are not looking for a handout. We are asking for the bridge funding that allows us to build something that will create lasting employment and contribute to the digital economy of Namibia.
@@ -322,41 +322,44 @@ function ExecutiveSummaryPage() {
         <Text style={s.pageTitle}>Executive Summary</Text>
         <View style={s.pageTitleRule} />
       </View>
-      <View style={s.box}>
-        <Text style={s.boxText}>
-          Swift Designz Investments CC is a Namibian-registered technology and digital services company applying for a loan of N$524,930 through the National Youth Development Fund. This funding will be used to purchase professional hardware equipment, cover professional and legal setup costs, and fund the salaries of six staff members during the first twelve months of structured operations.
-        </Text>
-      </View>
+
       <H2 num="WHO WE ARE" title="About Swift Designz Investments CC" />
       <Text style={s.p}>
-        Swift Designz Investments CC was registered as a Close Corporation on 12 May 2026 by Keenan Husselmann, a 31-year-old Namibian software developer holding a Bachelor of Computer Science degree in Software Development from NUST. The business grew out of four months of active freelance trading under the same brand since January 2026, during which time an average monthly revenue of N$8,000 was generated through website builds, retainer subscriptions, and consulting. The formal CC registration marks the transition from solo practice to a structured team-based agency.
+        My name is Keenan Husselmann. I am 31 years old, a Namibian citizen, and I hold a Bachelor of Computer Science degree in Software Development from NUST. I have been building websites, web applications, and digital products professionally for several years. Since January 2026 I have been trading under the Swift Designz brand as a freelancer, generating an average of N$8,000 per month from website builds, e-commerce stores, retainer clients, and consulting. On 12 May 2026 I registered Swift Designz Investments CC to formalise the business and begin building a proper team.
       </Text>
       <Text style={s.p}>
-        The business operates entirely remotely with no office premises to rent or manage. This keeps overhead low and means the business can serve clients anywhere. Swift Designz is already active in both Namibia and South Africa, with live e-commerce stores and websites deployed for clients in both markets. The business also has a live website at swiftdesignz.co.za with an integrated lead intake system, and a fully custom-built internal admin platform used to manage quotations, invoicing, billing, accounting, and client projects.
+        The business already serves active clients in both Namibia and South Africa. We build websites, e-commerce stores, web and mobile applications, and provide technical training and consulting. We operate fully remotely, which keeps our overhead low and allows us to serve clients anywhere without the cost of a physical office.
       </Text>
-      <H2 num="WHAT WE DO" title="Services" />
-      <Text style={s.p}>The business provides the following digital services to SMEs, NGOs, and businesses across Namibia:</Text>
-      <Bullet text="Website Development: custom business websites from N$2,500 to N$10,000" />
-      <Bullet text="E-Commerce Stores: Shopify and custom online stores from N$4,000 to N$15,000" />
-      <Bullet text="Web and Mobile App Development: custom software from N$5,000 to N$25,000 and above" />
-      <Bullet text="AI and Project Management Training: individual and team workshops" />
-      <Bullet text="Monthly Maintenance Retainers: recurring support and updates" />
-      <Bullet text="Technical Consulting: project reviews, audits, and advisory at N$350 per hour" />
+
       <View style={s.div} />
-      <H2 num="WHY WE NEED THE LOAN" title="Purpose of Funding" />
+
+      <H2 num="WHY WE NEED THE LOAN" title="Three Reasons for This Application" />
+      <Text style={s.h3}>1. To build a team</Text>
       <Text style={s.p}>
-        The business has demonstrated the ability to generate revenue and win clients. The limitation is capacity. As a sole operator, I can only take on a limited number of projects at a time. To grow, I need a team. And to build that team properly, with formal employment contracts, Social Security registration, and fair entry-level salaries, I need a bridge period of funding while the business scales its revenue to a level that can sustain the payroll independently.
+        I can only take on so many clients by myself. I have work coming in but no capacity to grow. To scale, I need people. The loan covers six salaries for 12 months while the business grows its revenue to a level where the team can sustain itself. All six positions are filled by young Namibians.
+      </Text>
+      <Text style={s.h3}>2. To serve Apple users for the first time</Text>
+      <Text style={s.p}>
+        Right now, I can only build and test on Windows and Android. A significant share of the clients I work with — and their customers — use Apple products: iPhones, iPads, and Macs. I cannot test an iOS application without a real iPhone. I cannot build or submit an app to the Apple App Store without a Mac. I cannot verify that a website displays correctly in Safari or on macOS without having those devices in front of me. This limits what I can deliver and which clients I can fully serve.
       </Text>
       <Text style={s.p}>
-        The loan will be used to: (1) procure all necessary professional hardware and software; and (2) fund six staff salaries for twelve months while the business grows monthly revenue from N$10,000 to N$60,000 and above.
+        The Apple hardware in this loan — the iMac, iPhone 16, and iPad Air — is not a lifestyle purchase. It directly expands the range of services we can offer and the clients we can work with. When this equipment is in place, Swift Designz will be able to build and test for the full market: Windows, Android, iOS, and macOS.
       </Text>
+      <Text style={s.h3}>3. To cover professional and legal setup costs</Text>
+      <Text style={s.p}>
+        Launching a formal business correctly costs money upfront. Legal fees, accounting fees, and business insurance are not optional. The N$50,000 professional reserve in this loan covers these first-year costs so the business is properly set up from the beginning.
+      </Text>
+
+      <View style={s.div} />
+
       <H2 num="IMPACT" title="What This Funding Will Achieve" />
-      <Bullet text="6 permanent jobs created, all held by young Namibians between the ages of 22 and 33" />
+      <Bullet text="6 permanent jobs created, all held by young Namibians aged 22 to 33" />
       <Bullet text="3 of the 6 positions filled by women" />
+      <Bullet text="Full cross-platform capability: the business will serve Windows, Android, iOS, and macOS users for the first time" />
       <Bullet text="Revenue growth from N$10,000 per month to N$60,000 and above per month within 12 months" />
-      <Bullet text="Formal employment, Social Security registration, and career development for the full team" />
-      <Bullet text="Expansion of Namibia's ICT sector capacity, reducing dependency on imported digital services" />
-      <Bullet text="Growth of our existing South Africa client base, bringing foreign revenue into Namibia" />
+      <Bullet text="Formal employment and Social Security registration for the full team from day one" />
+      <Bullet text="Growth of the existing South Africa client base, bringing foreign revenue into Namibia" />
+
       <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Executive Summary" />
     </Page>
   );
@@ -399,7 +402,7 @@ function CompanyInfoPage() {
         {[
           ["Website Development", "Custom business websites from Starter to Premium", "2,500 to 10,000"],
           ["E-Commerce Stores", "Shopify and custom online retail solutions", "4,000 to 15,000"],
-          ["App Development", "Web and mobile application builds", "5,000 to 25,000+"],
+          ["App Development", "Web and mobile application builds for Android, iOS, and cross-platform", "5,000 to 25,000+"],
           ["AI Training", "Individual (30 min) and team (1.5 hr) workshops", "Quoted per session"],
           ["PM Training", "Agile, Scrum, Kanban coaching and workshops", "Quoted per session"],
           ["Maintenance Retainer", "Monthly support, updates, and monitoring", "Quoted per client"],
@@ -918,6 +921,7 @@ function MarketingPage() {
           <Text style={s.swotItem}>- Registered CC with formal governance and accounting officer</Text>
           <Text style={s.swotItem}>- Live website with active lead intake and CRM system</Text>
           <Text style={s.swotItem}>- AI-assisted development reduces cost and turnaround time</Text>
+          <Text style={s.swotItem}>- Apple hardware enables full cross-platform delivery (Windows, Android, iOS, macOS)</Text>
         </View>
         <View style={s.swotCell}>
           <Text style={s.swotLabel}>Weaknesses</Text>
@@ -1112,7 +1116,7 @@ function OperationsPage2() {
           <Text style={[s.th, { flex: 0.8, textAlign: "right" as const }]}>Est. Cost (N$)</Text>
         </View>
         {[
-          ["Computing", "iMac 24-inch M4 (10-core, 24GB, 512GB, Green)", "Full kit incl. Magic Keyboard, Magic Mouse, 24-inch 4.5K display", "45,899"],
+          ["Computing", "iMac 24-inch M4 (10-core, 24GB, 512GB, Green)", "Primary workstation. Full kit incl. keyboard, mouse, and 24-inch display. Enables iOS and macOS development and testing for the first time.", "45,899"],
           ["Computing", "External Monitor (27-inch, 4K)", "Extended display alongside built-in iMac screen", "5,500"],
           ["Computing", "External SSD (1TB)", "Fast project backups and portable file storage", "1,800"],
           ["Computing", "USB-C Hub", "Expands iMac connectivity for drives and peripherals", "1,300"],
@@ -1121,7 +1125,7 @@ function OperationsPage2() {
           ["Workspace", "Monitor Arm (single, for ext. monitor)", "Frees desk space, ideal monitor positioning", "1,200"],
           ["Workspace", "Document Shredder", "Secure disposal of client documents (POPIA compliance)", "1,300"],
           ["Workspace", "Green Screen and Backdrop Stand", "Professional background for calls and content", "1,000"],
-          ["Mobile", "iPhone 16 (128GB)", "Client communication, mobile app testing, content creation", "22,000"],
+          ["Mobile", "iPhone 16 (128GB)", "Real-device iOS testing and verification. Required to test apps and websites on iPhone before client delivery. Also used for business communication.", "22,000"],
           ["Mobile", "iPad Air M2/M3 (11-inch)", "Design reviews, client presentations, and note-taking", "15,000"],
           ["Networking", "Wi-Fi 6 Business Router", "Fast, stable internet for home office", "4,000"],
           ["Networking", "UPS Battery Backup", "Equipment protection during power outages", "3,250"],
