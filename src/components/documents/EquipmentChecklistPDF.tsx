@@ -533,7 +533,7 @@ function Page1() {
         <CategoryBlock key={cat.title} cat={cat} />
       ))}
 
-      <Footer page="Page 1 of 4" />
+      <Footer page="Page 1 of 3" />
     </Page>
   );
 }
@@ -546,30 +546,37 @@ function Page2() {
         <Text style={s.runHeadText}>Core Equipment (continued)</Text>
       </View>
 
-      {/* Re-print column headers */}
       <View style={s.tblHead}>
-        <View style={s.colTick}>
-          <Text style={s.th}>Got</Text>
-        </View>
-        <View style={s.colItem}>
-          <Text style={s.th}>Item</Text>
-        </View>
-        <View style={s.colImportance}>
-          <Text style={s.th}>Importance</Text>
-        </View>
-        <View style={s.colPrice}>
-          <Text style={[s.th, { textAlign: "right" as const }]}>Avg Price (N$)</Text>
-        </View>
-        <View style={s.colNotes}>
-          <Text style={s.th}>Notes / Suggested Brand</Text>
-        </View>
+        <View style={s.colTick}><Text style={s.th}>Got</Text></View>
+        <View style={s.colItem}><Text style={s.th}>Item</Text></View>
+        <View style={s.colImportance}><Text style={s.th}>Importance</Text></View>
+        <View style={s.colPrice}><Text style={[s.th, { textAlign: "right" as const }]}>Avg Price (N$)</Text></View>
+        <View style={s.colNotes}><Text style={s.th}>Notes / Suggested Brand</Text></View>
       </View>
 
-      {EQUIPMENT.slice(2, 5).map((cat) => (
+      {EQUIPMENT.slice(2).map((cat) => (
         <CategoryBlock key={cat.title} cat={cat} />
       ))}
 
-      <Footer page="Page 2 of 4" />
+      <View style={s.summaryBox}>
+        <View style={s.summaryCol}>
+          <Text style={s.summaryLabel}>Critical Items Only (min. budget)</Text>
+          <Text style={s.summaryVal}>N$58,000 - 75,000</Text>
+          <Text style={s.summaryValSub}>Mac Studio + 2 monitors + iPhone 16 + UPS + router. Bare minimum to operate.</Text>
+        </View>
+        <View style={s.summaryCol}>
+          <Text style={s.summaryLabel}>Full Core List (mid-range)</Text>
+          <Text style={s.summaryVal}>N$108,650</Text>
+          <Text style={s.summaryValSub}>All loan-funded hardware at mid-range pricing. Mac peripherals and software are separate.</Text>
+        </View>
+        <View style={s.summaryCol}>
+          <Text style={s.summaryLabel}>Full Core List (top-end)</Text>
+          <Text style={s.summaryVal}>N$155,000+</Text>
+          <Text style={s.summaryValSub}>Mac Studio Pro + iPad Pro + high-spec monitors + premium networking</Text>
+        </View>
+      </View>
+
+      <Footer page="Page 2 of 3" />
     </Page>
   );
 }
@@ -579,112 +586,47 @@ function Page3() {
     <Page size="A4" style={s.page}>
       <View style={s.runHead} fixed>
         <Text style={s.runHeadText}>Swift Designz Investments CC | Equipment Checklist 2026</Text>
-        <Text style={s.runHeadText}>Core Equipment (continued)</Text>
-      </View>
-
-      <View style={s.tblHead}>
-        <View style={s.colTick}>
-          <Text style={s.th}>Got</Text>
-        </View>
-        <View style={s.colItem}>
-          <Text style={s.th}>Item</Text>
-        </View>
-        <View style={s.colImportance}>
-          <Text style={s.th}>Importance</Text>
-        </View>
-        <View style={s.colPrice}>
-          <Text style={[s.th, { textAlign: "right" as const }]}>Avg Price (N$)</Text>
-        </View>
-        <View style={s.colNotes}>
-          <Text style={s.th}>Notes / Suggested Brand</Text>
-        </View>
-      </View>
-
-      {EQUIPMENT.slice(5).map((cat) => (
-        <CategoryBlock key={cat.title} cat={cat} />
-      ))}
-
-      {/* Core equipment summary */}
-      <View style={s.summaryBox}>
-        <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Critical Items Only (min. budget)</Text>
-          <Text style={s.summaryVal}>N$55,000 - 72,000</Text>
-          <Text style={s.summaryValSub}>Mac Studio base + 2 monitors + iPhone 16 + UPS + router</Text>
-        </View>
-        <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Full Core List (mid-range estimates)</Text>
-          <Text style={s.summaryVal}>N$103,650</Text>
-          <Text style={s.summaryValSub}>All hardware at mid-range. Software and Mac peripherals are separate from this loan.</Text>
-        </View>
-        <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Full Core List (top-end estimates)</Text>
-          <Text style={s.summaryVal}>N$145,000+</Text>
-          <Text style={s.summaryValSub}>Mac Studio Pro + iPad Pro + top-spec monitors + high-end networking</Text>
-        </View>
-      </View>
-
-      <Footer page="Page 3 of 4" />
-    </Page>
-  );
-}
-
-function Page4() {
-  return (
-    <Page size="A4" style={s.page}>
-      <View style={s.runHead} fixed>
-        <Text style={s.runHeadText}>Swift Designz Investments CC | Equipment Checklist 2026</Text>
-        <Text style={s.runHeadText}>Suggested Additional Equipment</Text>
+        <Text style={s.runHeadText}>Additional Equipment to Consider</Text>
       </View>
 
       <View style={s.extrasBanner}>
-        <Text style={s.extrasBannerText}>Suggested Additional Equipment</Text>
+        <Text style={s.extrasBannerText}>Additional Equipment to Consider</Text>
       </View>
       <Text style={s.extrasNote}>
-        The items below are not included in the loan budget of N$538,430 but are worth considering. Software licences and office furniture are covered separately by the director. Review this list and decide which items to add before finalising your quotations. Adding team laptops is the most critical consideration if your staff do not have their own devices.
+        The items below are not included in the loan budget of N$519,330 but are worth adding before you finalise quotations. The Mac Studio keyboard and mouse are both CRITICAL since the machine ships with neither. The workspace add-ons are personal purchases at your own cost. Employees provide their own devices.
       </Text>
 
       <View style={s.tblHead}>
-        <View style={s.colTick}>
-          <Text style={s.th}>Got</Text>
-        </View>
-        <View style={s.colItem}>
-          <Text style={s.th}>Item</Text>
-        </View>
-        <View style={s.colImportance}>
-          <Text style={s.th}>Importance</Text>
-        </View>
-        <View style={s.colPrice}>
-          <Text style={[s.th, { textAlign: "right" as const }]}>Avg Price (N$)</Text>
-        </View>
-        <View style={s.colNotes}>
-          <Text style={s.th}>Notes / Suggested Brand</Text>
-        </View>
+        <View style={s.colTick}><Text style={s.th}>Got</Text></View>
+        <View style={s.colItem}><Text style={s.th}>Item</Text></View>
+        <View style={s.colImportance}><Text style={s.th}>Importance</Text></View>
+        <View style={s.colPrice}><Text style={[s.th, { textAlign: "right" as const }]}>Avg Price (N$)</Text></View>
+        <View style={s.colNotes}><Text style={s.th}>Notes / Suggested Brand</Text></View>
       </View>
 
       {EXTRA_EQUIPMENT.map((cat) => (
         <CategoryBlock key={cat.title} cat={cat} isExtra />
       ))}
 
-      {/* Extras summary */}
       <View style={s.summaryBox}>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Team Laptops (5 staff, mid-range)</Text>
-          <Text style={s.summaryVal}>~N$60,000</Text>
-          <Text style={s.summaryValSub}>If team members do not have their own devices</Text>
+          <Text style={s.summaryLabel}>Mac Peripherals Only (keyboard + mouse)</Text>
+          <Text style={s.summaryVal}>N$6,000 - 8,500</Text>
+          <Text style={s.summaryValSub}>Both CRITICAL. Mac Studio cannot be used without them.</Text>
         </View>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Full Extras List (mid-range)</Text>
-          <Text style={s.summaryVal}>~N$85,000</Text>
-          <Text style={s.summaryValSub}>Including team devices, redundancy, and productivity items</Text>
+          <Text style={s.summaryLabel}>All Extras (mid-range)</Text>
+          <Text style={s.summaryVal}>N$14,000 - 22,000</Text>
+          <Text style={s.summaryValSub}>Keyboard, mouse, ring light, monitor arm, shredder, green screen, drawing tablet</Text>
         </View>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Revised Loan if Mac Peripherals + Team Support Added</Text>
-          <Text style={s.summaryVal}>~N$525,000</Text>
-          <Text style={s.summaryValSub}>Still within the N$1,000,000 NYDF entrepreneurial tier</Text>
+          <Text style={s.summaryLabel}>Revised Loan if Mac Peripherals Added</Text>
+          <Text style={s.summaryVal}>~N$527,000</Text>
+          <Text style={s.summaryValSub}>Still well within the N$1,000,000 NYDF entrepreneurial tier</Text>
         </View>
       </View>
 
-      <Footer page="Page 4 of 4" />
+      <Footer page="Page 3 of 3" />
     </Page>
   );
 }
@@ -701,7 +643,6 @@ export default function EquipmentChecklistPDF() {
       <Page1 />
       <Page2 />
       <Page3 />
-      <Page4 />
     </Document>
   );
 }
