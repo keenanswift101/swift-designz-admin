@@ -92,7 +92,12 @@ export async function GET(
       installmentCount: invoice.installment_count ?? null,
       installmentInterval: invoice.installment_interval ?? null,
       paymentPlanType: invoice.payment_plan_type ?? null,
-      paymentPlanSchedule: invoice.payment_plan_schedule ?? null,
+      paymentPlanSchedule: invoice.payment_plan_schedule
+        ? (invoice.payment_plan_schedule as { label: string; amount_cents?: number; amount?: number }[]).map((row) => ({
+            label: row.label,
+            amount: row.amount_cents ?? row.amount ?? 0,
+          }))
+        : null,
       payments: typedPayments.map((p) => ({
         amount: p.amount,
         method: p.method,

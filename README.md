@@ -8,7 +8,7 @@ Internal business management portal for **Swift Designz Investments CC** — han
 | | |
 |---|---|
 | **Legal name** | Swift Designz Investments CC |
-| **CC Registration** | CC/2026/055589 |
+| **CC Registration** | CC/2026/05589 |
 | **NamRA TIN** | 16271273 (ITX 16271273-011) |
 | **Physical** | Erf 55 Kenneth McArthur Street, Auas Blick, Windhoek, Namibia |
 | **Financial year end** | Last day of February |

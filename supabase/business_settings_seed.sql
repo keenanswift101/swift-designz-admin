@@ -8,7 +8,7 @@ UPDATE business_settings SET
   address            = 'Erf 55 Kenneth McArthur Street, Auas Blick',
   city               = 'Windhoek',
   country            = 'Namibia',
-  registration_number = 'CC/2026/055589',
+  registration_number = 'CC/2026/05589',
   vat_number         = NULL, -- VAT registration pending; NamRA TIN is 16271273 (ITX, not VAT)
   registration_date  = '2026-05-12',
   directors          = 'Keenan Husselmann',

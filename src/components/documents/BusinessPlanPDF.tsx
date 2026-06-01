@@ -116,28 +116,37 @@ const s = StyleSheet.create({
   swotItem: { fontSize: 8.5, color: "#333333", marginBottom: 3, lineHeight: 1.55 },
   orgWrap: { alignItems: "center" as const, marginBottom: 14 },
   orgTopBox: {
-    borderWidth: 1.5,
-    borderColor: "#111111",
-    backgroundColor: "#eeeeee",
-    paddingHorizontal: 20,
+    backgroundColor: "#111111",
+    paddingHorizontal: 24,
+    paddingVertical: 10,
+    alignItems: "center" as const,
+    width: 260,
+  },
+  orgTopText: { fontSize: 8, fontWeight: 700, color: "#ffffff", textAlign: "center" as const, letterSpacing: 0.8 },
+  orgTopSub: { fontSize: 7.5, color: "#aaaaaa", textAlign: "center" as const, marginTop: 3 },
+  orgLine: { width: 2, height: 16, backgroundColor: "#444444", alignSelf: "center" as const },
+  orgChildBox: {
+    backgroundColor: "#333333",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    alignItems: "center" as const,
+    width: 128,
+  },
+  orgChildText: { fontSize: 7.5, fontWeight: 700, color: "#ffffff", textAlign: "center" as const, letterSpacing: 0.5 },
+  orgChildSub: { fontSize: 7, color: "#bbbbbb", textAlign: "center" as const, marginTop: 2 },
+  orgChildSal: { fontSize: 7, color: "#888888", textAlign: "center" as const, marginTop: 1 },
+  orgStaffBox: {
+    backgroundColor: "#f4f4f4",
+    borderWidth: 1,
+    borderColor: "#cccccc",
+    paddingHorizontal: 8,
     paddingVertical: 7,
     alignItems: "center" as const,
-    width: 200,
+    width: 108,
   },
-  orgTopText: { fontSize: 8.5, fontWeight: 700, color: "#111111", textAlign: "center" as const },
-  orgTopSub: { fontSize: 7.5, color: "#555555", textAlign: "center" as const, marginTop: 1 },
-  orgLine: { width: 1.5, height: 14, backgroundColor: "#999999", alignSelf: "center" as const },
-  orgChildBox: {
-    borderWidth: 1,
-    borderColor: "#999999",
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    alignItems: "center" as const,
-    width: 120,
-  },
-  orgChildText: { fontSize: 7.5, fontWeight: 700, color: "#333333", textAlign: "center" as const },
-  orgChildSub: { fontSize: 7, color: "#666666", textAlign: "center" as const, marginTop: 1 },
-  orgChildSal: { fontSize: 7, color: "#888888", textAlign: "center" as const, marginTop: 1 },
+  orgStaffText: { fontSize: 7.5, fontWeight: 700, color: "#111111", textAlign: "center" as const },
+  orgStaffSub: { fontSize: 7, color: "#555555", textAlign: "center" as const, marginTop: 2 },
+  orgStaffSal: { fontSize: 7, color: "#888888", textAlign: "center" as const, marginTop: 1 },
   div: { borderBottomWidth: 1, borderColor: "#e5e5e5", marginVertical: 12 },
   twoC: { flexDirection: "row", gap: 18, marginBottom: 12 },
   c50: { flex: 1 },
@@ -157,7 +166,7 @@ function Footer({ left, right }: { left: string; right: string }) {
 function RunHead({ section }: { section: string }) {
   return (
     <View style={s.runHead} fixed>
-      <Text style={s.runHeadText}>Swift Designz Investments CC | NYDF Business Plan 2026</Text>
+      <Text style={s.runHeadText}>{fl()}</Text>
       <Text style={s.runHeadText}>{section}</Text>
     </View>
   );
@@ -165,7 +174,7 @@ function RunHead({ section }: { section: string }) {
 
 function H2({ num, title }: { num: string; title: string }) {
   return (
-    <View style={s.h2wrap}>
+    <View style={s.h2wrap} wrap={false}>
       <Text style={s.h2num}>{num}</Text>
       <Text style={s.h2}>{title}</Text>
     </View>
@@ -174,7 +183,7 @@ function H2({ num, title }: { num: string; title: string }) {
 
 function Bullet({ text }: { text: string }) {
   return (
-    <View style={s.bRow}>
+    <View style={s.bRow} wrap={false}>
       <Text style={s.bDot}>-</Text>
       <Text style={s.bText}>{text}</Text>
     </View>
@@ -192,16 +201,103 @@ function KV({ k, v }: { k: string; v: string }) {
 
 // ── COVER PAGE ────────────────────────────────────────────────
 
-function CoverPage() {
+const LABEL = {
+  nydf: {
+    sub: "National Youth Development Fund Application\nSubmitted to the Development Bank of Namibia",
+    footer: "Swift Designz Investments CC | NYDF Business Plan 2026",
+    docTitle: "Swift Designz Investments CC - NYDF Business Plan 2026",
+    subject: "National Youth Development Fund Loan Application",
+    keywords: "NYDF, DBN, business plan, Swift Designz, Namibia, ICT",
+  },
+  generic: {
+    sub: "Business Loan Application\n2026",
+    footer: "Swift Designz Investments CC | Business Plan 2026",
+    docTitle: "Swift Designz Investments CC - Business Plan 2026",
+    subject: "Business Loan Application",
+    keywords: "business plan, Swift Designz, Namibia, ICT, loan",
+  },
+} as const;
+
+type Variant = keyof typeof LABEL;
+
+// Module-level footer label — set synchronously before render
+let _footerLabel: string = LABEL.nydf.footer;
+const fl = (): string => _footerLabel;
+
+// ── TABLE OF CONTENTS ────────────────────────────────────────
+
+function TableOfContentsPage() {
+  const entries: [string, string][] = [
+    ["Cover Letter", "2"],
+    ["Executive Summary", "3"],
+    ["Section 01 — Company Information", "5"],
+    ["  1.1  Business Name", "5"],
+    ["  1.2  Business Location", "5"],
+    ["  1.3  Description of Business and Services", "5"],
+    ["  1.4  Regulatory and Compliance Context", "5"],
+    ["  1.5  Sources of Funding", "5"],
+    ["Section 02 — Management Plan", "6"],
+    ["  2.1  Organisational Structure", "6"],
+    ["  2.1.1  Personnel: Year 1 to Year 3", "6"],
+    ["  2.1.2  Experience and Technical Ability", "7"],
+    ["  2.1.3  Ownership Structure", "7"],
+    ["  2.1.4  Strategic Alliances", "7"],
+    ["Section 03 — Financial Information", "8"],
+    ["  3.1  Implementation Plan", "8"],
+    ["  3.2  Pre-Registration Trading History", "8"],
+    ["  3.3  Loan Use Breakdown", "9"],
+    ["  3.3.1  Key Financial Assumptions", "10"],
+    ["  3.3.1a  Revenue Composition", "10"],
+    ["  3.3.2  Year 1 Monthly Cash Flow Projection", "11"],
+    ["  3.3.3  Income Statement Projection", "12"],
+    ["  3.3.3  Income Statement Projection (Year 1)", "12"],
+    ["  3.3.4  3-Year Financial Projection Summary", "12"],
+    ["  3.3.5  Loan Repayment Projection", "13"],
+    ["Section 04 — Marketing Plan", "13"],
+    ["  4.1  Industry Analysis", "13"],
+    ["  4.1.1  SWOT Analysis", "13"],
+    ["  4.1.2  Target Markets and Market Share Estimates", "13"],
+    ["  4.1.3  Market Segment Notes", "14"],
+    ["  4.1.4  Competition and Competitive Positioning", "14"],
+    ["  4.2  Promotion and Advertising Strategy", "14"],
+    ["Section 05 — Operations and Technology", "15"],
+    ["  5.1  Operations Overview", "15"],
+    ["  5.2  Delivery Methodology and Raw Material Costing", "15"],
+    ["  5.3  Organisation of Operations and Outputs", "15"],
+    ["  5.4  Technology and Equipment", "15"],
+    ["Section 06 — Statistics", "16"],
+  ];
+  return (
+    <Page size="A4" style={s.page}>
+      <RunHead section="Index" />
+      <View>
+        <Text style={s.pageTitle}>Index</Text>
+        <View style={s.pageTitleRule} />
+      </View>
+      {entries.map(([label, pg]) => (
+        <View key={label} style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 4 }}>
+          <Text style={{ fontSize: label.startsWith("  ") ? 8 : 9, color: label.startsWith("Section") ? "#111111" : "#444444", fontWeight: label.startsWith("Section") ? 700 : 400 }}>
+            {label}
+          </Text>
+          <Text style={{ fontSize: 8, color: "#888888" }}>{pg}</Text>
+        </View>
+      ))}
+      <Footer left={fl()} right="Index" />
+    </Page>
+  );
+}
+
+// ── COVER PAGE ────────────────────────────────────────────────
+
+function CoverPage({ variant }: { variant: Variant }) {
   return (
     <Page size="A4" style={s.coverPage}>
       <Text style={s.coverLogoName}>SWIFT DESIGNZ INVESTMENTS CC</Text>
-      <Text style={s.coverLogoSub}>CC/2026/055589 · Windhoek, Namibia</Text>
+      <Text style={s.coverLogoSub}>CC/2026/05589 · Windhoek, Namibia</Text>
       <View style={s.coverRule} />
       <Text style={s.coverTitle}>Business Plan</Text>
       <Text style={s.coverSub}>
-        National Youth Development Fund Application{"\n"}
-        Submitted to the Development Bank of Namibia
+        {LABEL[variant].sub}
       </Text>
       <View style={s.kvRow}>
         <Text style={s.coverDT}>Applicant</Text>
@@ -213,11 +309,11 @@ function CoverPage() {
       </View>
       <View style={s.kvRow}>
         <Text style={s.coverDT}>ID Number</Text>
-        <Text style={s.coverDD}>9505210045</Text>
+        <Text style={s.coverDD}>95052100450</Text>
       </View>
       <View style={s.kvRow}>
         <Text style={s.coverDT}>Business Registration</Text>
-        <Text style={s.coverDD}>CC/2026/055589, registered 12 May 2026</Text>
+        <Text style={s.coverDD}>CC/2026/05589, registered 12 May 2026</Text>
       </View>
       <View style={s.kvRow}>
         <Text style={s.coverDT}>NamRA Tax Income Number</Text>
@@ -241,7 +337,7 @@ function CoverPage() {
       </View>
       <View style={s.kvRow}>
         <Text style={s.coverDT}>Loan Amount Requested</Text>
-        <Text style={s.coverDD}>N$524,930</Text>
+        <Text style={s.coverDD}>N$550,000</Text>
       </View>
       <View style={s.kvRow}>
         <Text style={s.coverDT}>Repayment Period</Text>
@@ -253,7 +349,9 @@ function CoverPage() {
       </View>
       <View style={s.coverRule2} />
       <Text style={s.coverNote}>
-        This business plan has been prepared in support of a loan application under the National Youth Development Fund (NYDF), administered through the Development Bank of Namibia. All financial projections are based on conservative estimates derived from demonstrated pre-registration trading activity. The applicant declares that all information contained herein is true and accurate to the best of their knowledge.
+        {variant === "nydf"
+          ? "This business plan has been prepared in support of a loan application under the National Youth Development Fund (NYDF), administered through the Development Bank of Namibia. All financial projections are based on conservative estimates derived from demonstrated pre-registration trading activity. The applicant declares that all information contained herein is true and accurate to the best of their knowledge."
+          : "This business plan has been prepared in support of a business loan application. All financial projections are based on conservative estimates derived from demonstrated pre-registration trading activity. The applicant declares that all information contained herein is true and accurate to the best of their knowledge."}
       </Text>
     </Page>
   );
@@ -263,37 +361,34 @@ function CoverPage() {
 
 const bl = { fontSize: 9, color: "#111111", lineHeight: 1.72, marginBottom: 8 } as const;
 
-function CoverLetterPage() {
+function CoverLetterPage({ variant }: { variant: Variant }) {
   return (
     <Page size="A4" style={s.page}>
       <RunHead section="Cover Letter" />
 
       <View wrap={false} style={{ marginBottom: 16 }}>
-        <Text style={[bl, { fontWeight: 700, marginBottom: 2 }]}>The NYDF Fund Manager</Text>
-        <Text style={[bl, { marginBottom: 2 }]}>Development Bank of Namibia</Text>
-        <Text style={[bl, { marginBottom: 2 }]}>PO Box 235, Windhoek</Text>
+        <Text style={[bl, { fontWeight: 700, marginBottom: 2 }]}>{variant === "nydf" ? "The NYDF Fund Manager" : "The Loans Manager"}</Text>
+        <Text style={[bl, { marginBottom: 2 }]}>{variant === "nydf" ? "Development Bank of Namibia" : "[Financial Institution]"}</Text>
+        <Text style={[bl, { marginBottom: 2 }]}>{variant === "nydf" ? "PO Box 235, Windhoek" : "Windhoek, Namibia"}</Text>
         <Text style={[bl, { marginBottom: 0 }]}>Namibia</Text>
       </View>
 
-      <Text style={[bl, { fontWeight: 700, marginBottom: 14 }]}>
-        RE: NYDF LOAN APPLICATION - SWIFT DESIGNZ INVESTMENTS CC (CC/2026/055589)
+      <Text style={[bl, { fontWeight: 700, marginBottom: 14 }]} wrap={false}>
+        RE: {variant === "nydf" ? "NYDF LOAN APPLICATION" : "BUSINESS LOAN APPLICATION"} - SWIFT DESIGNZ INVESTMENTS CC (CC/2026/05589)
       </Text>
 
-      <Text style={[bl, { marginBottom: 14 }]}>Dear Sir / Madam,</Text>
+      <Text style={[bl, { marginBottom: 14 }]} wrap={false}>Dear Sir / Madam,</Text>
 
-      <Text style={bl}>
-        I am Keenan Husselmann, a 31-year-old Namibian citizen and sole director of Swift Designz Investments CC. I hereby apply for a loan of N$524,930 under the National Youth Development Fund through the Development Bank of Namibia. My business is registered as Close Corporation CC/2026/055589, effective 12 May 2026, and headquartered in Windhoek, Khomas Region.
+      <Text style={bl} wrap={false}>
+        I am Keenan Husselmann, 31, sole director of Swift Designz Investments CC (CC/2026/05589, registered 12 May 2026, Windhoek). I hereby apply for N$550,000 in business loan funding. Swift Designz is a digital technology company building websites, e-commerce stores, apps, and AI solutions for Namibian and South African businesses. Prior to formal registration, I generated N$41,000 in confirmed income over 5 months. Current monthly recurring revenue is N$7,000.
       </Text>
-      <Text style={bl}>
-        Swift Designz Investments CC is a technology and digital services company. We build websites, e-commerce stores, web and mobile applications, and we provide AI training and technical consulting to businesses across Namibia. Before formal registration, I operated as a freelancer under the same brand from January 2026, generating N$41,000 in confirmed income over 5 months with current recurring monthly revenue of N$7,000 from retainer subscriptions, investor income, and client deposits. The CC registration in May 2026 marks the transition from solo freelance work to a full team-based agency.
-      </Text>
-      <Text style={bl}>
+      <Text style={bl} wrap={false}>
         This loan will do three things: get Apple hardware into the business so we can build and test for iOS and macOS users for the first time; fund six staff salaries for 12 months while we grow the client base; and cover professional and legal setup costs for the new CC. We are fully remote, overhead is low, and we are already generating revenue in both Namibia and South Africa.
       </Text>
-      <Text style={bl}>
-        I believe this application speaks directly to the NYDF goals. Six young Namibians will be formally employed, registered with Social Security, and given real career experience in the technology sector. The business is innovation-driven, scalable, and rooted in Namibia. We are not looking for a handout. We are asking for the bridge funding that allows us to build something that will create lasting employment and contribute to the digital economy of Namibia.
+      <Text style={bl} wrap={false}>
+        Six young Namibians will be formally employed, registered with Social Security, and given real career experience in the technology sector. The business is profitable from Month 3 post-funding and generates a full-year operating surplus of N$136,000. This loan is a bridge to a scalable, self-sustaining business — not operating capital for a concept.
       </Text>
-      <Text style={bl}>
+      <Text style={bl} wrap={false}>
         I have attached a full business plan and all required supporting documents. I welcome the opportunity to discuss this application further.
       </Text>
 
@@ -307,14 +402,14 @@ function CoverLetterPage() {
         <Text style={[bl, { marginBottom: 2 }]}>Erf 55 Kenneth McArthur Street, Auas Blick, Windhoek, Namibia</Text>
       </View>
 
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Cover Letter" />
+      <Footer left={fl()} right="Cover Letter" />
     </Page>
   );
 }
 
-// ── EXECUTIVE SUMMARY ─────────────────────────────────────────
+// ── EXECUTIVE SUMMARY + NYDF CRITERIA ────────────────────────
 
-function ExecutiveSummaryPage() {
+function ExecutiveSummaryPage({ variant }: { variant: Variant }) {
   return (
     <Page size="A4" style={s.page}>
       <RunHead section="Executive Summary" />
@@ -324,43 +419,71 @@ function ExecutiveSummaryPage() {
       </View>
 
       <H2 num="WHO WE ARE" title="About Swift Designz Investments CC" />
-      <Text style={s.p}>
-        My name is Keenan Husselmann. I am 31 years old, a Namibian citizen, and I hold a Bachelor of Computer Science degree in Software Development from NUST. I started building websites and digital products professionally in early 2026. Since January 2026 I have been trading under the Swift Designz brand, generating N$41,000 in confirmed income over 5 months against approximately N$5,000 in expenses. Current monthly recurring revenue is N$7,000 from 3 active retainer clients on 1-year contracts, an investor contribution, and ongoing client project deposits. On 12 May 2026 I registered Swift Designz Investments CC to formalise the business and begin building a proper team.
+      <Text style={s.p} wrap={false}>
+        Swift Designz Investments CC is a registered Namibian digital technology company providing website development, e-commerce solutions, custom software applications, AI integration, and technical training to businesses across Namibia and South Africa. The company was formally registered on 12 May 2026 under the Close Corporations Act (CC/2026/05589) and operates fully remotely from Windhoek, Khomas Region.
       </Text>
-      <Text style={s.p}>
-        The business already serves active clients in both Namibia and South Africa. We build websites, e-commerce stores, web and mobile applications, and provide technical training and consulting. We operate fully remotely, which keeps our overhead low and allows us to serve clients anywhere without the cost of a physical office.
+      <Text style={s.p} wrap={false}>
+        Prior to formal registration, the business traded under the Swift Designz brand from January 2026, generating N$41,000 in confirmed income over 5 months. Current monthly recurring revenue is N$7,000 from active retainer contracts, an investor contribution, and ongoing client project deposits. The business serves active paying clients in both Namibia and South Africa, with live e-commerce stores and websites deployed in both markets.
       </Text>
 
       <View style={s.div} />
 
       <H2 num="WHY WE NEED THE LOAN" title="Three Reasons for This Application" />
-      <Text style={s.h3}>1. To build a team</Text>
-      <Text style={s.p}>
-        I can only take on so many clients by myself. I have work coming in but no capacity to grow. To scale, I need people. The loan covers six salaries for 12 months while the business grows its revenue to a level where the team can sustain itself. All six positions are filled by young Namibians.
-      </Text>
-      <Text style={s.h3}>2. To serve Apple users for the first time</Text>
-      <Text style={s.p}>
-        Right now, I can only build and test on Windows and Android. A significant share of the clients I work with — and their customers — use Apple products: iPhones, iPads, and Macs. I cannot test an iOS application without a real iPhone. I cannot build or submit an app to the Apple App Store without a Mac. I cannot verify that a website displays correctly in Safari or on macOS without having those devices in front of me. This limits what I can deliver and which clients I can fully serve.
-      </Text>
-      <Text style={s.p}>
-        The Apple hardware in this loan — the iMac, iPhone 16, and iPad Air — is not a lifestyle purchase. It directly expands the range of services we can offer and the clients we can work with. When this equipment is in place, Swift Designz will be able to build and test for the full market: Windows, Android, iOS, and macOS.
-      </Text>
-      <Text style={s.h3}>3. To cover professional and legal setup costs</Text>
-      <Text style={s.p}>
-        Launching a formal business correctly costs money upfront. Legal fees, accounting fees, and business insurance are not optional. The N$50,000 professional reserve in this loan covers these first-year costs so the business is properly set up from the beginning.
-      </Text>
+      <Bullet text="To build a team: solo capacity is capped at 10 active clients. Six hires unlock parallel project delivery and allow the director to focus on acquisition while the team handles delivery." />
+      <Bullet text="To serve Apple users: currently Windows and Android only. Testing iOS apps requires a real iPhone; submitting to the App Store requires a Mac. The iMac and iPhone in this budget unlock an entirely new service category." />
+      <Bullet text="To cover legal and professional setup: N$75,000 reserve for legal fees, accounting, and business insurance — non-optional costs for operating a compliant CC from day one." />
 
       <View style={s.div} />
 
-      <H2 num="IMPACT" title="What This Funding Will Achieve" />
-      <Bullet text="6 permanent jobs created, all held by young Namibians aged 22 to 33" />
-      <Bullet text="3 of the 6 positions filled by women" />
-      <Bullet text="Full cross-platform capability: the business will serve Windows, Android, iOS, and macOS users for the first time" />
-      <Bullet text="Revenue growth from N$10,000 per month to N$60,000 and above per month within 12 months" />
-      <Bullet text="Formal employment and Social Security registration for the full team from day one" />
-      <Bullet text="Growth of the existing South Africa client base, bringing foreign revenue into Namibia" />
+      <View wrap={false}>
+        <H2 num="IMPACT" title="What This Funding Will Achieve" />
+        <Bullet text="6 permanent jobs created, all held by young Namibians aged 22 to 33" />
+        <Bullet text="3 of the 6 positions filled by women" />
+        <Bullet text="Full cross-platform capability: the business will serve Windows, Android, iOS, and macOS users for the first time" />
+        <Bullet text="Revenue growth from N$25,000 at Month 1 (post-funding) to N$60,000 and above by Month 12" />
+        <Bullet text="Formal employment and Social Security registration for the full team from day one" />
+        <Bullet text="Growth of the existing South Africa client base, bringing foreign revenue into Namibia" />
+      </View>
 
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Executive Summary" />
+      {variant === "nydf" && <>
+        <View wrap={false}>
+          <View style={s.div} />
+          <H2 num="NYDF CRITERIA" title="How This Application Meets the NYDF Assessment Criteria" />
+          <Text style={[s.p, { marginBottom: 10 }]} wrap={false}>
+            The NYDF assesses all applications on five criteria. This section addresses each one directly so reviewers can verify eligibility and impact at a glance.
+          </Text>
+        </View>
+
+        <Text style={s.h3} wrap={false}>1. Viability and Sustainability of the Business</Text>
+        <Text style={s.p} wrap={false}>
+          Swift Designz is not a concept. It has been operating for over a year, has 6 active paying clients, and generates N$7,000 per month in confirmed recurring income from retainer contracts, investor contributions, and project deposits. Invoices totalling N$46,964 have been issued and paid in 2026 alone. The business has a registered accounting officer, a formal CC registration, and an active NamRA tax number. It is already a functioning business. This loan is for scaling it, not starting it.
+        </Text>
+        <Text style={[s.p, { marginBottom: 8 }]} wrap={false}>
+          Financial projections show the business reaching operational breakeven at Month 3, generating N$60,000 per month by Month 12, and producing a full-year operating surplus in Year 1. Loan repayments from Year 2 are fully serviceable from operational revenue. The full revenue model, monthly cash flow projections, and 3-year financial summary are in Section 03 of this plan.
+        </Text>
+
+        <Text style={s.h3} wrap={false}>2. Youth Empowerment Potential</Text>
+        <Text style={s.p} wrap={false}>
+          The Director, Keenan Husselmann, is 31 years old. All 5 positions to be hired are youth aged 22 to 33. Three of the 6 total team members are women. Every staff member will receive structured internal training across all business domains during Years 1 and 2. By Year 3, trained staff are advanced into management positions from within the business.
+        </Text>
+
+        <Text style={s.h3} wrap={false}>3. Job Creation Capacity</Text>
+        <Text style={s.p} wrap={false}>
+          This loan directly creates 5 formal, permanent, salaried positions from Month 1, all registered with the Social Security Commission. By Year 3, the team grows to 9 with 3 additional intern positions providing a pathway to permanent employment.
+        </Text>
+
+        <Text style={s.h3} wrap={false}>4. Innovation and Local Relevance</Text>
+        <Text style={s.p} wrap={false}>
+          Swift Designz builds technology that Namibian businesses currently have to import from South Africa, Europe, or the United States. The cross-platform capability unlocked by this loan (iOS, Android, Windows, macOS) means Namibian clients are served by a local company at local prices. Planned AI platforms and school tools directly address Namibia{"'"}s digital skills gap.
+        </Text>
+
+        <Text style={s.h3} wrap={false}>5. Environmental and Social Impact</Text>
+        <Text style={s.p} wrap={false}>
+          Fully remote operations mean zero commute, no office energy consumption, and no vehicle fleet. Cloud delivery reduces printed materials and in-person travel. Every website and app delivered gives a Namibian SME a permanent local digital presence, reducing dependency on expensive overseas services.
+        </Text>
+      </>}
+
+      <Footer left={fl()} right="Executive Summary" />
     </Page>
   );
 }
@@ -376,7 +499,7 @@ function CompanyInfoPage() {
         <View style={s.pageTitleRule} />
       </View>
       <H2 num="1.1" title="Business Name" />
-      <Text style={s.p}>Swift Designz Investments CC</Text>
+      <Text style={s.p} wrap={false}>Swift Designz Investments CC</Text>
       <H2 num="1.2" title="Business Location" />
       <KV k="Physical Address" v="Erf 55 Kenneth McArthur Street, Auas Blick, Windhoek, Namibia" />
       <KV k="Postal Address" v="P.O. Box 4655, Rehoboth, Namibia" />
@@ -387,13 +510,14 @@ function CompanyInfoPage() {
       <KV k="Email" v="info@swiftdesignz.co.za" />
       <View style={s.div} />
       <H2 num="1.3" title="Description of Business and Services" />
-      <Text style={s.p}>
+      <Text style={s.p} wrap={false}>
         Swift Designz Investments CC is a digital technology company that helps businesses establish and grow their online presence. We design and build websites, online stores, and custom software applications. We also offer training in artificial intelligence tools and project management methods, and we provide monthly technical support retainers to keep client platforms running well after launch.
       </Text>
-      <Text style={s.p}>
-        The business is built around a simple idea: quality digital services should be accessible to all businesses in Namibia, not just large ones. Our pricing is transparent, our turnaround times are fast, and our team is young, capable, and invested in what we build.
-      </Text>
-      <View style={s.tbl}>
+      <Text style={s.h3} wrap={false}>Future Services (Year 2 and beyond):</Text>
+      <Bullet text="AI agentic platforms built for specific business domains (legal, retail, logistics, healthcare)" />
+      <Bullet text="AI assistants for businesses — custom-trained, deployed, and maintained for individual companies" />
+      <Bullet text="AI tutors for schools — interactive learning tools built for Namibian curricula and classrooms" />
+      <View wrap={false} style={s.tbl}>
         <View style={s.tblH}>
           <Text style={[s.th, { flex: 2 }]}>Service</Text>
           <Text style={[s.th, { flex: 2 }]}>Description</Text>
@@ -403,10 +527,10 @@ function CompanyInfoPage() {
           ["Website Development", "Custom business websites from Starter to Premium", "2,500 to 10,000"],
           ["E-Commerce Stores", "Shopify and custom online retail solutions", "4,000 to 15,000"],
           ["App Development", "Web and mobile application builds for Android, iOS, and cross-platform", "5,000 to 25,000+"],
-          ["AI Training", "Individual (30 min) and team (1.5 hr) workshops", "Quoted per session"],
-          ["PM Training", "Agile, Scrum, Kanban coaching and workshops", "Quoted per session"],
-          ["Maintenance Retainer", "Monthly support, updates, and monitoring", "Quoted per client"],
-          ["Technical Consulting", "Audits, reviews, and advisory services", "N$350 per hour"],
+          ["AI Training", "Individual 1-hour sessions and team workshops", "N$800 per session"],
+          ["PM Training", "Full training programme including tools access and content", "N$2,000 fixed fee"],
+          ["Maintenance Retainer", "Monthly support, updates, and monitoring (range N$800 to N$1,500)", "avg N$900 per month"],
+          ["Technical Consulting", "Audits, reviews, and advisory services", "N$800 per hour"],
         ].map(([svc, desc, price], i) => (
           <View key={svc} style={i % 2 === 0 ? s.tblR : s.tblRA}>
             <Text style={[s.td, { flex: 2 }]}>{svc}</Text>
@@ -415,24 +539,12 @@ function CompanyInfoPage() {
           </View>
         ))}
       </View>
-      <Text style={s.h3}>Future Services (Year 2 and beyond):</Text>
-      <Bullet text="Software-as-a-Service products built and licensed to Namibian SMEs" />
-      <Bullet text="Digital automation solutions for small business workflows" />
-      <Bullet text="E-learning platform development for training institutions" />
       <View style={s.div} />
-      <H2 num="1.4" title="Background: Sector and Regulatory Context" />
-      <Text style={s.p}>
-        The ICT sector in Namibia is one of the fastest-growing segments of the national economy. The government ICT Master Plan, Vision 2030, and the Harambee Prosperity Plan II all identify digital transformation as a key driver of economic growth and youth employment. The demand for affordable, professional digital services among Namibian SMEs is significant and currently underserved. Most local businesses either rely on expensive agencies or make do with low-quality solutions from overseas platforms.
+      <H2 num="1.4" title="Regulatory and Compliance Context" />
+      <Text style={s.p} wrap={false}>
+        Registered under the Close Corporations Act, Act 26 of 1988 (CC/2026/05589). NamRA Tax Income Number: 16271273 (ITX 16271273-011). Not VAT-registered — annual turnover below N$500,000 threshold; registration will be initiated as revenue grows. Staff registered with SSC on appointment. Accounting Officer: Rachel N. Kashala (SAIBA 4132). Active clients in Namibia and South Africa — live e-commerce stores and websites deployed in both markets.
       </Text>
-      <Text style={s.p}>
-        Swift Designz Investments CC is registered under the Close Corporations Act, Act 26 of 1988. The company holds a NamRA Tax Income Number (16271273, ITX 16271273-011) and is registered for income tax. The business is not currently VAT-registered as annual turnover is below the N$500,000 threshold. VAT registration will be initiated as revenue grows past the threshold.
-      </Text>
-      <Text style={s.p}>
-        The business already serves clients in both Namibia and South Africa, with live e-commerce stores and websites deployed across both markets. This gives Swift Designz an established dual-market footprint from day one. The focus is not market entry into South Africa but growing the existing client base in both countries simultaneously.
-      </Text>
-      <Text style={s.p}>
-        The business operates fully within the regulatory framework of Namibia. Staff will be registered with the Social Security Commission upon appointment. The appointed accounting officer is Rachel N. Kashala (SAIBA 4132), providing independent financial oversight.
-      </Text>
+      <View wrap={false}>
       <View style={s.div} />
       <H2 num="1.5" title="Sources of Funding" />
       <View style={s.tbl}>
@@ -442,7 +554,7 @@ function CompanyInfoPage() {
           <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Amount (N$)</Text>
         </View>
         {[
-          ["NYDF Loan (DBN)", "Loan applied for in this application", "539,480"],
+          ["NYDF Loan (DBN)", "Loan applied for in this application", "550,000"],
           ["Own Contribution", "Existing equipment contributed in-kind", "40,000"],
           ["Private Investor (Signed investor commitment letter attached as Supporting Document SD-01)", "Monthly contribution of N$2,000 over 5 years (ongoing)", "120,000 total"],
         ].map(([src, desc, amt], i) => (
@@ -457,7 +569,8 @@ function CompanyInfoPage() {
           <Text style={[s.tdbr, { flex: 1 }]}>N$700,000</Text>
         </View>
       </View>
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 01 - Company Information" />
+      </View>
+      <Footer left={fl()} right="Section 01 - Company Information" />
     </Page>
   );
 }
@@ -473,109 +586,125 @@ function ManagementPlanPage() {
         <View style={s.pageTitleRule} />
       </View>
       <H2 num="2.1" title="Organisational Structure" />
-      <Text style={s.p}>
-        Swift Designz Investments CC operates a flat, remote-first structure. The Director leads all technical and strategic decisions. The Business Administrator and HR Officer manage day-to-day operations, finance administration, and people management. The technical team handles development, quality assurance, and systems. Marketing drives lead generation and brand growth.
+      <Text style={s.p} wrap={false}>
+        Swift Designz Investments CC operates a flat, remote-first structure. The Director leads all technical work, project management, and strategic decisions directly. Operations and project delivery are managed by the Director because that is where the domain knowledge sits. The Business Administrator handles finance administration and day-to-day coordination. The technical team handles development, quality assurance, and systems. Marketing drives lead generation and brand growth.
       </Text>
-      <Text style={s.h3}>Management Organogram</Text>
+      <Text style={s.h3} wrap={false}>Management Organogram</Text>
       <View style={s.orgWrap}>
+
+        {/* Director */}
         <View style={s.orgTopBox}>
-          <Text style={s.orgTopText}>DIRECTOR / LEAD DEVELOPER</Text>
-          <Text style={s.orgTopSub}>Keenan Husselmann · N$10,000/mo</Text>
+          <Text style={s.orgTopText}>DIRECTOR · LEAD DEVELOPER · OPERATIONS</Text>
+          <Text style={s.orgTopSub}>Keenan Husselmann  ·  N$10,000/mo</Text>
         </View>
         <View style={s.orgLine} />
+
+        {/* Horizontal spread */}
         <View style={{ flexDirection: "row", justifyContent: "center" as const }}>
-          <View style={{ flex: 1, borderTopWidth: 1.5, borderRightWidth: 1.5, borderColor: "#999999", height: 14 }} />
-          <View style={{ flex: 1, borderTopWidth: 1.5, borderLeftWidth: 1.5, borderColor: "#999999", height: 14 }} />
+          <View style={{ flex: 1, borderTopWidth: 2, borderRightWidth: 2, borderColor: "#444444", height: 14 }} />
+          <View style={{ flex: 1, borderTopWidth: 2, borderLeftWidth: 2, borderColor: "#444444", height: 14 }} />
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "center" as const, gap: 20 }}>
+
+        {/* Three departments */}
+        <View style={{ flexDirection: "row", justifyContent: "center" as const, gap: 18 }}>
+
+          {/* OPERATIONS */}
           <View style={{ alignItems: "center" as const }}>
             <View style={s.orgChildBox}>
               <Text style={s.orgChildText}>OPERATIONS</Text>
-              <Text style={s.orgChildSub}>Admin and Projects</Text>
+              <Text style={s.orgChildSub}>Director-led</Text>
             </View>
             <View style={s.orgLine} />
-            <View style={{ flexDirection: "row", gap: 8 }}>
-              <View style={{ ...s.orgChildBox, width: 108 }}>
-                <Text style={s.orgChildText}>Business Admin</Text>
-                <Text style={s.orgChildSub}>Georgia Orren</Text>
-                <Text style={s.orgChildSal}>N$6,500/mo</Text>
+            <View style={{ flexDirection: "row", gap: 6 }}>
+              <View style={s.orgStaffBox}>
+                <Text style={s.orgStaffText}>Business Admin</Text>
+                <Text style={s.orgStaffSub}>Georgia Orren</Text>
+                <Text style={s.orgStaffSal}>N$6,500/mo</Text>
               </View>
-              <View style={{ ...s.orgChildBox, width: 108 }}>
-                <Text style={s.orgChildText}>Project Manager</Text>
-                <Text style={s.orgChildSub}>Requelle Husselmann</Text>
-                <Text style={s.orgChildSal}>N$5,500/mo</Text>
+              <View style={s.orgStaffBox}>
+                <Text style={s.orgStaffText}>Project Manager</Text>
+                <Text style={s.orgStaffSub}>Requelle Husselmann</Text>
+                <Text style={s.orgStaffSal}>N$5,500/mo</Text>
               </View>
             </View>
           </View>
+
+          {/* TECHNOLOGY */}
           <View style={{ alignItems: "center" as const }}>
             <View style={s.orgChildBox}>
               <Text style={s.orgChildText}>TECHNOLOGY</Text>
-              <Text style={s.orgChildSub}>Dev, QA and Systems</Text>
+              <Text style={s.orgChildSub}>Dev, QA &amp; Systems</Text>
             </View>
             <View style={s.orgLine} />
-            <View style={{ flexDirection: "row", gap: 8 }}>
-              <View style={{ ...s.orgChildBox, width: 108 }}>
-                <Text style={s.orgChildText}>Systems Admin</Text>
-                <Text style={s.orgChildSub}>Anthony Bagley</Text>
-                <Text style={s.orgChildSal}>N$3,500/mo</Text>
+            <View style={{ flexDirection: "row", gap: 6 }}>
+              <View style={s.orgStaffBox}>
+                <Text style={s.orgStaffText}>Systems Admin</Text>
+                <Text style={s.orgStaffSub}>Anthony Bagley</Text>
+                <Text style={s.orgStaffSal}>N$3,500/mo</Text>
               </View>
-              <View style={{ ...s.orgChildBox, width: 108 }}>
-                <Text style={s.orgChildText}>QA Tester</Text>
-                <Text style={s.orgChildSub}>Tapiwa Machekera</Text>
-                <Text style={s.orgChildSal}>N$2,500/mo</Text>
+              <View style={s.orgStaffBox}>
+                <Text style={s.orgStaffText}>QA Tester</Text>
+                <Text style={s.orgStaffSub}>Tapiwa Machekera</Text>
+                <Text style={s.orgStaffSal}>N$2,500/mo</Text>
               </View>
             </View>
           </View>
+
+          {/* MARKETING */}
           <View style={{ alignItems: "center" as const }}>
             <View style={s.orgChildBox}>
               <Text style={s.orgChildText}>MARKETING</Text>
-              <Text style={s.orgChildSub}>Brand and Growth</Text>
+              <Text style={s.orgChildSub}>Brand &amp; Growth</Text>
             </View>
             <View style={s.orgLine} />
-            <View style={{ ...s.orgChildBox, width: 120 }}>
-              <Text style={s.orgChildText}>Marketing Officer</Text>
-              <Text style={s.orgChildSub}>Shakira Linno</Text>
-              <Text style={s.orgChildSal}>N$4,000/mo</Text>
+            <View style={s.orgStaffBox}>
+              <Text style={s.orgStaffText}>Marketing Officer</Text>
+              <Text style={s.orgStaffSub}>Shakira Linno</Text>
+              <Text style={s.orgStaffSal}>N$4,000/mo</Text>
             </View>
           </View>
+
         </View>
       </View>
       <View style={s.div} />
-      <H2 num="2.1.1" title="Personnel: Year 1 to Year 3" />
-      <View style={s.tbl}>
-        <View style={s.tblH}>
-          <Text style={[s.th, { flex: 1.8 }]}>Role</Text>
-          <Text style={[s.th, { flex: 1.6 }]}>Staff Member</Text>
-          <Text style={[s.th, { flex: 1.1 }]}>Qualification</Text>
-          <Text style={[s.th, { flex: 0.8 }]}>Age</Text>
-          <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Monthly (N$)</Text>
-        </View>
-        {[
-          ["Director / Lead Developer", "Keenan Husselmann", "BSc CS Software Dev, NUST", "31", "10,000"],
-          ["Business Administrator", "Georgia Orren", "BA Business Admin (Hons in progress)", "24", "6,500"],
-          ["Project Manager", "Requelle Husselmann", "BA Education (Hons) + Certificate in PM", "33", "5,500"],
-          ["Systems Admin Intern", "Anthony Bagley", "Studying Systems Administration", "26", "3,500"],
-          ["Marketing Officer", "Shakira Linno", "BA Marketing", "25", "4,000"],
-          ["QA Tester Intern", "Tapiwa Machekera", "BSc Computer Science (in progress)", "22", "2,500"],
-        ].map(([role, name, qual, age, sal], i) => (
-          <View key={role} style={i % 2 === 0 ? s.tblR : s.tblRA}>
-            <Text style={[s.td, { flex: 1.8 }]}>{role}</Text>
-            <Text style={[s.td, { flex: 1.6 }]}>{name}</Text>
-            <Text style={[s.td, { flex: 1.1 }]}>{qual}</Text>
-            <Text style={[s.td, { flex: 0.8 }]}>{age}</Text>
-            <Text style={[s.td, { flex: 1, textAlign: "right" as const }]}>{sal}</Text>
+      <View wrap={false}>
+        <H2 num="2.1.1" title="Personnel: Year 1 to Year 3" />
+        <View style={s.tbl}>
+          <View style={s.tblH}>
+            <Text style={[s.th, { flex: 1.8 }]}>Role</Text>
+            <Text style={[s.th, { flex: 1.6 }]}>Staff Member</Text>
+            <Text style={[s.th, { flex: 1.1 }]}>Qualification</Text>
+            <Text style={[s.th, { flex: 0.8 }]}>Age</Text>
+            <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Monthly (N$)</Text>
           </View>
-        ))}
-        <View style={s.tblRTotal}>
-          <Text style={[s.tdb, { flex: 5.3 }]}>Total Monthly Payroll</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>32,000</Text>
+          {[
+            ["Director / Lead Developer", "Keenan Husselmann", "BSc CS Software Dev, NUST", "31", "10,000"],
+            ["Business Administrator", "Georgia Orren", "BA Business Admin (Hons in progress)", "24", "6,500"],
+            ["Project Manager", "Requelle Husselmann", "BA Education (Hons) + Certificate in PM", "33", "5,500"],
+            ["Systems Admin Intern", "Anthony Bagley", "Studying Systems Administration", "26", "3,500"],
+            ["Marketing Officer", "Shakira Linno", "BA Marketing", "25", "4,000"],
+            ["QA Tester Intern", "Tapiwa Machekera", "BSc Computer Science (in progress)", "22", "2,500"],
+          ].map(([role, name, qual, age, sal], i) => (
+            <View key={role} style={i % 2 === 0 ? s.tblR : s.tblRA}>
+              <Text style={[s.td, { flex: 1.8 }]}>{role}</Text>
+              <Text style={[s.td, { flex: 1.6 }]}>{name}</Text>
+              <Text style={[s.td, { flex: 1.1 }]}>{qual}</Text>
+              <Text style={[s.td, { flex: 0.8 }]}>{age}</Text>
+              <Text style={[s.td, { flex: 1, textAlign: "right" as const }]}>{sal}</Text>
+            </View>
+          ))}
+          <View style={s.tblRTotal}>
+            <Text style={[s.tdb, { flex: 5.3 }]}>Total Monthly Payroll</Text>
+            <Text style={[s.tdbr, { flex: 1 }]}>32,000</Text>
+          </View>
         </View>
       </View>
-      <Text style={s.h3}>Planned Staff Growth (Years 2 and 3):</Text>
-      <Bullet text="Year 2: add 2 junior developers at N$12,000 per month each and 1 project manager at N$14,000 per month as revenue allows" />
-      <Bullet text="Year 3: expand to 10 to 12 staff, including designers and a sales representative for the South Africa market" />
-      <Bullet text="All salaries to be reviewed and adjusted upward by 10% per year from Year 2 onwards" />
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 02 - Management Plan" />
+      <Text style={s.h3} wrap={false}>Planned Staff Growth (Years 2 and 3):</Text>
+      <Bullet text="Year 2: no new hires. The existing team of 6 continues in their roles and undergoes structured training across all business domains including development, client management, project delivery, finance basics, and operations. The goal is to build complete business knowledge in each team member, not just technical skill." />
+      <Bullet text="Year 3: staff who have completed the 2-year training are advanced into management positions within their domain. Each manager is then supported by a new assistant hire recruited as an intern. Intern positions: Assistant Developer, Assistant Admin, and Assistant Sales." />
+      <Bullet text="Interns work on a pro bono basis for the first 2 months as part of their onboarding and practical training. After 2 months they move to entry-level salaries based on performance and business revenue at the time." />
+      <Bullet text="This model builds a loyal, fully trained management layer from within before expanding headcount, keeping costs controlled and knowledge retention high." />
+      <Footer left={fl()} right="Section 02 - Management Plan" />
     </Page>
   );
 }
@@ -585,39 +714,22 @@ function ManagementPlanPage2() {
     <Page size="A4" style={s.page}>
       <RunHead section="Section 02 - Management Plan (continued)" />
       <H2 num="2.1.2" title="Experience and Technical Ability" />
-      <Text style={s.h3}>Keenan Husselmann - Director and Lead Developer</Text>
-      <Text style={s.p}>
+      <Text style={s.h3} wrap={false}>Keenan Husselmann - Director and Lead Developer</Text>
+      <Text style={s.p} wrap={false}>
         I hold a Bachelor of Computer Science degree in Software Development from NUST (Namibia University of Science and Technology). I started building professionally in early 2026 and have been trading under the Swift Designz brand since January 2026. Over the first 5 months of trading I generated N$41,000 in total income with approximately N$5,000 in expenses, achieving an 88% profit margin. Current monthly recurring revenue is N$7,000, made up of 3 active retainer clients on 1-year contracts, 1 investor, and ongoing client project deposits.
       </Text>
-      <Text style={s.p}>
+      <Text style={s.p} wrap={false}>
         As evidence of my technical capability, I designed and built the full administrative management platform used to run Swift Designz. This system, accessible at admin.swiftdesignz.co.za, is a custom Next.js and React application backed by a PostgreSQL database. It handles client relationship management, project tracking, full accounts receivable (quotations, invoices, payments, reminders, statements, retainers), payroll tracking, equipment management, investor management, and automated email communication. Building this system from scratch demonstrates not only technical depth but the ability to understand business requirements and translate them into working software.
       </Text>
-      <Text style={s.p}>
+      <Text style={s.p} wrap={false}>
         I am proficient in: TypeScript, Tailwind CSS, Supabase (PostgreSQL, authentication, storage), React, Next.js, Shopify development, mobile-responsive design, and AI-assisted development workflows.
       </Text>
-      <Text style={s.h3}>Georgia Orren - Business Administrator</Text>
-      <Text style={s.p}>
-        Georgia Orren holds a BA in Business Administration and is currently completing her Honours degree. She brings structured administrative capability, financial reporting understanding, and client relations skills to the team.
-      </Text>
-      <Text style={s.h3}>Requelle Husselmann - Project Manager</Text>
-      <Text style={s.p}>
-        Requelle holds an Honours degree in Education and a Certificate in Project Management. She will oversee all active client projects, manage timelines and deliverables, coordinate between the development team and clients, and ensure projects are delivered on time and within scope. Her background in education supports structured planning and clear communication across the team.
-      </Text>
-      <Text style={s.h3}>Anthony Bagley - Systems Administration Intern</Text>
-      <Text style={s.p}>
-        Anthony is 26 years old and studying Systems Administration. He will manage internal IT systems, network infrastructure, server maintenance, and technical support for the team.
-      </Text>
-      <Text style={s.h3}>Shakira Linno - Marketing Officer</Text>
-      <Text style={s.p}>
-        Shakira holds a BA in Marketing. She will lead all brand and marketing activities including social media management, content creation, lead generation campaigns, and client communication.
-      </Text>
-      <Text style={s.h3}>Tapiwa Machekera - QA Tester Intern</Text>
-      <Text style={s.p}>
-        Tapiwa Machekera is 22 years old and currently studying Computer Science. As QA Tester, they will test all software and website builds before client delivery, write test cases, report bugs, and ensure quality standards are met consistently.
+      <Text style={[s.p, { fontSize: 8, color: "#555555" }]} wrap={false}>
+        Full CVs and supporting credentials for all staff members are available as Supporting Documents on request. Qualifications are summarised in the personnel table in Section 2.1.1 above.
       </Text>
       <View style={s.div} />
       <H2 num="2.1.3" title="Ownership Structure" />
-      <Text style={s.p}>
+      <Text style={s.p} wrap={false}>
         Swift Designz Investments CC has two members. Keenan Husselmann holds an 85% member interest and serves as the sole director. Leon Husselmann holds a 15% member interest. The controlling member and day-to-day operator is Keenan Husselmann, who qualifies as youth under the NYDF criteria (aged 31, within the 18 to 45 range). The business also has one private investor (Signed investor commitment letter attached as Supporting Document SD-01) who contributes N$2,000 per month for five years under a non-ownership financial arrangement.
       </Text>
       <KV k="Member 1" v="Keenan Husselmann — 85% interest (Director, aged 31)" />
@@ -625,12 +737,21 @@ function ManagementPlanPage2() {
       <KV k="Youth Ownership" v="85% (controlling director is youth-qualifying)" />
       <KV k="Women Ownership" v="0%" />
       <KV k="Disability" v="None" />
-      <View style={s.div} />
-      <H2 num="2.1.4" title="Strategic Alliances" />
-      <Bullet text="IT-Guru (Ambrose): hosting and domain registration partner. Facilitates affordable, reliable web hosting for all client websites deployed by Swift Designz" />
-      <Bullet text="Rachel N. Kashala (SAIBA 4132): appointed Accounting Officer. Provides independent financial oversight, compliance, and annual reporting" />
-      <Bullet text="Private Investor: committed to a monthly financial contribution of N$2,000 for a period of five years, providing supplementary income during the growth phase (Signed investor commitment letter attached as Supporting Document SD-01)" />
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 02 - Management Plan" />
+      <View wrap={false}>
+        <View style={s.div} />
+        <H2 num="2.1.4" title="Strategic Alliances" />
+        <Text style={s.h3} wrap={false}>Current Alliances</Text>
+        <Bullet text="IT-Guru (Ambrose): hosting and domain registration partner. Facilitates affordable, reliable web hosting for all client websites deployed by Swift Designz" />
+        <Bullet text="Rachel N. Kashala (SAIBA 4132): appointed Accounting Officer. Provides independent financial oversight, compliance, and annual reporting" />
+        <Bullet text="Private Investor: committed to a monthly financial contribution of N$2,000 for a period of five years, providing supplementary income during the growth phase (Signed investor commitment letter attached as Supporting Document SD-01)" />
+      </View>
+      <Text style={s.h3} wrap={false}>Planned Future Alliances</Text>
+      <Bullet text="Shopify and Google Partner certification (Year 2): pursue certified agency status with both platforms to gain qualified lead referrals, co-marketing exposure, and priority support." />
+      <Bullet text="School and college partnerships (Year 3): deploy AI tutor tools and digital skills training in Namibian schools, building recurring institutional revenue and a pipeline of future-trained staff." />
+      <Bullet text="Banking and accounting referral network (Year 2): become the referred ICT partner for Bank Windhoek, FNB Namibia, and accounting firms serving SME clients across Namibia." />
+      <Bullet text="Telecom bundle partnership (Year 3): partner with MTC or Telecom Namibia to offer bundled connectivity and digital presence packages to their SME customer base." />
+      <Bullet text="Investor expansion (Year 2 onwards): bring in additional investors with sector-specific networks in retail, education, or logistics to accelerate growth beyond NYDF loan coverage." />
+      <Footer left={fl()} right="Section 02 - Management Plan" />
     </Page>
   );
 }
@@ -671,129 +792,155 @@ function FinancialPage1() {
           </View>
         ))}
       </View>
-      <View style={s.div} />
-      <H2 num="3.2" title="Pre-Registration Trading History" />
-      <Text style={s.p}>
-        Prior to formal CC registration on 12 May 2026, the business operated as a sole proprietor under the Swift Designz brand from January 2026. The following figures are confirmed from the business own accounting records:
-      </Text>
-      <Bullet text="Total income (January to May 2026, 5 months): N$41,000" />
-      <Bullet text="Total expenses (January to May 2026): approximately N$5,000" />
-      <Bullet text="Net profit over 5 months: N$36,000 (approximately 88% profit margin)" />
-      <Bullet text="Average monthly gross revenue: N$8,200" />
-      <Text style={s.p}>
-        Current monthly revenue of N$7,000 to N$7,300 is made up of three recurring sources:
-      </Text>
-      <Bullet text="3 active retainer clients on 1-year service contracts: N$2,800 per month combined" />
-      <Bullet text="1 private investor contribution: N$2,000 per month (5-year commitment)" />
-      <Bullet text="Client project deposit payments at 50% upfront on projects averaging N$5,000 in total value: approximately N$2,500 per month" />
-      <Text style={s.p}>
-        Two additional retainer clients are currently in the activation pipeline. Once confirmed, they will add approximately N$1,800 per month to the recurring revenue base. All retainer clients are on 1-year contracts, providing stable and predictable monthly income regardless of project volume in any given month.
-      </Text>
-      <Text style={s.p}>
-        This demonstrates that the business already has proven, recurring revenue streams. This is not a concept seeking its first client. It is an operating business seeking the funding to grow its capacity and serve a wider client base.
-      </Text>
-      <View style={s.div} />
-      <H2 num="3.3" title="Loan Use Breakdown" />
-      <View style={s.tbl}>
-        <View style={s.tblH}>
-          <Text style={[s.th, { flex: 1.2 }]}>Category</Text>
-          <Text style={[s.th, { flex: 2 }]}>Items</Text>
-          <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Cost (N$)</Text>
-        </View>
-        {[
-          ["Computing and Workspace", "iMac 24-inch M4 (full kit incl. keyboard + mouse), external monitor, SSD, USB-C hub, ring light, drawing tablet, monitor arm, document shredder, green screen", "62,000"],
-          ["Mobile Devices", "iPhone 16 (128GB), iPad Air M2/M3 11-inch", "37,000"],
-          ["Networking", "Wi-Fi 6 business router, UPS battery backup, NAS network storage", "15,250"],
-          ["Professional and Legal Reserve", "Lawyer fees, accounting and audit fees, business insurance premiums", "50,000"],
-        ].map(([cat, items, cost], i) => (
-          <View key={cat} style={i % 2 === 0 ? s.tblR : s.tblRA}>
-            <Text style={[s.tdb, { flex: 1.2 }]}>{cat}</Text>
-            <Text style={[s.td, { flex: 2 }]}>{items}</Text>
-            <Text style={[s.tdr, { flex: 1 }]}>{cost}</Text>
+      <View wrap={false}>
+        <View style={s.div} />
+        <H2 num="3.2" title="Pre-Registration Trading History" />
+        <Text style={s.p} wrap={false}>
+          Prior to formal CC registration on 12 May 2026, the business operated as a sole proprietor under the Swift Designz brand from January 2026. The following figures are confirmed from the business own accounting records:
+        </Text>
+        <Bullet text="Total income (January to May 2026, 5 months): N$41,000" />
+        <Bullet text="Total expenses (January to May 2026): approximately N$5,000" />
+        <Bullet text="Net profit over 5 months: N$36,000 (approximately 88% profit margin)" />
+        <Bullet text="Average monthly gross revenue: N$8,200" />
+        <Text style={s.p} wrap={false}>
+          Current monthly revenue of N$7,000 to N$7,300 is made up of three recurring sources:
+        </Text>
+        <Bullet text="3 active retainer clients on 1-year service contracts: N$2,800 per month combined" />
+        <Bullet text="1 private investor contribution: N$2,000 per month (5-year commitment)" />
+        <Bullet text="Client project deposit payments at 50% upfront on projects averaging N$5,000 in total value: approximately N$2,500 per month" />
+        <Text style={s.p} wrap={false}>
+          Two additional retainer clients are currently in the activation pipeline. Once confirmed, they will add approximately N$1,800 per month to the recurring revenue base. All retainer clients are on 1-year contracts, providing stable and predictable monthly income regardless of project volume in any given month.
+        </Text>
+        <Text style={s.p} wrap={false}>
+          This demonstrates that the business already has proven, recurring revenue streams. This is not a concept seeking its first client. It is an operating business seeking the funding to grow its capacity and serve a wider client base.
+        </Text>
+      </View>
+      <View wrap={false}>
+        <View style={s.div} />
+        <H2 num="3.3" title="Loan Use Breakdown" />
+        <View style={s.tbl}>
+          <View style={s.tblH}>
+            <Text style={[s.th, { flex: 1.4 }]}>Category</Text>
+            <Text style={[s.th, { flex: 2 }]}>Description</Text>
+            <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Cost (N$)</Text>
           </View>
-        ))}
-        <View style={s.tblRTotal}>
-          <Text style={[s.tdb, { flex: 3.2 }]}>Subtotal: Hardware and Professional Reserve</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>164,250</Text>
-        </View>
-      </View>
-      <View style={s.tbl}>
-        <View style={s.tblH}>
-          <Text style={[s.th, { flex: 1.2 }]}>Category</Text>
-          <Text style={[s.th, { flex: 2 }]}>Description</Text>
-          <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Cost (N$)</Text>
-        </View>
-        {[
-          ["Gross Payroll (12 months)", "6 staff members at a combined N$32,000 per month for 12 months", "384,000"],
-          ["Employer Statutory Costs", "Social Security and statutory employer contributions (approximately 2%)", "7,680"],
-          ["Recruitment and Setup", "Job advertising, SSC registration fees, and administrative costs", "9,000"],
-        ].map(([cat, desc, cost], i) => (
-          <View key={cat} style={i % 2 === 0 ? s.tblR : s.tblRA}>
-            <Text style={[s.tdb, { flex: 1.2 }]}>{cat}</Text>
-            <Text style={[s.td, { flex: 2 }]}>{desc}</Text>
-            <Text style={[s.tdr, { flex: 1 }]}>{cost}</Text>
+          <View style={s.tblR}>
+            <Text style={[s.tdb, { flex: 1.4 }]}>Hardware</Text>
+            <Text style={[s.td, { flex: 2 }]}>iMac 24-inch M4 (full kit), 2× external monitors, monitor arm, SSD, ergonomic chair, printer and toner, document shredder, iPhone 16 (128GB), iPad Air 11-inch, UPS, NAS storage</Text>
+            <Text style={[s.tdr, { flex: 1 }]}>114,250</Text>
           </View>
-        ))}
-        <View style={s.tblRTotal}>
-          <Text style={[s.tdb, { flex: 3.2 }]}>Subtotal: Working Capital</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>400,680</Text>
+          <View style={s.tblRA}>
+            <Text style={[s.tdb, { flex: 1.4 }]}>Professional and Legal Reserve</Text>
+            <Text style={[s.td, { flex: 2 }]}>Lawyer fees, accounting and audit fees, business insurance premiums</Text>
+            <Text style={[s.tdr, { flex: 1 }]}>75,000</Text>
+          </View>
+          <View style={s.tblRTotal}>
+            <Text style={[s.tdb, { flex: 3.4 }]}>Subtotal: Equipment and Reserve</Text>
+            <Text style={[s.tdbr, { flex: 1 }]}>189,250</Text>
+          </View>
+          <View style={s.tblR}>
+            <Text style={[s.tdb, { flex: 1.4 }]}>Operational Staffing (12 months)</Text>
+            <Text style={[s.td, { flex: 2 }]}>5 youth employees at N$32,000 per month combined for 12 months</Text>
+            <Text style={[s.tdr, { flex: 1 }]}>384,000</Text>
+          </View>
+          <View style={s.tblRA}>
+            <Text style={[s.tdb, { flex: 1.4 }]}>Employer Statutory Costs</Text>
+            <Text style={[s.td, { flex: 2 }]}>Social Security and statutory employer contributions (~2%)</Text>
+            <Text style={[s.tdr, { flex: 1 }]}>7,750</Text>
+          </View>
+          <View style={s.tblR}>
+            <Text style={[s.tdb, { flex: 1.4 }]}>Recruitment and Setup</Text>
+            <Text style={[s.td, { flex: 2 }]}>Job advertising, SSC registration fees, and administrative costs</Text>
+            <Text style={[s.tdr, { flex: 1 }]}>9,000</Text>
+          </View>
+          <View style={s.tblRTotal}>
+            <Text style={[s.tdb, { flex: 3.4 }]}>Subtotal: Working Capital</Text>
+            <Text style={[s.tdbr, { flex: 1 }]}>400,750</Text>
+          </View>
+          <View style={s.tblR}>
+            <Text style={[s.tdb, { flex: 3.4 }]}>Total Funding Requirement</Text>
+            <Text style={[s.tdbr, { flex: 1 }]}>590,000</Text>
+          </View>
+          <View style={s.tblRA}>
+            <Text style={[s.td, { flex: 3.4 }]}>Less: Own Contribution (existing equipment, in-kind)</Text>
+            <Text style={[s.tdr, { flex: 1 }]}>(40,000)</Text>
+          </View>
+          <View style={s.tblRTotal}>
+            <Text style={[s.tdb, { flex: 3.4 }]}>LOAN AMOUNT REQUESTED</Text>
+            <Text style={[s.tdbr, { flex: 1 }]}>N$ 550,000</Text>
+          </View>
         </View>
       </View>
-      <View style={s.tbl}>
-        <View style={s.tblRTotal}>
-          <Text style={[s.tdb, { flex: 2 }]}>Total Funding Requirement</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>N$ 564,930</Text>
-        </View>
-        <View style={s.tblR}>
-          <Text style={[s.td, { flex: 2 }]}>Less: Own Contribution (existing equipment, in-kind)</Text>
-          <Text style={[s.tdr, { flex: 1 }]}>(40,000)</Text>
-        </View>
-        <View style={s.tblRTotal}>
-          <Text style={[s.tdb, { flex: 2 }]}>LOAN AMOUNT REQUESTED</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>N$ 524,930</Text>
-        </View>
-      </View>
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 03 - Financial Information" />
+      <Footer left={fl()} right="Section 03 - Financial Information" />
     </Page>
   );
 }
 
 function FinancialPage2() {
   const months = [
-    ["Month 1 (post-funding)", "7,000", "34,140", "(27,140)"],
-    ["Month 2", "7,000", "34,140", "(27,140)"],
-    ["Month 3", "11,000", "34,140", "(23,140)"],
-    ["Month 4", "15,000", "34,140", "(19,140)"],
-    ["Month 5", "20,000", "34,140", "(14,140)"],
-    ["Month 6", "25,000", "34,140", "(9,140)"],
-    ["Month 7", "31,000", "34,140", "(3,140)"],
-    ["Month 8", "37,000", "34,140", "2,860"],
-    ["Month 9", "43,000", "34,140", "8,860"],
-    ["Month 10", "49,000", "34,140", "14,860"],
-    ["Month 11", "55,000", "34,140", "20,860"],
-    ["Month 12", "60,000", "34,140", "25,860"],
+    ["Month 1 (post-funding)", "25,000", "34,500", "(9,500)"],
+    ["Month 2", "33,000", "35,000", "(2,000)"],
+    ["Month 3", "40,000", "35,500", "4,500"],
+    ["Month 4", "45,000", "36,000", "9,000"],
+    ["Month 5", "48,000", "36,500", "11,500"],
+    ["Month 6", "50,000", "37,000", "13,000"],
+    ["Month 7", "53,000", "37,500", "15,500"],
+    ["Month 8", "55,000", "38,000", "17,000"],
+    ["Month 9", "57,000", "38,500", "18,500"],
+    ["Month 10", "58,000", "39,000", "19,000"],
+    ["Month 11", "59,000", "39,500", "19,500"],
+    ["Month 12", "60,000", "40,000", "20,000"],
   ];
   return (
     <Page size="A4" style={s.page}>
       <RunHead section="Section 03 - Financial Information (continued)" />
       <H2 num="3.3.1" title="Key Financial Assumptions" />
-      <Bullet text="Revenue in Month 1 and Month 2 is N$7,000, which is the current confirmed monthly base. This includes: retainer subscriptions from 3 clients on 1-year contracts (N$2,800), investor contribution (N$2,000), and client project deposits (N$2,500). No additional new project revenue is assumed while the team is onboarding." />
-      <Bullet text="Two additional retainer clients are pending activation. These are not included in the projections and represent upside if they activate during the loan period." />
-      <Bullet text="New project revenue begins from Month 3 and grows as the team becomes productive. Marketing ramps up from Month 3 through the Marketing Officer." />
-      <Bullet text="Timing note: the pre-approval period is not counted in these 12 months. Month 1 begins on the date funds are received and employment commences." />
-      <Bullet text="Monthly operating costs are fixed at N$34,140 covering payroll and employer costs at N$32,640 and other operational expenses at N$1,500. Software licences are covered by the director outside the loan." />
-      <Bullet text="Hardware equipment (N$114,250) and the professional and legal reserve (N$50,000) are funded upfront from the loan at the start of Month 1" />
-      <Bullet text="All employees provide their own devices. The company covers team software licences only, including Google Workspace for all staff (~N$650 per month for 6 users, included in the N$1,500 monthly operational budget)" />
-      <Bullet text="Business operates with no rent or office costs as the team is fully remote" />
-      <Bullet text="Grace period of 12 months means no loan repayments during Year 1" />
-      <Bullet text="Loan interest rate assumed at 4% per annum (conservative estimate) for repayment calculations" />
-      <Bullet text="No VAT in Year 1 as turnover is below the N$500,000 threshold" />
-      <Bullet text="Investor income of N$2,000 per month continues for 5 years and is included in base revenue" />
+      <Bullet text="Month 1 revenue of N$25,000 reflects ~10 active clients built during pre-approval (6-12 months). Those clients are handed to the new team at funding date; director immediately pursues next 10. Breakeven at Month 3." />
+      <Bullet text="Operating costs start at N$34,500 and rise to N$40,000 by Month 12 as tools, hosting, licences, admin fees, and subscriptions accumulate. Base payroll and SSC: N$32,640." />
+      <Bullet text="Hardware (N$114,250) and professional reserve (N$75,000) drawn upfront from loan at Month 1. Month 1 counts from disbursement date, not application date." />
+      <Bullet text="No rent or office costs — fully remote. Employees provide own devices; company covers team software licences only (~N$650/mo Google Workspace for 6 users)." />
+      <Bullet text="12-month grace period — no loan repayments during Year 1. Interest assumed at 4% per annum (conservative). Investor income N$2,000/mo continues for 5 years." />
       <View style={s.div} />
-      <H2 num="3.3.2" title="Year 1: Monthly Cash Flow Projection (Operating)" />
-      <Text style={[s.p, { marginBottom: 8 }]}>
-        Note: Monthly operating costs exclude the one-time hardware purchase (N$127,750) and professional reserve (N$50,000) which are funded upfront from the loan at the start of Month 1. The figures below show ongoing monthly revenue versus operating expenses only.
+      <H2 num="3.3.1a" title="Revenue Composition: Solo Baseline vs Month 12 Target" />
+      <Text style={[s.p, { marginBottom: 8 }]} wrap={false}>
+        The table below shows two scenarios: the pre-funding solo baseline (what the director can carry alone — maximum 10 active project clients, currently 5), and the Month 12 target once the full team is operational. Retainer rates and project averages are drawn from actual 2026 invoices.
       </Text>
+      <View style={s.tbl}>
+        <View style={s.tblH}>
+          <Text style={[s.th, { flex: 2.5 }]}>Revenue Source</Text>
+          <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Solo (N$)</Text>
+          <Text style={[s.th, { flex: 1.2, textAlign: "right" as const }]}>Month 12 (N$)</Text>
+        </View>
+        {([
+          ["Website retainer subscriptions (7 clients)", "5,600", "5,600"],
+          ["eStore retainer subscriptions (3 clients)", "3,600", "3,600"],
+          ["Active project clients (5 solo / 12 with team)", "16,935", "40,600"],
+          ["AI and PM training sessions (1/month)", "3,000", "3,000"],
+          ["Ad hoc consulting and one-off services", "2,000", "5,200"],
+          ["Investor contributions", "2,000", "2,000"],
+        ] as [string, string, string][]).map(([src, solo, target], i) => (
+          <View key={src} style={i % 2 === 0 ? s.tblR : s.tblRA}>
+            <Text style={[s.td, { flex: 2.5 }]}>{src}</Text>
+            <Text style={[s.tdr, { flex: 1 }]}>{solo}</Text>
+            <Text style={[s.tdr, { flex: 1.2 }]}>{target}</Text>
+          </View>
+        ))}
+        <View style={s.tblRTotal}>
+          <Text style={[s.tdb, { flex: 2.5 }]}>Total Monthly Revenue</Text>
+          <Text style={[s.tdbr, { flex: 1 }]}>33,135</Text>
+          <Text style={[s.tdbr, { flex: 1.2 }]}>60,000</Text>
+        </View>
+      </View>
+      <Text style={[s.p, { fontSize: 7.5, color: "#555555", marginBottom: 6 }]} wrap={false}>
+        Solo baseline reflects 5 active project clients at N$3,387 average — the realistic pre-funding workload. Maximum solo capacity is 10 clients. With 6 staff hired at Month 1, project capacity doubles and ad hoc demand is captured properly, driving revenue toward the N$60,000 Month 12 target.
+      </Text>
+      <View wrap={false}>
+        <View style={s.div} />
+        <H2 num="3.3.2" title="Year 1: Monthly Cash Flow Projection (Operating)" />
+        <Text style={[s.p, { marginBottom: 8 }]} wrap={false}>
+          Note: Monthly operating costs exclude the one-time hardware purchase (N$114,250) and professional reserve (N$75,000) which are funded upfront from the loan at the start of Month 1. The figures below show ongoing monthly revenue versus operating expenses only.
+        </Text>
+      </View>
       <View style={s.tbl}>
         <View style={s.tblH}>
           <Text style={[s.th, { width: 75 }]}>Month</Text>
@@ -811,17 +958,17 @@ function FinancialPage2() {
         ))}
         <View style={s.tblRTotal}>
           <Text style={[s.tdb, { width: 75 }]}>TOTALS</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>360,000</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>409,680</Text>
-          <Text style={[s.tdbr, { flex: 1 }]}>(49,680)</Text>
+          <Text style={[s.tdbr, { flex: 1 }]}>583,000</Text>
+          <Text style={[s.tdbr, { flex: 1 }]}>447,000</Text>
+          <Text style={[s.tdbr, { flex: 1 }]}>136,000</Text>
         </View>
       </View>
       <View style={s.box}>
         <Text style={s.boxText}>
-          Month 1 and Month 2 show the highest deficit because the team is onboarding and new project revenue has not started yet. The N$7,000 base in those months reflects the current confirmed recurring income: retainer subscriptions, investor contribution, and existing client deposits. From Month 3 new project revenue kicks in and the business ramps steadily, reaching operational breakeven at Month 8. The full-year operating deficit of N$49,680, combined with the hardware cost of N$114,250 and the professional reserve of N$50,000, gives a total Year 1 loan draw of approximately N$213,930. The remaining N$311,000 of the N$524,930 loan provides a solid buffer as repayments begin in Year 2.
+          Month 1 starts at N$25,000 because by the time funding is received (pre-approval typically 6 to 12 months), the director will have grown the client base to approximately 10 active clients. Those clients are handed to the new staff team, freeing the director to pursue the next 10 immediately. Operating costs rise gradually from N$34,500 to N$40,000 as tools, hosting, software licences, admin fees, and subscriptions accumulate with the growing client base. The business reaches breakeven at Month 3 and generates a full-year operating surplus of N$136,000. Combined with the upfront hardware and reserve draw of N$189,250, the total Year 1 loan utilisation is approximately N$53,250, leaving N$496,750 of the N$550,000 loan intact as a repayment buffer from Year 2.
         </Text>
       </View>
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 03 - Financial Information" />
+      <Footer left={fl()} right="Section 03 - Financial Information" />
     </Page>
   );
 }
@@ -830,7 +977,62 @@ function FinancialPage3() {
   return (
     <Page size="A4" style={s.page}>
       <RunHead section="Section 03 - Financial Information (continued)" />
-      <H2 num="3.3.3" title="3-Year Financial Projection Summary" />
+      <View wrap={false}>
+        <H2 num="3.3.3" title="Income Statement Projection (Year 1)" />
+        <View style={s.tbl}>
+          <View style={s.tblH}>
+            <Text style={[s.th, { flex: 3 }]}>Income Statement Item</Text>
+            <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Year 1 (N$)</Text>
+          </View>
+          {[
+            ["Total Revenue", "583,000"],
+            ["Less: Cost of Services (hosting, domains, software per project)", "(18,000)"],
+          ].map(([item, val], i) => (
+            <View key={item} style={i % 2 === 0 ? s.tblR : s.tblRA}>
+              <Text style={[s.td, { flex: 3 }]}>{item}</Text>
+              <Text style={[s.tdr, { flex: 1 }]}>{val}</Text>
+            </View>
+          ))}
+          <View style={s.tblRTotal}>
+            <Text style={[s.tdb, { flex: 3 }]}>Gross Profit</Text>
+            <Text style={[s.tdbr, { flex: 1 }]}>565,000</Text>
+          </View>
+          {[
+            ["Salaries and wages (5 staff, 12 months)", "(384,000)"],
+            ["Employer SSC contributions (~2%)", "(7,750)"],
+            ["Recruitment and setup costs", "(9,000)"],
+            ["Software, tools, and subscriptions", "(22,000)"],
+            ["Marketing and advertising", "(12,000)"],
+            ["Administration and document fees", "(3,250)"],
+          ].map(([item, val], i) => (
+            <View key={item} style={i % 2 === 0 ? s.tblR : s.tblRA}>
+              <Text style={[s.td, { flex: 3 }]}>{item}</Text>
+              <Text style={[s.tdr, { flex: 1 }]}>{val}</Text>
+            </View>
+          ))}
+          <View style={s.tblRTotal}>
+            <Text style={[s.tdb, { flex: 3 }]}>Total Operating Expenses</Text>
+            <Text style={[s.tdbr, { flex: 1 }]}>(438,000)</Text>
+          </View>
+          <View style={s.tblRTotal}>
+            <Text style={[s.tdb, { flex: 3 }]}>Net Operating Surplus</Text>
+            <Text style={[s.tdbr, { flex: 1 }]}>127,000</Text>
+          </View>
+          <View style={s.tblR}>
+            <Text style={[s.td, { flex: 3 }]}>Less: Equipment depreciation (N$114,250 over 3 years)</Text>
+            <Text style={[s.tdr, { flex: 1 }]}>(38,083)</Text>
+          </View>
+          <View style={s.tblRTotal}>
+            <Text style={[s.tdb, { flex: 3 }]}>NET PROFIT BEFORE TAX (Year 1)</Text>
+            <Text style={[s.tdbr, { flex: 1 }]}>88,917</Text>
+          </View>
+        </View>
+        <Text style={[s.p, { fontSize: 7.5, color: "#555555", marginBottom: 6 }]} wrap={false}>
+          Note: No loan repayments in Year 1 (12-month grace period). Hardware and professional reserve (N$189,250) are funded upfront from the loan and excluded from operating expenses above. Depreciation is calculated on hardware only over 3 years.
+        </Text>
+      </View>
+      <View style={s.div} />
+      <H2 num="3.3.4" title="3-Year Financial Projection Summary (All Years)" />
       <View style={s.tbl}>
         <View style={s.tblH}>
           <Text style={[s.th, { flex: 2 }]}>Item</Text>
@@ -839,12 +1041,12 @@ function FinancialPage3() {
           <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Year 3 (2028/29)</Text>
         </View>
         {[
-          ["Annual Revenue (N$)", "360,000", "1,044,000", "1,560,000"],
-          ["Monthly Revenue (average)", "30,000", "87,000", "130,000"],
-          ["Annual Operating Costs (N$)", "409,680", "480,000", "528,000"],
-          ["Loan Repayment (annual)", "none", "146,400", "146,400"],
-          ["Total Annual Costs (N$)", "409,680", "626,400", "674,400"],
-          ["Net Profit or (Loss) (N$)", "(49,680)", "417,600", "885,600"],
+          ["Annual Revenue (N$)", "583,000", "1,044,000", "1,560,000"],
+          ["Monthly Revenue (average)", "48,583", "87,000", "130,000"],
+          ["Annual Operating Costs (N$)", "447,000", "510,000", "560,000"],
+          ["Loan Repayment (annual)", "none", "150,000", "150,000"],
+          ["Total Annual Costs (N$)", "447,000", "660,000", "710,000"],
+          ["Net Profit or (Loss) (N$)", "136,000", "384,000", "850,000"],
           ["Staff headcount (year-end)", "6", "9", "12"],
         ].map(([item, y1, y2, y3], i) => (
           <View key={item} style={i % 2 === 0 ? s.tblR : s.tblRA}>
@@ -855,48 +1057,50 @@ function FinancialPage3() {
           </View>
         ))}
       </View>
-      <Text style={[s.p, { fontSize: 7.5, color: "#555555", marginBottom: 6 }]}>
+      <Text style={[s.p, { fontSize: 7.5, color: "#555555", marginBottom: 6 }]} wrap={false}>
         * Year 2 and Year 3 operating cost increases reflect a conservative 10% annual uplift on the base payroll. New hires in Years 2 and 3 are junior and remote, keeping the per-head cost low. Payroll growth is intentionally staged to remain below revenue growth in both years.
       </Text>
-      <Text style={[s.p, { marginBottom: 6 }]}>
-        Year 1 note: The operating deficit is fully covered by the NYDF loan. Equipment purchase is not included in the operating costs above as it is a one-time upfront cost.
+      <Text style={[s.p, { marginBottom: 6 }]} wrap={false}>
+        Year 1 note: Revenue starts strong at Month 1 because the director will have built up approximately 10 active clients during the pre-approval waiting period. The operating surplus of N$173,320 means the loan is used primarily to fund the hardware and professional reserve upfront, not to cover operating losses. Equipment purchase is a one-time upfront cost and is not included in the operating figures above.
       </Text>
-      <Text style={[s.p, { marginBottom: 14 }]}>
+      <Text style={[s.p, { marginBottom: 14 }]} wrap={false}>
         Year 2 revenue growth is driven by an established team at full capacity, an active retainer base of 15 or more clients, continued growth in the existing South Africa client base, and growth from the established N$7,000 per month recurring revenue base including retainer contracts, investor income, and client deposits.
       </Text>
-      <View style={s.div} />
-      <H2 num="3.3.4" title="Loan Repayment Projection" />
-      <Text style={s.p}>
-        Repayment commences after the 12-month grace period (from approximately June 2027). At a 4% interest rate over the remaining 48 months:
-      </Text>
-      <View style={s.tbl}>
-        <View style={s.tblH}>
-          <Text style={[s.th, { flex: 2 }]}>Detail</Text>
-          <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Amount</Text>
-        </View>
-        {[
-          ["Principal (loan amount)", "N$ 514,330"],
-          ["Grace period", "12 months (no repayments)"],
-          ["Repayment period after grace", "48 months"],
-          ["Total repayment period", "60 months (5 years)"],
-          ["Interest rate (assumed at 4% per annum, conservative)", "4%"],
-          ["Estimated monthly repayment from Month 13", "N$ 12,200"],
-          ["Estimated annual repayment", "N$ 146,400"],
-          ["Repayment start date (estimated)", "June 2027"],
-          ["Repayment end date (estimated)", "May 2031"],
-        ].map(([detail, amt], i) => (
-          <View key={detail} style={i % 2 === 0 ? s.tblR : s.tblRA}>
-            <Text style={[s.td, { flex: 2 }]}>{detail}</Text>
-            <Text style={[s.tdr, { flex: 1 }]}>{amt}</Text>
-          </View>
-        ))}
-      </View>
-      <View style={s.box}>
-        <Text style={s.boxText}>
-          By Month 13 when repayments begin, the business projects monthly revenue of N$65,000 to N$85,000 based on the Year 1 growth trajectory ending at N$60,000 in Month 12. The recurring revenue base (retainers, investor, and deposits) will continue at or above N$7,000 per month minimum throughout. Monthly operating costs at that point will be approximately N$40,000, giving a monthly surplus of N$25,000 to N$45,000 from which to service the repayment of N$12,200 per month. The business will be profitable and able to repay the loan from operational income.
+      <View wrap={false}>
+        <View style={s.div} />
+        <H2 num="3.3.5" title="Loan Repayment Projection" />
+        <Text style={s.p} wrap={false}>
+          Repayment commences after the 12-month grace period (from approximately June 2027). At a 4% interest rate over the remaining 48 months:
         </Text>
+        <View style={s.tbl}>
+          <View style={s.tblH}>
+            <Text style={[s.th, { flex: 2 }]}>Detail</Text>
+            <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Amount</Text>
+          </View>
+          {[
+            ["Principal (loan amount)", "N$ 550,000"],
+            ["Grace period", "12 months (no repayments)"],
+            ["Repayment period after grace", "48 months"],
+            ["Total repayment period", "60 months (5 years)"],
+            ["Interest rate (assumed at 4% per annum, conservative)", "4%"],
+            ["Estimated monthly repayment from Month 13", "N$ 12,500"],
+            ["Estimated annual repayment", "N$ 150,000"],
+            ["Repayment start date (estimated)", "June 2027"],
+            ["Repayment end date (estimated)", "May 2031"],
+          ].map(([detail, amt], i) => (
+            <View key={detail} style={i % 2 === 0 ? s.tblR : s.tblRA}>
+              <Text style={[s.td, { flex: 2 }]}>{detail}</Text>
+              <Text style={[s.tdr, { flex: 1 }]}>{amt}</Text>
+            </View>
+          ))}
+        </View>
+        <View style={s.box}>
+          <Text style={s.boxText}>
+            By Month 13 when repayments begin, the business projects monthly revenue of N$65,000 to N$85,000 based on the Year 1 growth trajectory ending at N$60,000 in Month 12. The recurring revenue base (retainers, investor, and deposits) will continue at or above N$7,000 per month minimum throughout. Monthly operating costs at that point will be approximately N$40,000, giving a monthly surplus of N$25,000 to N$45,000 from which to service the repayment of N$12,500 per month. The business will be profitable and able to repay the loan from operational income.
+          </Text>
+        </View>
       </View>
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 03 - Financial Information" />
+      <Footer left={fl()} right="Section 03 - Financial Information" />
     </Page>
   );
 }
@@ -912,11 +1116,8 @@ function MarketingPage() {
         <View style={s.pageTitleRule} />
       </View>
       <H2 num="4.1" title="Industry Analysis" />
-      <Text style={s.p}>
-        The digital services sector in Namibia is growing rapidly. The government ICT Master Plan, Vision 2030, and the Harambee Prosperity Plan II all identify technology and digital transformation as priority areas for economic development. Demand for professional websites, e-commerce platforms, and custom software is increasing across all sectors including retail, hospitality, construction, healthcare, NGOs, and government. The majority of Namibian SMEs either lack a proper digital presence or are paying high prices to agencies that are out of reach for small business owners.
-      </Text>
-      <Text style={s.p}>
-        Swift Designz sits in a gap that is currently underserved: professional digital work at prices a Namibian small business can actually afford, delivered by a local team that understands the local market. Our fully remote operating model means we can serve clients anywhere in the country without travel or logistics costs.
+      <Text style={s.p} wrap={false}>
+        Namibian SMEs either lack a proper digital presence or are paying high prices to agencies out of reach for small businesses. Swift Designz fills this gap: professional digital work at prices Namibian businesses can actually afford (N$2,500 to N$10,000), delivered by a local remote team with no travel overhead.
       </Text>
       <View style={s.div} />
       <H2 num="4.1.1" title="SWOT Analysis" />
@@ -958,31 +1159,65 @@ function MarketingPage() {
           <Text style={s.swotItem}>- Global website builders as DIY alternatives for some clients</Text>
         </View>
       </View>
-      <H2 num="4.1.2" title="Target Markets and Market Share Estimates" />
-      <View style={s.tbl}>
-        <View style={s.tblH}>
-          <Text style={[s.th, { flex: 1 }]}>Market Segment</Text>
-          <Text style={[s.th, { flex: 2 }]}>Description</Text>
-          <Text style={[s.th, { flex: 1 }]}>Priority</Text>
-        </View>
-        {[
-          ["Namibian SMEs", "Small and medium businesses across all sectors needing websites, e-commerce, or apps", "Primary, active now"],
-          ["South Africa SMEs", "Existing client base with live stores and websites already deployed", "Primary, active now"],
-          ["NGOs and Non-profits", "Organisations needing professional web presence and donor-facing platforms", "Primary, Year 1"],
-          ["Startups and Entrepreneurs", "New businesses needing a digital foundation from day one", "Primary, Year 1"],
-          ["Government and Parastatals", "Public entities requiring web systems, portals, and digital tools", "Secondary, Year 2"],
-        ].map(([seg, desc, pri], i) => (
-          <View key={seg} style={i % 2 === 0 ? s.tblR : s.tblRA}>
-            <Text style={[s.tdb, { flex: 1 }]}>{seg}</Text>
-            <Text style={[s.td, { flex: 2 }]}>{desc}</Text>
-            <Text style={[s.td, { flex: 1 }]}>{pri}</Text>
+      <View wrap={false}>
+        <H2 num="4.1.2" title="Target Markets and Market Share Estimates" />
+        <View style={s.tbl}>
+          <View style={s.tblH}>
+            <Text style={[s.th, { flex: 1 }]}>Market Segment</Text>
+            <Text style={[s.th, { flex: 2 }]}>Description</Text>
+            <Text style={[s.th, { flex: 1 }]}>Priority</Text>
           </View>
-        ))}
+          {[
+            ["Namibian SMEs", "Small and medium businesses across all sectors needing websites, e-commerce, or apps", "Primary, active now"],
+            ["South Africa SMEs", "Existing client base with live stores and websites already deployed", "Primary, active now"],
+            ["NGOs and Non-profits", "Organisations needing professional web presence and donor-facing platforms", "Primary, Year 1"],
+            ["Startups and Entrepreneurs", "New businesses needing a digital foundation from day one", "Primary, Year 1"],
+            ["Government and Parastatals", "Public entities requiring web systems, portals, and digital tools", "Secondary, Year 2"],
+          ].map(([seg, desc, pri], i) => (
+            <View key={seg} style={i % 2 === 0 ? s.tblR : s.tblRA}>
+              <Text style={[s.tdb, { flex: 1 }]}>{seg}</Text>
+              <Text style={[s.td, { flex: 2 }]}>{desc}</Text>
+              <Text style={[s.td, { flex: 1 }]}>{pri}</Text>
+            </View>
+          ))}
+        </View>
+        <Text style={s.p} wrap={false}>
+          Year 1 target: 3 to 5 new clients per month — conservative given 70,000+ registered Namibian businesses and an average project value of N$3,500 to N$10,000.
+        </Text>
       </View>
-      <Text style={s.p}>
-        There are over 70,000 registered businesses in Namibia. We estimate that 40% of those currently lack a proper digital presence. Even capturing 0.1% of this market (70 clients per year) would represent significant annual revenue given our average project value of N$6,000 to N$12,000. Our realistic Year 1 target is 3 to 5 new clients per month (36 to 60 clients in the year), which is conservative and achievable.
-      </Text>
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 04 - Marketing Plan" />
+
+      <H2 num="4.1.3" title="Market Segment Notes" />
+      <View wrap={false}>
+        <Text style={s.h3} wrap={false}>Namibian SMEs</Text>
+        <Text style={s.p} wrap={false}>
+          The largest and most accessible segment. Most Namibian SMEs either have no website, or have one that is outdated, non-mobile, or built on a free platform that limits growth. Our pricing (N$2,500 to N$10,000) is within reach for a small business that generates N$30,000 to N$200,000 per year. Retainer subscriptions after launch create recurring revenue and long-term client relationships.
+        </Text>
+      </View>
+      <View wrap={false}>
+        <Text style={s.h3} wrap={false}>South Africa SMEs</Text>
+        <Text style={s.p} wrap={false}>
+          An active market already generating revenue. Swift Designz has live e-commerce stores and websites deployed for South African clients. SA businesses are comfortable transacting remotely and are willing to pay for quality. Our Namibian pricing is 30 to 50% below comparable Cape Town agency rates for equivalent work — a strong competitive advantage in this market.
+        </Text>
+      </View>
+      <View wrap={false}>
+        <Text style={s.h3} wrap={false}>NGOs and Non-profits</Text>
+        <Text style={s.p} wrap={false}>
+          NGOs require professional web presence for donor credibility, grant applications, and public reporting. They tend to have allocated digital budgets and prefer long-term support arrangements. Maintenance retainers are particularly well-suited to this segment.
+        </Text>
+      </View>
+      <View wrap={false}>
+        <Text style={s.h3} wrap={false}>Startups and Entrepreneurs</Text>
+        <Text style={s.p} wrap={false}>
+          Early-stage businesses need a digital foundation quickly and at low cost. Many become long-term clients as they grow — a website at launch becomes an e-commerce store at Year 1 and a full app at Year 2. This segment has high lifetime value relative to the initial project cost.
+        </Text>
+      </View>
+      <View wrap={false}>
+        <Text style={s.h3} wrap={false}>Government and Parastatals</Text>
+        <Text style={s.p} wrap={false}>
+          A secondary target requiring longer sales cycles and formal procurement processes. Included as a Year 2 priority once the business has a portfolio, formal credentials, and team capacity to handle public sector delivery requirements. Contracts in this segment are typically larger and longer in duration.
+        </Text>
+      </View>
+      <Footer left={fl()} right="Section 04 - Marketing Plan" />
     </Page>
   );
 }
@@ -991,13 +1226,13 @@ function MarketingPage2() {
   return (
     <Page size="A4" style={s.page}>
       <RunHead section="Section 04 - Marketing Plan (continued)" />
-      <H2 num="4.1.3" title="Competition and Competitive Positioning" />
+      <H2 num="4.1.4" title="Competition and Competitive Positioning" />
       <View style={s.tbl}>
         <View style={s.tblH}>
-          <Text style={[s.th, { flex: 1 }]}>Competitor Type</Text>
-          <Text style={[s.th, { flex: 1.5 }]}>What They Offer</Text>
-          <Text style={[s.th, { flex: 1.5 }]}>Their Weakness</Text>
-          <Text style={[s.th, { flex: 1.5 }]}>Our Advantage</Text>
+          <Text style={[s.th, { flex: 1.1 }]}>Competitor Type</Text>
+          <Text style={[s.th, { flex: 1.8, paddingLeft: 8 }]}>What They Offer</Text>
+          <Text style={[s.th, { flex: 1.8, paddingLeft: 8 }]}>Their Weakness</Text>
+          <Text style={[s.th, { flex: 1.8, paddingLeft: 8 }]}>Our Advantage</Text>
         </View>
         {[
           ["Large local agencies", "Full-service digital, branding, marketing", "High prices, slow, not focused on SMEs", "Transparent pricing, fast turnaround, affordable for SMEs"],
@@ -1006,37 +1241,37 @@ function MarketingPage2() {
           ["Overseas agencies", "Remote-built digital services", "No local context, no in-person option, foreign currency pricing", "Locally based, NAD pricing, cultural understanding"],
         ].map(([ct, offer, weak, adv], i) => (
           <View key={ct} style={i % 2 === 0 ? s.tblR : s.tblRA}>
-            <Text style={[s.tdb, { flex: 1 }]}>{ct}</Text>
-            <Text style={[s.td, { flex: 1.5 }]}>{offer}</Text>
-            <Text style={[s.td, { flex: 1.5 }]}>{weak}</Text>
-            <Text style={[s.td, { flex: 1.5 }]}>{adv}</Text>
+            <Text style={[s.tdb, { flex: 1.1 }]}>{ct}</Text>
+            <Text style={[s.td, { flex: 1.8, paddingLeft: 8 }]}>{offer}</Text>
+            <Text style={[s.td, { flex: 1.8, paddingLeft: 8 }]}>{weak}</Text>
+            <Text style={[s.td, { flex: 1.8, paddingLeft: 8 }]}>{adv}</Text>
           </View>
         ))}
       </View>
       <View style={s.div} />
       <H2 num="4.2" title="Promotion and Advertising Strategy" />
-      <Text style={s.h3}>Digital Marketing (Primary Channel)</Text>
+      <Text style={s.h3} wrap={false}>Digital Marketing (Primary Channel)</Text>
       <Bullet text="Live business website (swiftdesignz.co.za) with integrated quote request and contact forms that feed directly into our CRM. All leads are automatically tracked and followed up" />
       <Bullet text="Facebook and Instagram business pages with regular content showcasing completed projects, client testimonials, and service promotions targeted at Namibian SMEs" />
       <Bullet text="LinkedIn presence for corporate and government sector outreach" />
       <Bullet text="Targeted Facebook and Google paid advertising campaigns managed by the Marketing Officer with a monthly budget of N$2,000 to N$5,000" />
       <Bullet text="Google Business listing for local search visibility" />
-      <Text style={s.h3}>Referral Network</Text>
+      <Text style={s.h3} wrap={false}>Referral Network</Text>
       <Bullet text="Existing freelance clients will be converted to formal clients with proper onboarding and retainer agreements" />
       <Bullet text="Client referral programme offering a discount on their next invoice for every successful referral" />
       <Bullet text="Partnership with IT-Guru to cross-refer clients needing hosting alongside development services" />
-      <Text style={s.h3}>Community and Networking</Text>
+      <Text style={s.h3} wrap={false}>Community and Networking</Text>
       <Bullet text="Windhoek Chamber of Commerce membership and networking events" />
       <Bullet text="Participation in Namibia ICT industry events and startup communities" />
       <Bullet text="Free initial consultations to build relationships with businesses not yet ready to commit" />
-      <Text style={s.h3}>Content Marketing</Text>
+      <Text style={s.h3} wrap={false}>Content Marketing</Text>
       <Bullet text="Monthly blog posts and social media content on topics relevant to Namibian businesses including digital presence, e-commerce, and AI tools" />
       <Bullet text="Short video tutorials and behind-the-scenes content to build brand trust and visibility" />
-      <Text style={s.h3}>South Africa (Existing Market)</Text>
+      <Text style={s.h3} wrap={false}>South Africa (Existing Market)</Text>
       <Bullet text="Swift Designz already serves clients in South Africa, with live e-commerce stores and websites actively running for SA-based clients. This is not a future expansion plan but an existing revenue stream that the loan funding will help us scale" />
       <Bullet text="The business is headquartered in Namibia and all revenue is earned and taxed in Namibia. The SA market is served entirely remotely at no additional overhead cost" />
       <Bullet text="Growing the SA client base is a key part of Year 1 and Year 2 revenue targets, with dedicated marketing spend applied to both markets from Month 1" />
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 04 - Marketing Plan" />
+      <Footer left={fl()} right="Section 04 - Marketing Plan" />
     </Page>
   );
 }
@@ -1052,7 +1287,7 @@ function OperationsPage() {
         <View style={s.pageTitleRule} />
       </View>
       <H2 num="5.1" title="Business Process Description" />
-      <Text style={s.p}>
+      <Text style={s.p} wrap={false}>
         Swift Designz operates a clean, fully digital workflow from first contact through to final delivery and ongoing support:
       </Text>
       <View style={{ flexDirection: "row", alignItems: "center" as const, marginBottom: 16, flexWrap: "wrap" as const, gap: 4 }}>
@@ -1072,39 +1307,16 @@ function OperationsPage() {
       <Bullet text="After launch, clients are offered a monthly maintenance retainer covering updates, monitoring, backups, and priority support" />
       <View style={s.div} />
       <H2 num="5.2" title="Supplies and Costing" />
-      <Text style={s.p}>
+      <Text style={s.p} wrap={false}>
         Swift Designz is a knowledge-based, digital-only business. There are no raw materials, physical inventory, or manufacturing processes. The inputs are:
       </Text>
       <Bullet text="Google Workspace Business Starter for all staff (email, Drive, Docs, Meet) — approximately N$650 per month for 6 users, covered by the company" />
       <Bullet text="Cloud hosting services facilitated through IT-Guru (hosting partner)" />
       <Bullet text="Domain registrations and SSL certificates sourced per client project" />
-      <Text style={s.p}>
+      <Text style={s.p} wrap={false}>
         Each team member is responsible for their own internet connection and personal devices as part of their remote working arrangement. The company provides team software licences only, including Google Workspace for all staff. All other software costs are passed through to clients as part of their project quotation.
       </Text>
-      <View style={s.div} />
-      <H2 num="5.3" title="Organisation of Operations and Outputs" />
-      <View style={s.tbl}>
-        <View style={s.tblH}>
-          <Text style={[s.th, { flex: 1.2 }]}>Role</Text>
-          <Text style={[s.th, { flex: 2 }]}>Responsibilities</Text>
-          <Text style={[s.th, { flex: 1.5 }]}>Key Outputs</Text>
-        </View>
-        {[
-          ["Director and Developer", "Client projects, technical architecture, quality sign-off, business strategy", "Websites, apps, project delivery"],
-          ["Business Admin", "Finance administration, client billing, quotation management, SSC registration, HR admin", "Invoices, quotations, financial reports, employment records"],
-          ["Project Manager", "Project planning, timeline management, client coordination, delivery oversight", "Project plans, status reports, on-time delivery"],
-          ["Systems Admin", "Internal IT, network management, server maintenance, team tech support", "Stable infrastructure, uptime"],
-          ["Marketing Officer", "Social media, advertising, content creation, lead generation", "Leads, brand presence, content"],
-          ["QA Tester", "Testing all builds before delivery, bug reports, quality documentation", "Tested deliverables, test reports"],
-        ].map(([role, resp, out], i) => (
-          <View key={role} style={i % 2 === 0 ? s.tblR : s.tblRA}>
-            <Text style={[s.tdb, { flex: 1.2 }]}>{role}</Text>
-            <Text style={[s.td, { flex: 2 }]}>{resp}</Text>
-            <Text style={[s.td, { flex: 1.5 }]}>{out}</Text>
-          </View>
-        ))}
-      </View>
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 05 - Operations and Technology" />
+      <Footer left={fl()} right="Section 05 - Operations and Technology" />
     </Page>
   );
 }
@@ -1113,8 +1325,33 @@ function OperationsPage2() {
   return (
     <Page size="A4" style={s.page}>
       <RunHead section="Section 05 - Operations and Technology (continued)" />
+      <View wrap={false}>
+        <H2 num="5.3" title="Organisation of Operations and Outputs" />
+        <View style={s.tbl}>
+          <View style={s.tblH}>
+            <Text style={[s.th, { flex: 1.2 }]}>Role</Text>
+            <Text style={[s.th, { flex: 2 }]}>Responsibilities</Text>
+            <Text style={[s.th, { flex: 1.5 }]}>Key Outputs</Text>
+          </View>
+          {[
+            ["Director and Developer", "Client projects, technical architecture, quality sign-off, business strategy", "Websites, apps, project delivery"],
+            ["Business Admin", "Finance administration, client billing, quotation management, SSC registration, HR admin", "Invoices, quotations, financial reports, employment records"],
+            ["Project Manager", "Project planning, timeline management, client coordination, delivery oversight", "Project plans, status reports, on-time delivery"],
+            ["Systems Admin", "Internal IT, network management, server maintenance, team tech support", "Stable infrastructure, uptime"],
+            ["Marketing Officer", "Social media, advertising, content creation, lead generation", "Leads, brand presence, content"],
+            ["QA Tester", "Testing all builds before delivery, bug reports, quality documentation", "Tested deliverables, test reports"],
+          ].map(([role, resp, out], i) => (
+            <View key={role} style={i % 2 === 0 ? s.tblR : s.tblRA}>
+              <Text style={[s.tdb, { flex: 1.2 }]}>{role}</Text>
+              <Text style={[s.td, { flex: 2 }]}>{resp}</Text>
+              <Text style={[s.td, { flex: 1.5 }]}>{out}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+      <View style={s.div} />
       <H2 num="5.4" title="Technology and Equipment" />
-      <Text style={s.p}>
+      <Text style={s.p} wrap={false}>
         The following equipment and software will be procured using the loan funds. Actual supplier quotations will be obtained from Namibian IT suppliers (Mustek Namibia, Incredible Connection Windhoek, and local ICT resellers) prior to disbursement. The prices below are mid-range estimates.
       </Text>
       <View style={s.tbl}>
@@ -1125,21 +1362,19 @@ function OperationsPage2() {
           <Text style={[s.th, { flex: 0.8, textAlign: "right" as const }]}>Est. Cost (N$)</Text>
         </View>
         {[
-          ["Computing", "iMac 24-inch M4 (10-core, 24GB, 512GB, Green)", "Primary workstation. Full kit incl. keyboard, mouse, and 24-inch display. Enables iOS and macOS development and testing for the first time.", "45,899"],
+          ["Computing", "iMac 24-inch M4 (10-core, 24GB, 512GB, Green)", "Primary workstation. Full kit incl. keyboard, mouse, and 24-inch display.", "45,899"],
           ["Computing", "External Monitor (27-inch, 4K)", "Extended display alongside built-in iMac screen", "5,500"],
           ["Computing", "External SSD (1TB)", "Fast project backups and portable file storage", "1,800"],
-          ["Computing", "USB-C Hub", "Expands iMac connectivity for drives and peripherals", "1,300"],
-          ["Workspace", "Ring Light or Key Light", "Professional lighting for client calls and recordings", "1,500"],
-          ["Workspace", "Drawing Tablet (Wacom Intuos)", "Precision stylus input for UI/UX design work", "3,500"],
+          ["Workspace", "Second External Monitor (24-inch)", "Extended dual-screen workspace for multitasking and code review", "3,500"],
           ["Workspace", "Monitor Arm (single, for ext. monitor)", "Frees desk space, ideal monitor positioning", "1,200"],
           ["Workspace", "Document Shredder", "Secure disposal of client documents (POPIA compliance)", "1,300"],
-          ["Workspace", "Green Screen and Backdrop Stand", "Professional background for calls and content", "1,000"],
-          ["Mobile", "iPhone 16 (128GB)", "Real-device iOS testing and verification. Required to test apps and websites on iPhone before client delivery. Also used for business communication.", "22,000"],
+          ["Mobile", "iPhone 16 (128GB)", "iOS testing and verification.", "22,000"],
           ["Mobile", "iPad Air M2/M3 (11-inch)", "Design reviews, client presentations, and note-taking", "15,000"],
-          ["Networking", "Wi-Fi 6 Business Router", "Fast, stable internet for home office", "4,000"],
+          ["Workspace", "Business Laser Printer", "Printing contracts, invoices, and client documents for signing and filing", "3,000"],
+          ["Workspace", "Printer Toner Cartridges (initial supply)", "2 full replacement sets for uninterrupted document printing", "1,500"],
+          ["Workspace", "Ergonomic Office Chair", "Full-time remote work setup — essential for health and productivity", "3,300"],
           ["Networking", "UPS Battery Backup", "Equipment protection during power outages", "3,250"],
           ["Networking", "NAS Network Storage", "Centralised file server and backups", "8,000"],
-          ["Reserve", "Professional and Legal Reserve", "Lawyer fees, accounting fees, business insurance", "50,000"],
         ].map(([cat, item, purpose, cost], i) => (
           <View key={`${cat}-${item}`} style={i % 2 === 0 ? s.tblR : s.tblRA}>
             <Text style={[s.tdb, { flex: 1 }]}>{cat}</Text>
@@ -1148,12 +1383,20 @@ function OperationsPage2() {
             <Text style={[s.tdr, { flex: 0.8 }]}>{cost}</Text>
           </View>
         ))}
+      </View>
+      <View wrap={false} style={s.tbl}>
+        <View style={s.tblRA}>
+          <Text style={[s.tdb, { flex: 1 }]}>Reserve</Text>
+          <Text style={[s.td, { flex: 2 }]}>Professional and Legal Reserve</Text>
+          <Text style={[s.td, { flex: 1 }]}>Lawyer fees, accounting fees, business insurance</Text>
+          <Text style={[s.tdr, { flex: 0.8 }]}>75,000</Text>
+        </View>
         <View style={s.tblRTotal}>
           <Text style={[s.tdb, { flex: 4.8 }]}>Total Hardware and Reserve</Text>
-          <Text style={[s.tdbr, { flex: 0.8 }]}>164,250</Text>
+          <Text style={[s.tdbr, { flex: 0.8 }]}>189,250</Text>
         </View>
       </View>
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 05 - Operations and Technology" />
+      <Footer left={fl()} right="Section 05 - Operations and Technology" />
     </Page>
   );
 }
@@ -1168,63 +1411,78 @@ function StatisticsPage() {
         <Text style={s.pageTitle}>Section 06 - Statistics</Text>
         <View style={s.pageTitleRule} />
       </View>
-      <View style={s.twoC}>
-        <View style={s.c50}>
-          <Text style={s.h3}>Applicant Profile</Text>
-          <KV k="PDN Ownership (%)" v="85% (Keenan Husselmann)" />
-          <KV k="Women Ownership (%)" v="0%" />
-          <KV k="Youth Ownership (%)" v="85% (controlling director, aged 31)" />
-          <KV k="Age of Youth (applicant)" v="31 years" />
-          <KV k="Education Qualification" v="BSc Computer Science (Software Development), NUST" />
-          <KV k="Employment Status at Application" v="Self-employed (sole director)" />
-          <KV k="Year of Business Registration" v="2026" />
-          <KV k="Business Stage" v="Startup / Early Growth" />
-          <KV k="Business Traded Formally" v="Yes" />
-          <KV k="SME or Large Enterprise" v="SME" />
-        </View>
-        <View style={s.c50}>
-          <Text style={s.h3}>Business Location</Text>
-          <KV k="Industry" v="ICT / Digital Services" />
-          <KV k="Economic Sector" v="Technology and Innovation" />
-          <KV k="Town" v="Windhoek" />
-          <KV k="Region" v="Khomas" />
-          <KV k="Rural or Urban" v="Urban" />
-          <KV k="Sales Region" v="Namibia and South Africa (both active)" />
-          <KV k="Innovation / Tech Driven" v="Yes" />
-          <KV k="Market Linkages" v="Yes" />
-          <KV k="Business Development Services" v="No" />
-        </View>
-      </View>
-      <View style={s.div} />
-      <Text style={s.h3}>Employment Statistics</Text>
+      <Text style={s.h3} wrap={false}>Applicant Profile</Text>
       <View style={s.tbl}>
-        <View style={s.tblH}>
-          <Text style={[s.th, { flex: 2 }]}>Category</Text>
-          <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Count</Text>
-        </View>
         {[
-          ["New Permanent Jobs Created (direct result of NYDF funding)", "5"],
-          ["Retained Jobs (director, continuing from freelance)", "1"],
-          ["Temporary Jobs", "0"],
-          ["Skilled Jobs (developer, business admin, HR, marketing)", "4"],
-          ["Semi-Skilled Jobs (systems admin intern, QA intern)", "2"],
-          ["Unskilled Jobs", "0"],
-          ["Direct Jobs (within the funded enterprise)", "6"],
-          ["Indirect Jobs (accounting officer, hosting partner, supplier support)", "~3"],
-          ["Youth Employed (all team members under 35)", "6"],
-          ["Women Employed (Georgia Orren, Requelle Husselmann, Shakira Linno)", "3"],
-          ["People with Disabilities Employed", "0"],
-          ["People from Marginalised Communities", "0"],
-        ].map(([cat, count], i) => (
-          <View key={cat} style={i % 2 === 0 ? s.tblR : s.tblRA}>
-            <Text style={[s.td, { flex: 2 }]}>{cat}</Text>
-            <Text style={[s.tdbr, { flex: 1 }]}>{count}</Text>
+          ["PDN Ownership (%)", "85% (Keenan Husselmann)"],
+          ["Women Ownership (%)", "0%"],
+          ["Youth Ownership (%)", "85% (controlling director, aged 31)"],
+          ["Age of Youth (applicant)", "31 years"],
+          ["Education Qualification", "BSc Computer Science (Software Development), NUST"],
+          ["Employment Status at Application", "Self-employed (sole director)"],
+          ["Year of Business Registration", "2026"],
+          ["Business Stage", "Startup / Early Growth"],
+          ["Business Traded Formally", "Yes"],
+          ["SME or Large Enterprise", "SME"],
+        ].map(([k, v], i) => (
+          <View key={k} style={i % 2 === 0 ? s.tblR : s.tblRA}>
+            <Text style={[s.tdb, { flex: 1.6 }]}>{k}</Text>
+            <Text style={[s.td, { flex: 1 }]}>{v}</Text>
           </View>
         ))}
       </View>
+      <Text style={s.h3} wrap={false}>Business Location &amp; Classification</Text>
+      <View style={s.tbl}>
+        {[
+          ["Industry", "ICT / Digital Services"],
+          ["Economic Sector", "Technology and Innovation"],
+          ["Town", "Windhoek"],
+          ["Region", "Khomas"],
+          ["Constituency", "Windhoek East"],
+          ["Rural or Urban", "Urban"],
+          ["Sales Region", "Namibia and South Africa (both active)"],
+          ["Innovation / Tech Driven", "Yes"],
+          ["Market Linkages", "Yes"],
+          ["Business Development Services", "No"],
+        ].map(([k, v], i) => (
+          <View key={k} style={i % 2 === 0 ? s.tblR : s.tblRA}>
+            <Text style={[s.tdb, { flex: 1.6 }]}>{k}</Text>
+            <Text style={[s.td, { flex: 1 }]}>{v}</Text>
+          </View>
+        ))}
+      </View>
+      <View wrap={false}>
+        <View style={s.div} />
+        <Text style={s.h3} wrap={false}>Employment Statistics</Text>
+        <View style={s.tbl}>
+          <View style={s.tblH}>
+            <Text style={[s.th, { flex: 2 }]}>Category</Text>
+            <Text style={[s.th, { flex: 1, textAlign: "right" as const }]}>Count</Text>
+          </View>
+          {[
+            ["New Permanent Jobs Created (direct result of NYDF funding)", "5"],
+            ["Retained Jobs (director, continuing from freelance)", "1"],
+            ["Temporary Jobs", "0"],
+            ["Skilled Jobs (developer, business admin, HR, marketing)", "4"],
+            ["Semi-Skilled Jobs (systems admin intern, QA intern)", "2"],
+            ["Unskilled Jobs", "0"],
+            ["Direct Jobs (within the funded enterprise)", "6"],
+            ["Indirect Jobs (accounting officer, hosting partner, supplier support)", "~3"],
+            ["Youth Employed (all team members under 35)", "6"],
+            ["Women Employed (Georgia Orren, Requelle Husselmann, Shakira Linno)", "3"],
+            ["People with Disabilities Employed", "0"],
+            ["People from Marginalised Communities", "0"],
+          ].map(([cat, count], i) => (
+            <View key={cat} style={i % 2 === 0 ? s.tblR : s.tblRA}>
+              <Text style={[s.td, { flex: 2 }]}>{cat}</Text>
+              <Text style={[s.tdbr, { flex: 1 }]}>{count}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
       <View style={s.div} />
-      <Text style={s.h3}>Short Description of Business Activities</Text>
-      <Text style={s.p}>
+      <Text style={s.h3} wrap={false}>Short Description of Business Activities</Text>
+      <Text style={s.p} wrap={false}>
         Swift Designz Investments CC is a Namibian digital technology company that provides website development, e-commerce solutions, web and mobile application development, AI and project management training, and monthly maintenance retainer services. The business operates fully remotely and already serves active clients in both Namibia and South Africa, with live e-commerce stores and websites running in both markets. All services are delivered digitally. The business is 85% youth-owned, tech-driven, and designed to scale.
       </Text>
       <View style={s.box}>
@@ -1236,24 +1494,23 @@ function StatisticsPage() {
           Business Development Services: No
         </Text>
       </View>
-      <Footer left="Swift Designz Investments CC | NYDF Business Plan 2026" right="Section 06 - Statistics" />
+      <Footer left={fl()} right="Section 06 - Statistics" />
     </Page>
   );
 }
 
 // ── MAIN DOCUMENT ─────────────────────────────────────────────
 
-export default function BusinessPlanPDF() {
+function BusinessPlanDocument({ variant }: { variant: Variant }) {
+  // eslint-disable-next-line react-hooks/globals
+  _footerLabel = LABEL[variant].footer;
+  const L = LABEL[variant];
   return (
-    <Document
-      title="Swift Designz Investments CC - NYDF Business Plan 2026"
-      author="Keenan Husselmann"
-      subject="National Youth Development Fund Loan Application"
-      keywords="NYDF, DBN, business plan, Swift Designz, Namibia, ICT"
-    >
-      <CoverPage />
-      <CoverLetterPage />
-      <ExecutiveSummaryPage />
+    <Document title={L.docTitle} author="Keenan Husselmann" subject={L.subject} keywords={L.keywords}>
+      <CoverPage variant={variant} />
+      <TableOfContentsPage />
+      <CoverLetterPage variant={variant} />
+      <ExecutiveSummaryPage variant={variant} />
       <CompanyInfoPage />
       <ManagementPlanPage />
       <ManagementPlanPage2 />
@@ -1264,7 +1521,15 @@ export default function BusinessPlanPDF() {
       <MarketingPage2 />
       <OperationsPage />
       <OperationsPage2 />
-      <StatisticsPage />
+      {variant === "nydf" && <StatisticsPage />}
     </Document>
   );
+}
+
+export default function BusinessPlanPDF() {
+  return <BusinessPlanDocument variant="nydf" />;
+}
+
+export function GenericBusinessPlanPDF() {
+  return <BusinessPlanDocument variant="generic" />;
 }

@@ -75,7 +75,12 @@ export async function sendInvoiceAction(id: string): Promise<{ error: string } |
         installmentCount: invoice.installment_count ?? null,
         installmentInterval: invoice.installment_interval ?? null,
         paymentPlanType: invoice.payment_plan_type ?? null,
-        paymentPlanSchedule: invoice.payment_plan_schedule ?? null,
+        paymentPlanSchedule: invoice.payment_plan_schedule
+          ? (invoice.payment_plan_schedule as { label: string; amount_cents?: number; amount?: number }[]).map((row) => ({
+              label: row.label,
+              amount: row.amount_cents ?? row.amount ?? 0,
+            }))
+          : null,
         payments: [],
         logoSrc: loadLogoBase64(),
       })
@@ -94,7 +99,14 @@ export async function sendInvoiceAction(id: string): Promise<{ error: string } |
     notes: invoice.notes,
     pdfBuffer,
     paymentPlanEnabled: invoice.payment_plan_enabled ?? false,
-    paymentPlanSchedule: invoice.payment_plan_schedule ?? null,
+    paymentPlanSchedule: invoice.payment_plan_schedule
+      ? (invoice.payment_plan_schedule as { label: string; amount_cents?: number; amount?: number; due_date?: string; installment_number?: number }[]).map((row) => ({
+          label: row.label,
+          amount_cents: row.amount_cents ?? row.amount ?? 0,
+          due_date: row.due_date ?? "",
+          installment_number: row.installment_number ?? 1,
+        }))
+      : null,
     installmentNumber: invoice.installment_number ?? null,
   }).catch(() => {});
 

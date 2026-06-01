@@ -149,11 +149,11 @@ const EQUIPMENT: Category[] = [
         notes: "Exact price confirmed. Get quote from iStore Windhoek or authorised Apple reseller. This is the complete out-of-box kit.",
       },
       {
-        item: "1x External Monitor (27-inch, 4K)",
-        description: "Extended display alongside the built-in iMac screen for dual-monitor productivity",
+        item: "2× External Monitors (24-inch)",
+        description: "Dual extended displays for multitasking, code review, and running client previews alongside active work",
         importance: "RECOMMENDED",
-        avgPrice: "N$5,000 - 8,000",
-        notes: "LG 27UK850 or Dell UltraSharp 27 4K. The iMac already provides one 24-inch Retina display.",
+        avgPrice: "N$3,000 - 4,500 each",
+        notes: "Samsung or LG 24-inch 1080p/1440p monitors. Budget ~N$3,500 each. The iMac already has one 24-inch built-in display — these add two more workspaces.",
       },
       {
         item: "External SSD (1TB)",
@@ -161,27 +161,6 @@ const EQUIPMENT: Category[] = [
         importance: "RECOMMENDED",
         avgPrice: "N$1,500 - 2,200",
         notes: "Samsung T7 or SanDisk Extreme Pro. Keep one copy offsite.",
-      },
-      {
-        item: "USB-C Hub",
-        description: "Expands the iMac ports for connecting extra drives and peripherals simultaneously",
-        importance: "RECOMMENDED",
-        avgPrice: "N$800 - 1,800",
-        notes: "iMac has 2x Thunderbolt 4 and 2x USB-3 ports. A hub helps when using SSD, NAS, and other devices at once.",
-      },
-      {
-        item: "Ring Light or Key Light",
-        description: "Professional studio lighting for client video calls and content recordings",
-        importance: "RECOMMENDED",
-        avgPrice: "N$900 - 3,500",
-        notes: "Already have webcam and mic. Elgato Key Light Air (~N$2,500) is a desk-friendly option. Standard ring light from Makro from N$900.",
-      },
-      {
-        item: "Drawing Tablet (Wacom Intuos)",
-        description: "Precision stylus input for UI/UX design, digital art, and precise mouse control",
-        importance: "OPTIONAL",
-        avgPrice: "N$3,000 - 7,000",
-        notes: "Wacom Intuos Small (~N$3,200) is a good entry point. Medium (~N$4,500) gives more workspace. Available at major tech retailers.",
       },
       {
         item: "Monitor Arm (single, for external monitor)",
@@ -197,12 +176,31 @@ const EQUIPMENT: Category[] = [
         avgPrice: "N$800 - 2,000",
         notes: "Required for POPIA compliance when handling physical client documents. Cross-cut shredder as minimum. Available at Builders Warehouse or Makro.",
       },
+    ],
+  },
+  {
+    title: "Office Equipment",
+    items: [
       {
-        item: "Green Screen and Backdrop Stand",
-        description: "Professional virtual background for client calls, video content, and recorded presentations",
-        importance: "OPTIONAL",
-        avgPrice: "N$700 - 1,800",
-        notes: "Collapsible green screen kits with stand are widely available. Works well with the existing webcam and ring light setup.",
+        item: "Business Laser Printer",
+        description: "Printing contracts, invoices, employment documents, and client paperwork for signing and filing",
+        importance: "RECOMMENDED",
+        avgPrice: "N$2,500 - 4,000",
+        notes: "HP LaserJet Pro or Brother HL series. A laser printer is more cost-effective than inkjet for regular contract and document printing.",
+      },
+      {
+        item: "Printer Toner Cartridges (initial supply, 2 sets)",
+        description: "Replacement toner to avoid downtime during active contract periods",
+        importance: "RECOMMENDED",
+        avgPrice: "N$1,200 - 2,000",
+        notes: "Buy 2 full replacement sets at procurement. Toner for laser printers lasts significantly longer than inkjet cartridges per page.",
+      },
+      {
+        item: "Ergonomic Office Chair",
+        description: "Full-time remote work seat with lumbar support for long daily sessions at the iMac",
+        importance: "RECOMMENDED",
+        avgPrice: "N$3,300",
+        notes: "Included in loan budget as an essential remote-work productivity item. Office Pro or local ergonomic chairs available at Makro or Builders Warehouse.",
       },
     ],
   },
@@ -229,18 +227,11 @@ const EQUIPMENT: Category[] = [
     title: "Networking",
     items: [
       {
-        item: "Wi-Fi 6 Business Router",
-        description: "Fast, stable internet for the home office setup",
-        importance: "CRITICAL",
-        avgPrice: "N$3,000 - 6,500",
-        notes: "TP-Link Archer AX73 or ASUS RT-AX88U. Wi-Fi 6 is a significant upgrade over standard routers for a home office.",
-      },
-      {
         item: "UPS Battery Backup (1000VA)",
-        description: "Keeps iMac, router, and NAS powered during load shedding and power fluctuations",
+        description: "Keeps iMac and NAS powered during load shedding and power fluctuations",
         importance: "CRITICAL",
         avgPrice: "N$2,800 - 5,000",
-        notes: "Non-negotiable in Namibia. APC or Mecer are widely available. Size the UPS to cover the iMac (up to 150W), router, and NAS together.",
+        notes: "Non-negotiable in Namibia. APC or Mecer are widely available. Size the UPS to cover the iMac (up to 150W) and NAS together.",
       },
       {
         item: "NAS Network Storage (2-bay)",
@@ -258,27 +249,27 @@ const EXTRA_EQUIPMENT: Category[] = [
     title: "Personal Workspace (Not in Loan - Own Cost)",
     items: [
       {
-        item: "Ergonomic Chair",
-        description: "Lumbar support for long daily sessions at the iMac",
-        importance: "RECOMMENDED",
-        avgPrice: "N$5,000 - 13,000",
-        notes: "Not in the loan since office furniture is excluded. A quality chair is a worthwhile personal purchase for a remote-first role.",
-        isExtra: true,
-      },
-      {
         item: "Desk or Sit-Stand Desk",
-        description: "The iMac is a desktop and needs a dedicated workspace",
+        description: "The iMac is a desktop and needs a dedicated workspace surface",
         importance: "RECOMMENDED",
         avgPrice: "N$4,000 - 16,000",
         notes: "Height-adjustable desks reduce fatigue significantly. Consider this a long-term personal investment. Brands like FlexiSpot are available online.",
         isExtra: true,
       },
       {
-        item: "Laptop Stand (for iMac cable management)",
-        description: "Keeps the iMac workspace clean and accessible",
+        item: "Desk Cable Management Tray",
+        description: "Keeps the iMac workspace clean and cables routed neatly",
         importance: "OPTIONAL",
         avgPrice: "N$300 - 800",
-        notes: "Helps with cable routing behind the iMac. Most desk cable management trays work well.",
+        notes: "Helps with cable routing behind the iMac. Most generic desk cable trays work well.",
+        isExtra: true,
+      },
+      {
+        item: "Desk Lamp",
+        description: "Supplementary task lighting for late-session work",
+        importance: "OPTIONAL",
+        avgPrice: "N$300 - 900",
+        notes: "BenQ ScreenBar is a premium monitor-mounted option. Any LED desk lamp from Makro works.",
         isExtra: true,
       },
     ],
@@ -377,7 +368,7 @@ function Page2() {
     <Page size="A4" style={s.page}>
       <View style={s.runHead} fixed>
         <Text style={s.runHeadText}>Swift Designz Investments CC | Equipment Checklist 2026</Text>
-        <Text style={s.runHeadText}>Mobile and Networking</Text>
+        <Text style={s.runHeadText}>Office, Mobile and Networking</Text>
       </View>
 
       <ColHeaders />
@@ -389,18 +380,18 @@ function Page2() {
       <View style={s.summaryBox}>
         <View style={s.summaryCol}>
           <Text style={s.summaryLabel}>Critical Items Only (minimum budget)</Text>
-          <Text style={s.summaryVal}>N$75,000 - 90,000</Text>
-          <Text style={s.summaryValSub}>iMac + iPhone 16 + UPS + router. Bare minimum to operate.</Text>
+          <Text style={s.summaryVal}>N$68,000 - 80,000</Text>
+          <Text style={s.summaryValSub}>iMac + iPhone 16 + UPS. Bare minimum to operate.</Text>
         </View>
         <View style={s.summaryCol}>
           <Text style={s.summaryLabel}>Full Core List (mid-range estimates)</Text>
-          <Text style={s.summaryVal}>N$112,000</Text>
-          <Text style={s.summaryValSub}>All loan-funded items at mid-range. Keyboard and mouse are included with the iMac.</Text>
+          <Text style={s.summaryVal}>N$114,250</Text>
+          <Text style={s.summaryValSub}>All loan-funded hardware items at mid-range. Keyboard and mouse included with iMac.</Text>
         </View>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Full Core List (top-end estimates)</Text>
-          <Text style={s.summaryVal}>N$160,000+</Text>
-          <Text style={s.summaryValSub}>iMac + iPad Pro + premium monitor + high-end networking</Text>
+          <Text style={s.summaryLabel}>Hardware + Professional Reserve</Text>
+          <Text style={s.summaryVal}>N$189,250</Text>
+          <Text style={s.summaryValSub}>Full hardware budget (N$114,250) plus legal, accounting, and insurance reserve (N$75,000)</Text>
         </View>
       </View>
 
@@ -421,7 +412,7 @@ function Page3() {
         <Text style={s.extrasBannerText}>Personal Workspace (Not in Loan)</Text>
       </View>
       <Text style={s.extrasNote}>
-        The items below are not included in the loan budget of N$524,930 and are personal purchases at your own cost. Office furniture is excluded from the loan because the business operates remotely with no company premises. These are recommended personal investments for a productive home office setup.
+        The items below are not included in the loan budget and are personal purchases at your own cost. The ergonomic chair is already included in the loan hardware budget. The items on this page cover additional personal workspace items that improve comfort and productivity but are not required by the business.
       </Text>
 
       <ColHeaders />
@@ -432,14 +423,14 @@ function Page3() {
 
       <View style={s.summaryBox}>
         <View style={s.summaryCol}>
-          <Text style={s.summaryLabel}>Loan Budget (all core hardware)</Text>
-          <Text style={s.summaryVal}>N$524,930</Text>
-          <Text style={s.summaryValSub}>iMac full kit + workspace + mobile + networking + reserve + working capital</Text>
+          <Text style={s.summaryLabel}>Total Loan Requested</Text>
+          <Text style={s.summaryVal}>N$550,000</Text>
+          <Text style={s.summaryValSub}>Hardware N$114,250 + reserve N$75,000 + working capital N$400,750 − own contribution N$40,000</Text>
         </View>
         <View style={s.summaryCol}>
           <Text style={s.summaryLabel}>Personal Workspace (own cost)</Text>
-          <Text style={s.summaryVal}>N$9,000 - 30,000</Text>
-          <Text style={s.summaryValSub}>Chair + desk. Not in loan. Personal investment in your home office.</Text>
+          <Text style={s.summaryVal}>N$5,000 - 18,000</Text>
+          <Text style={s.summaryValSub}>Desk + extras. Chair is in the loan budget. Personal investment in your home office setup.</Text>
         </View>
         <View style={s.summaryCol}>
           <Text style={s.summaryLabel}>NYDF Loan Tier</Text>

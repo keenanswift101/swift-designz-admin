@@ -10,6 +10,17 @@
 - Resend for transactional emails
 - Vitest (unit) + Playwright (E2E) for testing
 
+## ALWAYS DO THIS FIRST
+Before asking the user for any financial figures, project rates, client counts, revenue data, or business metrics — **query the Supabase database directly**. The admin portal is the source of truth. Use the service role key from `.env.local` and query via the Supabase REST API or `npx supabase` CLI. Never estimate, never ask the user to look it up — look it up yourself.
+
+Key tables for business data:
+- `invoices` — project billing, amounts, clients
+- `quotations` — project rates and line items
+- `retainer_subscriptions` — active retainers, monthly amounts, types
+- `clients` — client list
+- `income_entries`, `expense_entries` — accounting data
+- `projects` — project list and status
+
 ## Build
 - `npm run dev` — runs on localhost:3000
 - `npm run build` — production build
@@ -228,7 +239,7 @@ Template logic lives in src/lib/document-templates.ts; content in src/lib/docume
 
 ## Company Registration
 - **Legal name:** Swift Designz Investments CC
-- **CC Registration:** CC/2026/055589
+- **CC Registration:** CC/2026/05589
 - **NamRA TIN:** 16271273 (Tax Type: ITX 16271273-011)
 - **Physical:** Erf 55 Kenneth McArthur Street, Auas Blick, Windhoek, Namibia
 - **Postal:** P.O. Box 4655, Rehoboth, Namibia
