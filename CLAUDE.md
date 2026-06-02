@@ -39,6 +39,7 @@ Key tables for business data:
 - Accounts Receivable schema: supabase/accounts_receivable.sql (run after schema.sql)
 - Employment contracts schema: supabase/employee_contracts.sql
 - Notifications scheduled column: supabase/notifications_scheduled.sql (adds `scheduled_for TIMESTAMPTZ` to notifications)
+- Retainer payments: supabase/retainer_payments.sql (adds `retainer_payments` table)
 - Money values stored as integer cents (R2,500 = 250000)
 - All enums and interfaces: src/types/database.ts
 
@@ -123,25 +124,35 @@ Full AR flow: Quotation → Invoice → Payment Confirmation → Payment Reminde
 
 ### Phase 3 — Payments ✓
 - DB table: `payment_confirmations` (receipt_number SD26-REC-001)
+- `invoice_id NOT NULL` — payment confirmations are always linked to an invoice
 - Receipt preview modal before sending (shows amount, client, method, balance)
 - Receipt email: logo + payment details + PDF attachment
 - Component: src/components/invoices/SendReceiptButton.tsx (previewData prop triggers modal)
+- **Resend support**: `sendReceiptAction` checks for existing confirmation and updates `sent_at` instead of inserting; payments page shows Send Receipt button when `sent_at` is null (even if record exists)
+- To reset a receipt for resend: set `sent_at = null, sent_to = null` on the `payment_confirmations` row directly in DB
 
 ### Phase 3 — Account Statements ✓
 - DB table: `account_statements` (statement_number SD26-STMT-001)
 - `/accounts-receivable/statements` — list with KPIs, generate form, delete
-- `/accounts-receivable/statements/[id]` — detail with "Outstanding Brought Forward" + "Invoices in Period" sections
-- Statement correctly captures pre-period outstanding as opening balance (no lower-bound date filter on invoice query)
-- Opening balance = outstanding on invoices created before period start
-- Closing balance = total outstanding across all invoices up to period end
+- `/accounts-receivable/statements/[id]` — detail with brought-forward, in-period invoices, scheduled installments
+- Invoice queries always filter `.neq("doc_type", "quotation")` to exclude draft quotations from balances
+- Balances recalculated live from invoice data (stored values may be stale — do not trust `stmt.opening_balance` etc.)
+- Scheduled installments: detected by querying `retainer_payments` invoices with `quotation_id` → fetching `quotations.payment_plan_schedule` → filtering entries where `installment_number > max_already_invoiced`
+- Summary adapts: "Total Contracted" / "Total Outstanding" when active payment plans present
+- Send Statement: generates PDF + emails via Resend, marks `sent_at`/`sent_to`; component: src/components/ar/SendStatementButton.tsx
+- PDF (src/components/ar/AccountStatementPDF.tsx): due dates, outstanding per invoice, scheduled installments section, payment terms footer
 - Server actions: src/app/(dashboard)/accounts-receivable/statements/actions.ts
 
 ### Phase 4 — Retainer Subscriptions ✓
 - DB table: `retainer_subscriptions` (links clients, monthly_amount cents, billing_day, status)
-- `/accounts-receivable/retainers` — list with KPIs (active/paused/cancelled counts, monthly revenue)
+- DB table: `retainer_payments` (receipt_number SD26-REC-XXX, retainer_subscription_id, amount, payment_method, payment_date, reference, sent_at, sent_to) — migration: supabase/retainer_payments.sql
+- `/accounts-receivable/retainers` — list with KPIs, last payment per retainer, Record Payment button
+- Record Payment modal: portaled to `document.body` (avoids table overflow clipping), amount pre-filled, cycles payment number 1–12 then restarts
+- Button label: "Record Payment" → "Record Payment 2" → ... → "Record Payment 12" → resets (based on `paymentCount % 12`)
+- After recording: success state shows receipt number + "Send Receipt" button that emails via existing `sendReceiptEmail`
 - Status controls: pause, resume, cancel, delete
 - Server actions: src/app/(dashboard)/accounts-receivable/retainers/actions.ts
-- Components: src/components/ar/NewRetainerForm.tsx, src/components/ar/RetainerStatusButton.tsx
+- Components: src/components/ar/NewRetainerForm.tsx, src/components/ar/RetainerStatusButton.tsx, src/components/ar/RecordRetainerPaymentButton.tsx
 
 ## Notifications
 - DB table: `notifications` with `scheduled_for TIMESTAMPTZ` column (migration: supabase/notifications_scheduled.sql)
@@ -154,7 +165,8 @@ Full AR flow: Quotation → Invoice → Payment Confirmation → Payment Reminde
 - Logo: `${EMAIL_BASE_URL}/logo.png` with `height:auto` (no fixed height to avoid squishing)
 - `sendQuotationEmail` — quotation with PDF attachment + acceptance link
 - `sendInvoiceEmail` — invoice with logo, payment plan schedule section, PDF attachment
-- `sendReceiptEmail` — receipt with logo, payment details, PDF attachment
+- `sendReceiptEmail` — receipt with logo, payment details, PDF attachment (used for both invoice and retainer receipts)
+- `sendStatementEmail` — account statement with financial summary + PDF attachment
 - `sendReminderEmail` — 4-stage payment reminder (teal/amber color per urgency)
 - `sendQuotationAcceptedNotification` — admin notification on client acceptance
 - `sendInviteEmail` — OTP invite for new team members
@@ -213,7 +225,7 @@ Template logic lives in src/lib/document-templates.ts; content in src/lib/docume
 - src/components/layout/Sidebar.tsx — nav with labeled sections, role-aware, live counts
 - src/components/layout/Topbar.tsx — top bar with notification bell
 - src/components/layout/NotificationBell.tsx — unread notification count (scheduled_for aware)
-- src/components/ar/ — AR components: QuotationEditor, QuotationActions, ConvertToInvoiceButton, ReminderActions, GenerateStatementForm, DeleteStatementButton, NewRetainerForm, RetainerStatusButton
+- src/components/ar/ — AR components: QuotationEditor, QuotationActions, ConvertToInvoiceButton, ReminderActions, GenerateStatementForm, DeleteStatementButton, NewRetainerForm, RetainerStatusButton, SendStatementButton, RecordRetainerPaymentButton (portaled modal)
 - src/components/invoices/ — SendInvoiceButton, SendReceiptButton (with preview modal), InvoicePDF, ReceiptPDF, CreditNoteForm, VoidCreditNoteButton, DeleteInvoiceButton
 - src/components/ui/KpiCard.tsx, PageHeader.tsx, StatusBadge.tsx
 - src/components/dashboard/LeadPipelineChart.tsx, RevenueChart.tsx
@@ -226,6 +238,7 @@ Template logic lives in src/lib/document-templates.ts; content in src/lib/docume
 - `/api/docs/retainers/[id]` — retainer PDF (embed/preview/download)
 - `/api/docs/employee-contracts/[id]` — employment contract PDF (embed/preview/download)
 - `/api/docs/quotations/[token]` — quotation PDF via acceptance token
+- `/api/docs/account-statements/[id]` — statement PDF (recalculates balances live, includes scheduled installments)
 
 ## Brand
 - Colors: #30B0B0 (teal), #303030 (dark), #101010 (background)
@@ -246,5 +259,5 @@ Template logic lives in src/lib/document-templates.ts; content in src/lib/docume
 - **Email:** info@swiftdesignz.co.za
 - **Financial year end:** Last day of February each year
 - **Registration effective:** 12 May 2026
-- **Director:** Keenan Husselmann
+- **Member / Managing Member:** Keenan Husselmann (correct title for a CC — not "Director")
 - **Accounting officer:** Rachel N. Kashala (SAIBA 4132)
