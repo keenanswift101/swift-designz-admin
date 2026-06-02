@@ -6,6 +6,8 @@ import {
   Trophy,
   AlertCircle,
   Calendar,
+  RefreshCw,
+  Clock,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import StatCard from "@/components/ui/StatCard";
@@ -24,6 +26,9 @@ export default async function DashboardPage() {
   const mtdStartDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
   const yearStart = new Date(now.getFullYear() - 1, now.getMonth() + 1, 1).toISOString();
 
+  const next30 = new Date(now);
+  next30.setDate(next30.getDate() + 30);
+
   const [
     { count: newLeadsCount },
     { count: activeProjectsCount },
@@ -35,6 +40,10 @@ export default async function DashboardPage() {
     { data: expenseEntries },
     { data: allLeads },
     { data: activeProjectsList },
+    { data: activeRetainers },
+    { data: recentPayments },
+    { data: recentRetainerPayments },
+    { data: upcomingQuotations },
   ] = await Promise.all([
     supabase.from("leads").select("*", { count: "exact", head: true }).eq("status", "new"),
     supabase.from("projects").select("*", { count: "exact", head: true }).eq("status", "in_progress"),
@@ -51,6 +60,19 @@ export default async function DashboardPage() {
       .eq("status", "in_progress")
       .order("due_date", { ascending: true, nullsFirst: false })
       .limit(6),
+    // Retainer MRR
+    supabase.from("retainer_subscriptions").select("monthly_amount").eq("status", "active"),
+    // Cash collected MTD from invoice payments
+    supabase.from("payments").select("amount, paid_at").gte("paid_at", mtdStartDate),
+    // Cash collected MTD from retainer payments
+    supabase.from("retainer_payments").select("amount, payment_date").gte("payment_date", mtdStartDate),
+    // Quotations with upcoming payment plan installments (next 30 days)
+    supabase
+      .from("quotations")
+      .select("id, quote_number, payment_plan_schedule, clients(name)")
+      .eq("status", "converted")
+      .eq("payment_plan_enabled", true)
+      .not("payment_plan_schedule", "is", null),
   ]);
 
   // ── Derived stats ────────────────────────────────────────────────────────
@@ -73,6 +95,47 @@ export default async function DashboardPage() {
   const wonLeads = (allLeads || []).filter((l) => l.status === "won").length;
   const closedLeads = (allLeads || []).filter((l) => l.status === "won" || l.status === "lost").length;
   const winRate = closedLeads > 0 ? Math.round((wonLeads / closedLeads) * 100) : 0;
+
+  // Retainer MRR
+  const retainerMRR = (activeRetainers || []).reduce((s, r) => s + r.monthly_amount, 0);
+
+  // Cash actually collected MTD (invoice payments + retainer payments)
+  const invoiceCashMTD = (recentPayments || []).reduce((s, p) => s + p.amount, 0);
+  const retainerCashMTD = (recentRetainerPayments || []).reduce((s, p) => s + p.amount, 0);
+  const cashCollectedMTD = invoiceCashMTD + retainerCashMTD;
+
+  // Upcoming installments due in next 30 days (from converted quotations with payment plans)
+  type UpcomingInstallment = {
+    quoteNumber: string;
+    clientName: string;
+    label: string;
+    amount: number;
+    dueDate: string;
+  };
+  const todayStr = now.toISOString().slice(0, 10);
+  const next30Str = next30.toISOString().slice(0, 10);
+
+  const upcomingInstallments: UpcomingInstallment[] = [];
+  for (const q of (upcomingQuotations || []) as unknown as {
+    id: string; quote_number: string;
+    payment_plan_schedule: { label: string; amount_cents?: number; amount?: number; due_date?: string; installment_number?: number }[] | null;
+    clients: { name: string } | null;
+  }[]) {
+    if (!q.payment_plan_schedule) continue;
+    for (const entry of q.payment_plan_schedule) {
+      if (!entry.due_date) continue;
+      if (entry.due_date >= todayStr && entry.due_date <= next30Str) {
+        upcomingInstallments.push({
+          quoteNumber: q.quote_number,
+          clientName: q.clients?.name ?? "—",
+          label: entry.label,
+          amount: entry.amount_cents ?? entry.amount ?? 0,
+          dueDate: entry.due_date,
+        });
+      }
+    }
+  }
+  upcomingInstallments.sort((a, b) => a.dueDate.localeCompare(b.dueDate));
 
   // Daily cumulative income sparkline for this month
   const daysInMonth = now.getDate();
@@ -157,18 +220,24 @@ export default async function DashboardPage() {
             <SparklineChart data={sparklineData} />
           </div>
 
-          {/* Margin */}
-          <div className="text-right shrink-0">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Net Margin</p>
-            <p className={`text-4xl font-bold ${marginPct >= 0 ? "text-teal" : "text-red-400"}`}>
-              {marginPct}%
-            </p>
+          {/* Margin + MRR */}
+          <div className="text-right shrink-0 space-y-3">
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Net Margin</p>
+              <p className={`text-4xl font-bold ${marginPct >= 0 ? "text-teal" : "text-red-400"}`}>
+                {marginPct}%
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Cash Collected MTD</p>
+              <p className="text-xl font-bold text-foreground">{formatCurrency(cashCollectedMTD)}</p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ── 6-stat compact grid ─────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+      {/* ── 7-stat compact grid ─────────────────────────────────────────── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
         <StatCard
           title="New Leads"
           value={String(newLeadsCount ?? 0)}
@@ -188,6 +257,13 @@ export default async function DashboardPage() {
           sub="Unpaid invoices"
           icon={FileText}
           accent={outstandingAmount > 0 ? "amber" : "default"}
+        />
+        <StatCard
+          title="Retainer MRR"
+          value={formatCurrency(retainerMRR)}
+          sub={`${(activeRetainers || []).length} active retainer${(activeRetainers || []).length !== 1 ? "s" : ""}`}
+          icon={RefreshCw}
+          accent={retainerMRR > 0 ? "teal" : "default"}
         />
         <StatCard
           title="Win Rate"
@@ -220,6 +296,34 @@ export default async function DashboardPage() {
           <RevenueChart data={revenueData} />
         </div>
       </div>
+
+      {/* ── Upcoming installments ───────────────────────────────────────── */}
+      {upcomingInstallments.length > 0 && (
+        <div className="glass-card p-5 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <Clock className="h-4 w-4 text-amber-400" />
+              Upcoming Payment Plan Installments
+              <span className="text-xs text-gray-500 font-normal">— next 30 days</span>
+            </h2>
+            <Link href="/accounts-receivable/payments" className="text-xs text-teal hover:underline">
+              View payments
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {upcomingInstallments.map((inst, i) => (
+              <div key={i} className="flex items-center justify-between bg-amber-500/5 border border-amber-500/20 rounded-lg px-4 py-3">
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">{inst.clientName}</p>
+                  <p className="text-xs text-gray-500 truncate">{inst.label} · {inst.quoteNumber}</p>
+                  <p className="text-xs text-amber-400 mt-0.5">{formatDate(inst.dueDate)}</p>
+                </div>
+                <p className="text-sm font-bold text-amber-400 tabular-nums ml-3 shrink-0">{formatCurrency(inst.amount)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── Activity row ────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
