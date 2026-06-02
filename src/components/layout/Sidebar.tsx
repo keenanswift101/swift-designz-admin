@@ -74,6 +74,7 @@ const SECTIONS: NavSection[] = [
     label: "Finance",
     items: [
       { href: "/accounting", label: "Accounting", icon: TrendingUp, requiresAccounting: true },
+      { href: "/accounting/pl", label: "P&L Report", icon: BarChart2, requiresAccounting: true },
     ],
   },
   {
