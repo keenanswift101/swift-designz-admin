@@ -827,3 +827,118 @@ export async function sendReminderEmail({
     html: reminderHtml,
   });
 }
+
+// ── Account Statement email ───────────────────────────────────────────────────
+
+interface SendStatementEmailParams {
+  to: string;
+  clientName: string;
+  statementNumber: string;
+  periodFrom: string;
+  periodTo: string;
+  openingBalance: number;
+  totalInvoiced: number;
+  totalPaid: number;
+  closingBalance: number;
+  pdfBuffer?: Buffer;
+}
+
+export async function sendStatementEmail({
+  to,
+  clientName,
+  statementNumber,
+  periodFrom,
+  periodTo,
+  openingBalance,
+  totalInvoiced,
+  totalPaid,
+  closingBalance,
+  pdfBuffer,
+}: SendStatementEmailParams) {
+  const fmt = (d: string) => new Date(d).toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" });
+
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head>
+<body style="margin:0;padding:0;background:#0d0d0d;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="520" cellpadding="0" cellspacing="0" style="background:#111;border:1px solid #222;border-radius:12px;overflow:hidden;max-width:520px;width:100%;">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#0c2020,#081818);padding:28px 32px;border-bottom:1px solid #1a3030;">
+              <table cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding-right:12px;vertical-align:middle;">
+                    <img src="${APP_URL}/logo.png" alt="Swift Designz" width="40" style="display:block;height:auto;border-radius:4px;" />
+                  </td>
+                  <td style="vertical-align:middle;">
+                    <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#30B0B0;">Swift Designz</p>
+                    <p style="margin:4px 0 0;font-size:11px;color:#4a8080;letter-spacing:2px;text-transform:uppercase;">swiftdesignz.co.za</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:32px;">
+              <p style="margin:0 0 6px;font-size:13px;color:#70c0c0;letter-spacing:1px;text-transform:uppercase;">Account Statement</p>
+              <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;color:#fff;">${escapeHtml(statementNumber)}</h1>
+              <p style="margin:0 0 24px;font-size:12px;color:#555;">${fmt(periodFrom)} &ndash; ${fmt(periodTo)}</p>
+
+              <p style="margin:0 0 24px;font-size:14px;color:#aaa;line-height:1.6;">Hi ${escapeHtml(clientName)},<br/>Please find your account statement for the above period attached. A summary is shown below.</p>
+
+              <!-- Financial summary -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:8px;margin:0 0 24px;">
+                <tr><td colspan="2" style="padding:12px 16px;font-size:11px;font-weight:700;color:#30B0B0;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid #1a1a1a;">Summary</td></tr>
+                <tr>
+                  <td style="padding:10px 16px;font-size:12px;color:#666;">Opening Balance</td>
+                  <td style="padding:10px 16px;font-size:12px;color:#ccc;font-weight:600;text-align:right;">${fmtR(openingBalance)}</td>
+                </tr>
+                <tr style="border-top:1px solid #111;">
+                  <td style="padding:10px 16px;font-size:12px;color:#666;">Invoiced in Period</td>
+                  <td style="padding:10px 16px;font-size:12px;color:#ccc;font-weight:600;text-align:right;">${fmtR(totalInvoiced)}</td>
+                </tr>
+                <tr style="border-top:1px solid #111;">
+                  <td style="padding:10px 16px;font-size:12px;color:#666;">Payments Received</td>
+                  <td style="padding:10px 16px;font-size:12px;color:#30B0B0;font-weight:600;text-align:right;">${fmtR(totalPaid)}</td>
+                </tr>
+                <tr style="border-top:1px solid #1a1a1a;">
+                  <td style="padding:10px 16px;font-size:12px;color:#666;font-weight:700;">Closing Balance</td>
+                  <td style="padding:10px 16px;font-size:14px;font-weight:700;text-align:right;color:${closingBalance > 0 ? "#f59e0b" : "#30B0B0"};">${closingBalance > 0 ? fmtR(closingBalance) + " outstanding" : "Nil — account clear"}</td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 6px;font-size:12px;color:#555;line-height:1.6;">Your full statement is attached as a PDF. If you have any queries about this statement, please reply to this email.</p>
+              ${closingBalance > 0 ? `<p style="margin:12px 0 0;font-size:12px;color:#f59e0b;line-height:1.6;">If you have already made payment, please disregard the outstanding balance shown above.</p>` : ""}
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:20px 32px;border-top:1px solid #1a1a1a;">
+              <p style="margin:0;font-size:11px;color:#444;">Swift Designz &middot; swiftdesignz.co.za &middot; keenan@swiftdesignz.co.za</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+  return resend.emails.send({
+    from: "Swift Designz <keenan@swiftdesignz.co.za>",
+    to,
+    subject: `Account Statement ${statementNumber} — ${fmt(periodFrom)} to ${fmt(periodTo)} | Swift Designz`,
+    html,
+    ...(pdfBuffer
+      ? { attachments: [{ filename: `${statementNumber}.pdf`, content: pdfBuffer }] }
+      : {}),
+  });
+}
