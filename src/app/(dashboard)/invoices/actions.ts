@@ -143,7 +143,15 @@ export async function sendReceiptAction(paymentId: string): Promise<{ error: str
   const client = invoice.clients;
   if (!client?.email) return { error: "Client has no email address." };
 
-  const { data: arNum } = await supabase.rpc("generate_ar_number", { p_type: "receipt" });
+  // Check if a confirmation already exists (e.g. resend after email reset)
+  const { data: existingConfirmation } = await supabase
+    .from("payment_confirmations")
+    .select("id, receipt_number")
+    .eq("payment_id", paymentId)
+    .maybeSingle();
+
+  const receiptNumber: string = existingConfirmation?.receipt_number
+    ?? ((await supabase.rpc("generate_ar_number", { p_type: "receipt" })).data as string);
 
   const balance = invoice.amount - invoice.paid_amount;
 
@@ -151,7 +159,7 @@ export async function sendReceiptAction(paymentId: string): Promise<{ error: str
   try {
     pdfBuffer = await renderToBuffer(
       ReceiptPDF({
-        receiptNumber: arNum as string,
+        receiptNumber,
         invoiceNumber: invoice.invoice_number,
         clientName: client.name,
         clientEmail: client.email,
@@ -169,22 +177,28 @@ export async function sendReceiptAction(paymentId: string): Promise<{ error: str
     // PDF failure is non-fatal
   }
 
-  await supabase.from("payment_confirmations").insert({
-    receipt_number: arNum as string,
-    invoice_id: invoice.id,
-    payment_id: paymentId,
-    quotation_id: invoice.quotation_id ?? null,
-    amount: payment.amount,
-    payment_method: payment.method,
-    payment_date: payment.paid_at.split("T")[0],
-    sent_at: new Date().toISOString(),
-    sent_to: client.email,
-  });
+  if (existingConfirmation) {
+    await supabase.from("payment_confirmations")
+      .update({ sent_at: new Date().toISOString(), sent_to: client.email })
+      .eq("id", existingConfirmation.id);
+  } else {
+    await supabase.from("payment_confirmations").insert({
+      receipt_number: receiptNumber,
+      invoice_id: invoice.id,
+      payment_id: paymentId,
+      quotation_id: invoice.quotation_id ?? null,
+      amount: payment.amount,
+      payment_method: payment.method,
+      payment_date: payment.paid_at.split("T")[0],
+      sent_at: new Date().toISOString(),
+      sent_to: client.email,
+    });
+  }
 
   await sendReceiptEmail({
     to: client.email,
     clientName: client.name,
-    receiptNumber: arNum as string,
+    receiptNumber,
     invoiceNumber: invoice.invoice_number,
     paymentAmount: payment.amount,
     paymentMethod: payment.method,

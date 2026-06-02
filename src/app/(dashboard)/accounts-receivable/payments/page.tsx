@@ -21,8 +21,9 @@ export default async function PaymentsPage() {
       .select("payment_id, receipt_number, sent_at"),
   ]);
 
+  // Map payment_id → confirmation. sentAt may be null (confirmation exists but not yet sent/resend needed).
   const sentMap = new Map(
-    (confirmations ?? []).map((c) => [c.payment_id, { receiptNumber: c.receipt_number, sentAt: c.sent_at }])
+    (confirmations ?? []).map((c) => [c.payment_id, { receiptNumber: c.receipt_number, sentAt: c.sent_at as string | null }])
   );
 
   const rows = (payments ?? []) as unknown as {
@@ -96,8 +97,13 @@ export default async function PaymentsPage() {
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1.5 hover:opacity-80 transition-opacity"
                         >
-                          <CheckCircle2 className="h-3.5 w-3.5 text-teal shrink-0" />
-                          <span className="text-xs text-teal font-mono underline underline-offset-2">{receipt.receiptNumber}</span>
+                          {receipt.sentAt
+                            ? <CheckCircle2 className="h-3.5 w-3.5 text-teal shrink-0" />
+                            : <Clock className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                          }
+                          <span className={`text-xs font-mono underline underline-offset-2 ${receipt.sentAt ? "text-teal" : "text-amber-400"}`}>
+                            {receipt.receiptNumber}
+                          </span>
                         </a>
                       ) : (
                         <div className="flex items-center gap-1.5">
@@ -107,7 +113,7 @@ export default async function PaymentsPage() {
                       )}
                     </td>
                     <td className="px-5 py-3 text-center">
-                      {!receipt && (
+                      {!receipt?.sentAt && (
                         <SendReceiptButton
                           paymentId={pay.id}
                           previewData={pay.invoices ? {
