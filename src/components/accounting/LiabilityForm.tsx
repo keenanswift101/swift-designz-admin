@@ -51,7 +51,7 @@ export default function LiabilityForm({ action, defaultValues }: LiabilityFormPr
         <div>
           <label htmlFor="lender" className={LABEL}>Lender / Creditor</label>
           <input id="lender" name="lender" type="text" defaultValue={dv.lender ?? ""}
-            placeholder="e.g. FNB, SARS" className={INPUT} />
+            placeholder="e.g. FNB, NamRA" className={INPUT} />
         </div>
 
         <div>

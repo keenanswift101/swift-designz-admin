@@ -60,11 +60,15 @@ export default async function AccountingPage({ searchParams }: Props) {
     0
   );
 
-  const totalLiabilities = (liabilitiesResult.data ?? []).reduce(
+  // Guard: tables may not exist yet in the live DB — fall back to empty arrays
+  const liabilitiesData = Array.isArray(liabilitiesResult.data) ? liabilitiesResult.data : [];
+  const projectionsData = Array.isArray(projectionsResult.data) ? projectionsResult.data : [];
+
+  const totalLiabilities = liabilitiesData.reduce(
     (s: number, l: { outstanding: number }) => s + l.outstanding,
     0
   );
-  const projections12 = (projectionsResult.data ?? []) as { projected_income: number; projected_expenses: number; month: string }[];
+  const projections12 = projectionsData as { projected_income: number; projected_expenses: number; month: string }[];
   const projMonthsSet = projections12.length;
   const totalProjNet = projections12.reduce((s, p) => s + p.projected_income - p.projected_expenses, 0);
 
@@ -376,8 +380,8 @@ export default async function AccountingPage({ searchParams }: Props) {
             <ArrowUpRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors" />
           </div>
           <h3 className="text-foreground font-semibold">Tax</h3>
-          <p className="text-sm text-gray-500 mt-1">VAT & provisional tax</p>
-          <p className="text-xs text-purple-400/80 font-mono font-medium mt-3">SARS estimates</p>
+          <p className="text-sm text-gray-500 mt-1">Provisional income tax</p>
+          <p className="text-xs text-purple-400/80 font-mono font-medium mt-3">NamRA estimates · 32%</p>
         </Link>
         <Link href="/accounting/reports" className="glass-card p-6 hover:border-teal/30 transition-colors group">
           <div className="flex items-start justify-between mb-3">

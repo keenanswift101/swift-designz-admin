@@ -300,16 +300,46 @@ export async function convertToInvoiceAction(quotationId: string): Promise<{ err
     .sort((a, b) => a.sort_order - b.sort_order);
 
   if (lineItems.length > 0) {
-    const { error: itemsError } = await supabase.from("invoice_items").insert(
-      lineItems.map((item) => ({
+    type InsertItem = { invoice_id: string; description: string; quantity: number; unit_rate: number; amount: number; sort_order: number };
+    let itemsToInsert: InsertItem[];
+
+    if (!hasInstallments) {
+      itemsToInsert = lineItems.map((item) => ({
         invoice_id: invoice.id,
         description: item.description,
         quantity: item.quantity,
         unit_rate: item.unit_rate,
         amount: item.amount,
         sort_order: item.sort_order,
-      }))
-    );
+      }));
+    } else {
+      // Scale each line item's amount proportionally to the installment slice
+      const quoteTotalItems = lineItems.reduce((s, it) => s + it.amount, 0);
+      itemsToInsert = lineItems.map((item) => {
+        const scaledAmount = quoteTotalItems > 0
+          ? Math.round(item.amount * invoiceAmount / quoteTotalItems)
+          : Math.round(invoiceAmount / lineItems.length);
+        const scaledRate = item.quantity > 0 ? Math.round(scaledAmount / item.quantity) : scaledAmount;
+        return {
+          invoice_id: invoice.id,
+          description: item.description,
+          quantity: item.quantity,
+          unit_rate: scaledRate,
+          amount: scaledAmount,
+          sort_order: item.sort_order,
+        };
+      });
+      // Fix any rounding difference so items always sum to exactly invoiceAmount
+      const itemsSum = itemsToInsert.reduce((s, it) => s + it.amount, 0);
+      const diff = invoiceAmount - itemsSum;
+      if (diff !== 0) {
+        const last = itemsToInsert[itemsToInsert.length - 1];
+        last.amount += diff;
+        if (last.quantity > 0) last.unit_rate = Math.round(last.amount / last.quantity);
+      }
+    }
+
+    const { error: itemsError } = await supabase.from("invoice_items").insert(itemsToInsert);
     if (itemsError) return { error: itemsError.message };
   }
 

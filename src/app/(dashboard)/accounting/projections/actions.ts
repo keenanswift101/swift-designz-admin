@@ -26,7 +26,10 @@ export async function upsertProjectionAction(formData: FormData) {
     { onConflict: "month" },
   );
 
-  if (error) return { error: error.message };
+  if (error) {
+    if (error.code === "42P01") return { error: "Run supabase/missing_tables.sql in the Supabase SQL editor first." };
+    return { error: error.message };
+  }
 
   revalidatePath("/accounting/projections");
   revalidatePath("/accounting");

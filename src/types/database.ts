@@ -120,6 +120,8 @@ export interface Invoice {
   due_date: string;
   paid_date: string | null;
   paid_amount: number;
+  quotation_id: string | null;
+  installment_number: number | null;
   payment_plan_enabled: boolean;
   installment_count: number | null;
   installment_interval: InstallmentInterval | null;

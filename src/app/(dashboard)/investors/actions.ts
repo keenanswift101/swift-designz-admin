@@ -2,9 +2,11 @@
 
 import { requireAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { InvestorStatus } from "@/types/database";
+import { sendReceiptEmail } from "@/lib/email";
 
 export async function createInvestorAction(formData: FormData) {
   await requireAuth();
@@ -135,4 +137,73 @@ export async function addContributionAction(investorId: string, formData: FormDa
   revalidatePath("/accounting/income");
   revalidatePath("/accounting");
   redirect(`/investors/${investorId}`);
+}
+
+export async function sendInvestorReceiptAction(
+  entryId: string
+): Promise<{ error: string } | { ok: true }> {
+  await requireAuth();
+  const supabase = createAdminClient();
+
+  // Fetch the contribution entry joined with investor details
+  const { data: entry } = await supabase
+    .from("income_entries")
+    .select(`
+      id, amount, description, date, receipt_number, sent_at,
+      investors(id, name, email, investment_amount)
+    `)
+    .eq("id", entryId)
+    .eq("source", "investor")
+    .single();
+
+  if (!entry) return { error: "Contribution not found." };
+
+  type Inv = { id: string; name: string; email: string | null; investment_amount: number };
+  const investor = entry.investors as unknown as Inv | null;
+  if (!investor?.email) return { error: "Investor has no email address." };
+
+  // Generate receipt number if not yet assigned
+  let receiptNumber = entry.receipt_number as string | null;
+  if (!receiptNumber) {
+    const { data: num } = await supabase.rpc("generate_ar_number", { p_type: "receipt" });
+    receiptNumber = num as string;
+    await supabase
+      .from("income_entries")
+      .update({ receipt_number: receiptNumber })
+      .eq("id", entryId);
+  }
+
+  // Compute total contributed (all entries for this investor) to derive remaining balance
+  const { data: allEntries } = await supabase
+    .from("income_entries")
+    .select("amount")
+    .eq("investor_id", investor.id)
+    .eq("source", "investor");
+  const totalContributed = (allEntries ?? []).reduce((s: number, e: { amount: number }) => s + e.amount, 0);
+  const remaining = Math.max(0, investor.investment_amount - totalContributed);
+
+  try {
+    await sendReceiptEmail({
+      to: investor.email,
+      clientName: investor.name,
+      receiptNumber: receiptNumber!,
+      invoiceNumber: (entry.description as string) || "Capital Contribution",
+      paymentAmount: entry.amount as number,
+      paymentMethod: "eft",
+      paymentDate: entry.date as string,
+      invoiceTotal: investor.investment_amount,
+      balance: remaining,
+    });
+  } catch (err) {
+    return { error: `Email failed: ${String(err)}` };
+  }
+
+  await supabase
+    .from("income_entries")
+    .update({ sent_at: new Date().toISOString(), sent_to: investor.email })
+    .eq("id", entryId);
+
+  revalidatePath("/accounts-receivable/payments");
+  revalidatePath(`/investors/${investor.id}`);
+  return { ok: true };
 }

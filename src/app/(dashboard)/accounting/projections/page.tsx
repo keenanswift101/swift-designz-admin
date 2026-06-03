@@ -37,7 +37,8 @@ export default async function ProjectionsPage() {
       .gte("date", firstMonth),
   ]);
 
-  const projections = (projectionsResult.data ?? []) as RevenueProjection[];
+  // Guard: table may not exist yet in the live DB
+  const projections = (Array.isArray(projectionsResult.data) ? projectionsResult.data : []) as RevenueProjection[];
   const incomeEntries = (incomeResult.data ?? []) as { amount: number; date: string }[];
   const expenseEntries = (expensesResult.data ?? []) as { amount: number; date: string }[];
 

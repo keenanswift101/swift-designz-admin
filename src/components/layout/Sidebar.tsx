@@ -64,10 +64,6 @@ const SECTIONS: NavSection[] = [
     items: [
       { href: "/accounts-receivable/quotations", label: "Quotations", icon: ClipboardList, countKey: "quotations" },
       { href: "/invoices",                       label: "Billing",    icon: DollarSign,    countKey: "invoices" },
-      { href: "/accounts-receivable/payments",   label: "Payments",   icon: CreditCard,    countKey: "payments" },
-      { href: "/accounts-receivable/reminders",  label: "Reminders",  icon: Bell,          countKey: "payment_reminders" },
-      { href: "/accounts-receivable/statements", label: "Statements", icon: FileText,      countKey: "account_statements" },
-      { href: "/accounts-receivable/retainers",  label: "Retainers",  icon: RefreshCw,     countKey: "retainer_subscriptions" },
     ],
   },
   {

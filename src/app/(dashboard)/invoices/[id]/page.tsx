@@ -150,7 +150,7 @@ export default async function InvoiceDetailPage({
                 ) : (
                   <tr className="border-t border-border">
                     <td colSpan={3} className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Subtotal</td>
-                    <td className="px-6 py-3 text-right text-sm font-bold text-foreground font-mono">{formatCurrency(invoice.amount)}</td>
+                    <td className="px-6 py-3 text-right text-sm font-bold text-foreground font-mono">{formatCurrency(itemsSubtotal)}</td>
                   </tr>
                 )}
                 {!isQuotation && invoice.paid_amount > 0 && (
