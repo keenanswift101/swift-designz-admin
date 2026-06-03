@@ -16,11 +16,7 @@ import {
   Package,
   BarChart2,
   ClipboardList,
-  Bell,
   DollarSign,
-  CreditCard,
-  FileText,
-  RefreshCw,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
