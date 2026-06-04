@@ -1,5 +1,5 @@
 import { Document, Page, View, Text, Image } from "@react-pdf/renderer";
-import { ds, C } from "./pdf-styles";
+import { ds } from "./pdf-styles";
 import type { TemplateDocument, ContentBlock } from "./pdf-styles";
 
 interface Props {
@@ -12,24 +12,23 @@ function BankingSection() {
   return (
     <View style={ds.bankingBox}>
       <Text style={ds.bankingLabel}>Banking Details (EFT)</Text>
-      {/* Namibia / International */}
-      <Text style={{ fontSize: 7, fontWeight: 700, letterSpacing: 2, color: "#444", marginBottom: 6, textTransform: "uppercase" as const }}>Namibia / International — Bank Windhoek</Text>
+      <Text style={{ fontSize: 7, fontWeight: 700, letterSpacing: 2, color: "#444", marginBottom: 6, textTransform: "uppercase" as const }}>Bank Windhoek — Maerua Mall (WHK)</Text>
       <View style={ds.bankingGrid}>
         <View style={ds.bankingItem}>
           <Text style={ds.bankingKey}>Account Holder</Text>
-          <Text style={ds.bankingVal}>Keenan Husselmann</Text>
+          <Text style={ds.bankingVal}>Swift Designz Investments CC</Text>
         </View>
         <View style={ds.bankingItem}>
           <Text style={ds.bankingKey}>Bank</Text>
-          <Text style={ds.bankingVal}>Bank Windhoek</Text>
+          <Text style={ds.bankingVal}>Bank Windhoek Limited</Text>
         </View>
         <View style={ds.bankingItem}>
           <Text style={ds.bankingKey}>Account Number</Text>
-          <Text style={ds.bankingVal}>8025331126</Text>
+          <Text style={ds.bankingVal}>8056219849</Text>
         </View>
         <View style={ds.bankingItem}>
           <Text style={ds.bankingKey}>Branch Code</Text>
-          <Text style={ds.bankingVal}>481-972</Text>
+          <Text style={ds.bankingVal}>483-872</Text>
         </View>
         <View style={ds.bankingItem}>
           <Text style={ds.bankingKey}>Account Type</Text>
@@ -38,32 +37,6 @@ function BankingSection() {
         <View style={ds.bankingItem}>
           <Text style={ds.bankingKey}>Swift Code</Text>
           <Text style={ds.bankingVal}>BWLINANX</Text>
-        </View>
-      </View>
-      {/* Divider */}
-      <View style={{ borderBottomWidth: 1, borderColor: C.border, marginVertical: 8 }} />
-      {/* South Africa — ABSA */}
-      <Text style={{ fontSize: 7, fontWeight: 700, letterSpacing: 2, color: "#444", marginBottom: 6, textTransform: "uppercase" as const }}>South African Clients — ABSA</Text>
-      <View style={ds.bankingGrid}>
-        <View style={ds.bankingItem}>
-          <Text style={ds.bankingKey}>Account Name</Text>
-          <Text style={ds.bankingVal}>Leon Lourens Husselmann</Text>
-        </View>
-        <View style={ds.bankingItem}>
-          <Text style={ds.bankingKey}>Bank</Text>
-          <Text style={ds.bankingVal}>ABSA Bank</Text>
-        </View>
-        <View style={ds.bankingItem}>
-          <Text style={ds.bankingKey}>Account Number</Text>
-          <Text style={ds.bankingVal}>9325564310</Text>
-        </View>
-        <View style={ds.bankingItem}>
-          <Text style={ds.bankingKey}>Branch Code</Text>
-          <Text style={ds.bankingVal}>632005</Text>
-        </View>
-        <View style={ds.bankingItem}>
-          <Text style={ds.bankingKey}>Account Type</Text>
-          <Text style={ds.bankingVal}>Current / Cheque</Text>
         </View>
       </View>
     </View>

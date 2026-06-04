@@ -241,11 +241,11 @@ export default function InvoicePDF({
           </View>
           <View style={s.party}>
             <Text style={s.partyLabel}>From</Text>
-            <Text style={s.partyName}>Keenan Husselmann</Text>
-            <Text style={s.partyLine}>Trading as Swift Designz</Text>
-            <Text style={s.partyLine}>keenan@swiftdesignz.co.za</Text>
+            <Text style={s.partyName}>Swift Designz Investments CC</Text>
+            <Text style={s.partyLine}>CC/2026/05589</Text>
+            <Text style={s.partyLine}>info@swiftdesignz.co.za</Text>
             <Text style={s.partyLine}>+264 81 853 6789</Text>
-            <Text style={s.partyLine}>Remote · Worldwide</Text>
+            <Text style={s.partyLine}>Windhoek, Namibia</Text>
           </View>
         </View>
 
@@ -394,20 +394,19 @@ export default function InvoicePDF({
         {!isQuotation && (
           <View style={s.bankingBox}>
             <Text style={s.bankingLabel}>Banking Details — EFT Payment</Text>
-            {/* Namibia / International */}
-            <Text style={s.bankingSubLabel}>Namibia / International — Bank Windhoek</Text>
+            <Text style={s.bankingSubLabel}>Bank Windhoek — Maerua Mall (WHK)</Text>
             <View style={s.bankingGrid}>
               <View style={s.bankingItem}>
                 <Text style={s.bankingKey}>Account Name</Text>
-                <Text style={s.bankingVal}>Keenan Husselmann</Text>
+                <Text style={s.bankingVal}>Swift Designz Investments CC</Text>
               </View>
               <View style={s.bankingItem}>
                 <Text style={s.bankingKey}>Bank</Text>
-                <Text style={s.bankingVal}>Bank Windhoek Ltd.</Text>
+                <Text style={s.bankingVal}>Bank Windhoek Limited</Text>
               </View>
               <View style={s.bankingItem}>
                 <Text style={s.bankingKey}>Account Number</Text>
-                <Text style={s.bankingVal}>8025331126</Text>
+                <Text style={s.bankingVal}>8056219849</Text>
               </View>
               <View style={s.bankingItem}>
                 <Text style={s.bankingKey}>Account Type</Text>
@@ -415,36 +414,11 @@ export default function InvoicePDF({
               </View>
               <View style={s.bankingItem}>
                 <Text style={s.bankingKey}>Branch Code</Text>
-                <Text style={s.bankingVal}>481-972</Text>
+                <Text style={s.bankingVal}>483-872</Text>
               </View>
               <View style={s.bankingItem}>
                 <Text style={s.bankingKey}>Swift Code</Text>
                 <Text style={s.bankingVal}>BWLINANX</Text>
-              </View>
-            </View>
-            <View style={s.bankingDivider} />
-            {/* South Africa — ABSA */}
-            <Text style={s.bankingSubLabel}>South African Clients — ABSA</Text>
-            <View style={s.bankingGrid}>
-              <View style={s.bankingItem}>
-                <Text style={s.bankingKey}>Account Name</Text>
-                <Text style={s.bankingVal}>Leon Lourens Husselmann</Text>
-              </View>
-              <View style={s.bankingItem}>
-                <Text style={s.bankingKey}>Bank</Text>
-                <Text style={s.bankingVal}>ABSA Bank</Text>
-              </View>
-              <View style={s.bankingItem}>
-                <Text style={s.bankingKey}>Account Number</Text>
-                <Text style={s.bankingVal}>9325564310</Text>
-              </View>
-              <View style={s.bankingItem}>
-                <Text style={s.bankingKey}>Account Type</Text>
-                <Text style={s.bankingVal}>Current / Cheque</Text>
-              </View>
-              <View style={s.bankingItem}>
-                <Text style={s.bankingKey}>Branch Code</Text>
-                <Text style={s.bankingVal}>632005</Text>
               </View>
             </View>
             <Text style={s.bankingRef}>

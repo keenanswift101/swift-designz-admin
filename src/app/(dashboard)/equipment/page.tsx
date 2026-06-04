@@ -4,7 +4,7 @@ import StatusBadge from "@/components/ui/StatusBadge";
 import { formatCurrency } from "@/lib/utils";
 import Link from "next/link";
 import type { Equipment, EquipmentCategory } from "@/types/database";
-import { Package, DollarSign, Cpu, Key, Armchair, ArrowUpRight } from "lucide-react";
+import { Package, DollarSign, Cpu, Key, Armchair, ArrowUpRight, FileDown } from "lucide-react";
 
 const categoryConfig: Record<EquipmentCategory, { label: string; color: string; bg: string }> = {
   computing:        { label: "Computing",        color: "text-blue-400",   bg: "bg-blue-400/10" },
@@ -110,12 +110,22 @@ export default async function EquipmentPage() {
         title="Equipment Registry"
         description="Track company assets, hardware, and software licences"
         actions={
-          <Link
-            href="/equipment/new"
-            className="px-4 py-2 bg-teal hover:bg-teal-hover text-white text-sm font-medium rounded-lg transition-colors"
-          >
-            Add Equipment
-          </Link>
+          <div className="flex items-center gap-2">
+            <a
+              href="/api/docs/equipment-list"
+              download
+              className="flex items-center gap-1.5 px-4 py-2 bg-card border border-border hover:border-teal text-foreground text-sm font-medium rounded-lg transition-colors"
+            >
+              <FileDown className="h-4 w-4" />
+              Insurance PDF
+            </a>
+            <Link
+              href="/equipment/new"
+              className="px-4 py-2 bg-teal hover:bg-teal-hover text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              Add Equipment
+            </Link>
+          </div>
         }
       />
 
