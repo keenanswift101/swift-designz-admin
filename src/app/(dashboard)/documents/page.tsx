@@ -69,8 +69,24 @@ export default async function DocumentsPage() {
         </div>
       </div>
 
-      {/* NYDF loan documents */}
+      {/* Funding documents */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <a
+          href="/api/docs/nydf-business-plan-docx"
+          download
+          className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal/10">
+              <FileText className="h-5 w-5 text-teal" />
+            </span>
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">NYDF / DBN Business Plan 2026</h3>
+              <p className="text-xs text-gray-500 mt-0.5">Full business plan for the NYDF / DBN loan application</p>
+            </div>
+          </div>
+          <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
+        </a>
         <a
           href="/api/docs/business-plan-docx"
           download
@@ -81,8 +97,8 @@ export default async function DocumentsPage() {
               <FileText className="h-5 w-5 text-blue-400" />
             </span>
             <div>
-              <h3 className="text-sm font-semibold text-foreground">NYDF Business Plan 2026 (.docx)</h3>
-              <p className="text-xs text-gray-500 mt-0.5">Word document version — editable, for institutions requiring .docx</p>
+              <h3 className="text-sm font-semibold text-foreground">Business Plan for Funding 2026</h3>
+              <p className="text-xs text-gray-500 mt-0.5">General business plan for smaller funding amounts and investors</p>
             </div>
           </div>
           <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
