@@ -42,3 +42,6 @@ next-env.d.ts
 
 # supabase cli temp files
 supabase/.temp/
+
+# local business documents (PDFs, forms, personal docs — not for repo)
+/_docs/
