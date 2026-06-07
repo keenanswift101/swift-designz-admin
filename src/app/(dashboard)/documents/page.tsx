@@ -72,38 +72,6 @@ export default async function DocumentsPage() {
       {/* NYDF loan documents */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <a
-          href="/api/docs/business-plan"
-          download
-          className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors group"
-        >
-          <div className="flex items-center gap-4">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal/10">
-              <FileText className="h-5 w-5 text-teal" />
-            </span>
-            <div>
-              <h3 className="text-sm font-semibold text-foreground">NYDF Business Plan 2026</h3>
-              <p className="text-xs text-gray-500 mt-0.5">Full business plan PDF for DBN loan application</p>
-            </div>
-          </div>
-          <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
-        </a>
-        <a
-          href="/api/docs/generic-business-plan"
-          download
-          className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors group"
-        >
-          <div className="flex items-center gap-4">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal/10">
-              <FileText className="h-5 w-5 text-teal" />
-            </span>
-            <div>
-              <h3 className="text-sm font-semibold text-foreground">Generic Business Plan 2026</h3>
-              <p className="text-xs text-gray-500 mt-0.5">Institution-neutral version for banks and other lenders</p>
-            </div>
-          </div>
-          <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
-        </a>
-        <a
           href="/api/docs/business-plan-docx"
           download
           className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors group"
