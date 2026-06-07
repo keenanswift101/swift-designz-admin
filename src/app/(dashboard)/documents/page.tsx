@@ -104,6 +104,22 @@ export default async function DocumentsPage() {
           <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
         </a>
         <a
+          href="/api/docs/generic-business-plan-docx"
+          download
+          className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10">
+              <FileText className="h-5 w-5 text-purple-400" />
+            </span>
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">Business Plan 2026 — General</h3>
+              <p className="text-xs text-gray-500 mt-0.5">Full funding plan for banks, private investors, and lenders</p>
+            </div>
+          </div>
+          <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
+        </a>
+        <a
           href="/api/docs/equipment-checklist"
           download
           className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors group"
