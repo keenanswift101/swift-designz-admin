@@ -1,22 +1,25 @@
-import { generateBusinessPlanDocx } from "@/lib/business-plan-docx";
 import { createClient } from "@/lib/supabase/server";
+import fs from "fs";
+import path from "path";
 
 export async function GET() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return new Response("Unauthorized", { status: 401 });
 
-  try {
-    const buffer = await generateBusinessPlanDocx();
-    return new Response(new Uint8Array(buffer), {
-      headers: {
-        "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "Content-Disposition": 'attachment; filename="Swift-Designz-NYDF-Business-Plan-2026.docx"',
-        "Cache-Control": "no-store",
-      },
-    });
-  } catch (err) {
-    console.error("[business-plan DOCX] error:", err);
-    return new Response(String(err), { status: 500 });
+  const filePath = path.join(process.cwd(), "public", "docs", "business-plan.docx");
+
+  if (!fs.existsSync(filePath)) {
+    return new Response("Business plan document not found", { status: 404 });
   }
+
+  const buffer = fs.readFileSync(filePath);
+
+  return new Response(new Uint8Array(buffer), {
+    headers: {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "Content-Disposition": 'attachment; filename="Swift-Designz-Business-Plan-for-Funding.docx"',
+      "Cache-Control": "no-store",
+    },
+  });
 }
