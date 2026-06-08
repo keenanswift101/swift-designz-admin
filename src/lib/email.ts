@@ -381,9 +381,31 @@ export async function sendInvoiceEmail({
 
               ${notes ? `<div style="background:#f0fafa;border-left:3px solid #30B0B0;padding:12px 16px;margin:0 0 24px;border-radius:0 6px 6px 0;"><p style="margin:0;font-size:13px;color:#555555;line-height:1.6;">${escapeHtml(notes)}</p></div>` : ""}
 
+              <!-- Proof of payment instructions -->
+              <div style="background:#f0fafa;border:1px solid #c0e8e8;border-radius:8px;padding:16px 20px;margin:0 0 24px;">
+                <p style="margin:0 0 10px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#30B0B0;">How to Submit Proof of Payment</p>
+                <table cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding:4px 10px 4px 0;vertical-align:top;font-size:12px;font-weight:700;color:#30B0B0;white-space:nowrap;">1.</td>
+                    <td style="padding:4px 0;font-size:13px;color:#444444;line-height:1.7;">Use <strong style="color:#111111;">${escapeHtml(invoiceNumber)}</strong> as your payment reference when making the EFT.</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 10px 4px 0;vertical-align:top;font-size:12px;font-weight:700;color:#30B0B0;white-space:nowrap;">2.</td>
+                    <td style="padding:4px 0;font-size:13px;color:#444444;line-height:1.7;">After paying, email your bank-generated proof of payment to <strong style="color:#111111;">info@swiftdesignz.co.za</strong> — attach it as a <strong style="color:#111111;">PDF</strong>.</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 10px 4px 0;vertical-align:top;font-size:12px;font-weight:700;color:#30B0B0;white-space:nowrap;">3.</td>
+                    <td style="padding:4px 0;font-size:13px;color:#444444;line-height:1.7;">Use this exact subject line: <strong style="color:#111111;">Proof of Payment – ${escapeHtml(invoiceNumber)}</strong></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 10px 4px 0;vertical-align:top;font-size:12px;font-weight:700;color:#30B0B0;white-space:nowrap;">4.</td>
+                    <td style="padding:4px 0;font-size:13px;color:#444444;line-height:1.7;">Our system will automatically process your proof and send a payment receipt to your email.</td>
+                  </tr>
+                </table>
+              </div>
+
               <p style="margin:0;font-size:13px;color:#777777;line-height:1.6;">
-                Please use <strong style="color:#333333;">${escapeHtml(invoiceNumber)}</strong> as your payment reference.<br/>
-                If you have any questions, reply to this email or contact us at keenan@swiftdesignz.co.za.
+                If you have any questions, reply to this email or contact us at info@swiftdesignz.co.za.
               </p>
             </td>
           </tr>

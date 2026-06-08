@@ -24,8 +24,11 @@ export default function SendInvoiceButton({ invoiceId }: { invoiceId: string }) 
       const result = await sendInvoiceAction(invoiceId);
       if ("error" in result) {
         toast.error(result.error);
-      } else {
+      } else if (result.warning) {
         toast.success("Invoice sent!");
+        setTimeout(() => toast.error(result.warning!), 800);
+      } else {
+        toast.success("Invoice sent! Payment reminders scheduled.");
       }
     } finally {
       setLoading(false);

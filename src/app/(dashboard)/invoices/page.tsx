@@ -15,6 +15,7 @@ import type { Invoice } from "@/types/database";
 import RemindersTab from "./_tabs/RemindersTab";
 import StatementsTab from "./_tabs/StatementsTab";
 import RetainersTab from "./_tabs/RetainersTab";
+import InboxScanTab from "./_tabs/InboxScanTab";
 
 type InvoiceWithClient = Invoice & { clients: { name: string } | null };
 
@@ -164,6 +165,7 @@ export default async function InvoicesPage({ searchParams }: Props) {
           { key: "reminders",    label: "Reminders"  },
           { key: "statements",   label: "Statements" },
           { key: "retainers",    label: "Retainers"  },
+          { key: "inbox",        label: "Inbox Scan" },
         ].map(({ key, label }) => {
           const isActive = tab === key || (!tab && !key);
           const href = key ? `/invoices?tab=${key}` : "/invoices";
@@ -330,6 +332,9 @@ export default async function InvoicesPage({ searchParams }: Props) {
 
       {/* ── RETAINERS TAB ───────────────────────────────────── */}
       {tab === "retainers" && <RetainersTab />}
+
+      {/* ── INBOX SCAN TAB ──────────────────────────────────── */}
+      {tab === "inbox" && <InboxScanTab />}
 
       {/* ── PAYMENTS TAB ────────────────────────────────────── */}
       {isPaymentsTab && (

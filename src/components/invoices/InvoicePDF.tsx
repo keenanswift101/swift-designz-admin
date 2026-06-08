@@ -424,6 +424,23 @@ export default function InvoicePDF({
             <Text style={s.bankingRef}>
               Reference: {invoiceNumber} — Always include your invoice number as the payment reference.
             </Text>
+            <View style={{ borderTopWidth: 1, borderColor: border, marginTop: 8, paddingTop: 8 }}>
+              <Text style={{ fontSize: 7, fontWeight: 700, letterSpacing: 2, color: teal, textTransform: "uppercase" as const, marginBottom: 5 }}>
+                Submitting Proof of Payment
+              </Text>
+              <Text style={{ fontSize: 7.5, color: "#444", lineHeight: 1.7, marginBottom: 2 }}>
+                1. Use {invoiceNumber} as your payment reference when making the EFT.
+              </Text>
+              <Text style={{ fontSize: 7.5, color: "#444", lineHeight: 1.7, marginBottom: 2 }}>
+                2. Email your bank-generated proof of payment (PDF) to info@swiftdesignz.co.za
+              </Text>
+              <Text style={{ fontSize: 7.5, color: "#444", lineHeight: 1.7, marginBottom: 2 }}>
+                3. Subject line: Proof of Payment – {invoiceNumber}
+              </Text>
+              <Text style={{ fontSize: 7.5, color: "#444", lineHeight: 1.7 }}>
+                4. Our system will process your proof and send a receipt automatically.
+              </Text>
+            </View>
           </View>
         )}
 

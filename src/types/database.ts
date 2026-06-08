@@ -1,4 +1,4 @@
-export type UserRole = "admin" | "viewer" | "investor";
+export type UserRole = "admin" | "viewer" | "investor" | "employee";
 export type LeadSource = "quote_form" | "contact_form" | "manual";
 export type LeadStatus = "new" | "contacted" | "quoted" | "won" | "lost";
 export type ProjectStatus = "planning" | "in_progress" | "review" | "completed" | "on_hold" | "cancelled";

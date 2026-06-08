@@ -17,6 +17,7 @@ import {
   BarChart2,
   ClipboardList,
   DollarSign,
+  Wallet,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -37,6 +38,7 @@ interface NavItem {
   countKey?: string;
   viewerHidden?: boolean;
   requiresAccounting?: boolean;
+  exact?: boolean;
 }
 
 interface NavSection {
@@ -65,8 +67,9 @@ const SECTIONS: NavSection[] = [
   {
     label: "Finance",
     items: [
-      { href: "/accounting", label: "Accounting", icon: TrendingUp, requiresAccounting: true },
+      { href: "/accounting", label: "Accounting", icon: TrendingUp, requiresAccounting: true, exact: true },
       { href: "/accounting/pl", label: "P&L Report", icon: BarChart2, requiresAccounting: true },
+      { href: "/payroll", label: "Payroll", icon: Wallet },
     ],
   },
   {
@@ -92,6 +95,11 @@ const SECTIONS: NavSection[] = [
   },
 ];
 
+const EMPLOYEE_NAV: NavItem[] = [
+  { href: "/documents", label: "Documents", icon: FolderOpen, countKey: "documents" },
+  { href: "/settings",  label: "Settings",  icon: Settings },
+];
+
 const INVESTOR_NAV: NavItem[] = [
   { href: "/",                   label: "Dashboard", icon: LayoutDashboard },
   { href: "/projects",           label: "Projects",  icon: Briefcase,  countKey: "projects" },
@@ -106,9 +114,10 @@ export default function Sidebar({ profile, initialCounts, mobileOpen, onMobileCl
   const counts = initialCounts;
   const documentLibraryCount = getDocumentLibraryCountForRole(profile?.role);
   const isViewer = profile?.role === "viewer";
+  const isEmployee = profile?.role === "employee";
 
-  const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
+  const isActive = (href: string, exact?: boolean) => {
+    if (href === "/" || exact) return pathname === href;
     return pathname.startsWith(href);
   };
 
@@ -122,7 +131,7 @@ export default function Sidebar({ profile, initialCounts, mobileOpen, onMobileCl
 
   function renderNavItem(item: NavItem) {
     const Icon = item.icon;
-    const active = isActive(item.href);
+    const active = isActive(item.href, item.exact);
     const count = getCount(item);
     return (
       <li key={item.href}>
@@ -159,6 +168,8 @@ export default function Sidebar({ profile, initialCounts, mobileOpen, onMobileCl
           <p className="text-xs text-teal-muted">
             {profile?.role === "investor"
               ? "Investor Portal"
+              : isEmployee
+              ? "Team Portal"
               : isViewer && profile?.accounting_access
               ? "Intern Admin"
               : "Admin Portal"}
@@ -168,11 +179,15 @@ export default function Sidebar({ profile, initialCounts, mobileOpen, onMobileCl
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
-        {profile?.role === "investor" ? (
+        {isEmployee ? (
+          <ul className="space-y-1">
+            {EMPLOYEE_NAV.map((item) => renderNavItem(item))}
+          </ul>
+        ) : profile?.role === "investor" ? (
           <ul className="space-y-1">
             {INVESTOR_NAV.map((item) => {
               const Icon = item.icon;
-              const active = isActive(item.href);
+              const active = isActive(item.href, item.exact);
               const count = item.countKey === "documents"
                 ? documentLibraryCount
                 : item.countKey ? counts[item.countKey] ?? 0 : null;

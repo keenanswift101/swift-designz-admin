@@ -69,8 +69,8 @@ export default async function DocumentsPage() {
         </div>
       </div>
 
-      {/* Funding documents */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+      {/* Funding documents — admin/viewer only */}
+      {role !== "employee" && <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <a
           href="/api/docs/nydf-business-plan-docx"
           download
@@ -135,10 +135,10 @@ export default async function DocumentsPage() {
           </div>
           <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
         </a>
-      </div>
+      </div>}
 
-      {/* Dynamic contract builders */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      {/* Dynamic contract builders — admin/viewer only */}
+      {role !== "employee" && <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <Link
           href="/documents/retainers"
           className="glass-card p-5 flex items-center justify-between gap-4 hover:border-teal/50 transition-colors group"
@@ -170,7 +170,7 @@ export default async function DocumentsPage() {
           </div>
           <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-teal transition-colors shrink-0" />
         </Link>
-      </div>
+      </div>}
 
       {/* Category cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

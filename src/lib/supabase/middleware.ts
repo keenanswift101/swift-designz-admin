@@ -2,6 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 const INVESTOR_ALLOWED_PATHS = ["/", "/investors", "/projects", "/accounting/reports", "/equipment", "/documents"];
+const EMPLOYEE_ALLOWED_PATHS = ["/documents", "/settings"];
+const EMPLOYEE_BLOCKED_PATHS = ["/documents/retainers", "/documents/employee-contracts"];
 const PUBLIC_PATHS = ["/login", "/auth/callback", "/auth/set-password", "/auth/magic", "/accept", "/api/accept", "/api/docs/quotations", "/api/leads"];
 const INVESTOR_ONBOARDING_PATH = "/investors/onboarding";
 const STATIC_FILE_RE = /\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js|map|txt|xml|html|pdf)$/i;
@@ -60,7 +62,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Allow auth callback and login pages to be reached without a session.
-  if (!user && !isPublicPath(request.nextUrl.pathname)) {
+  if (!user && !isPublicPath(request.nextUrl.pathname) && !isStaticOrSystemPath(request.nextUrl.pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
@@ -73,13 +75,28 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Investor route guard — restrict to allowed pages only
+  // Role-based route guards
   if (user && !isStaticOrSystemPath(request.nextUrl.pathname)) {
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", user.id)
       .single();
+
+    // Employee: only /documents (excluding retainers/contracts) and /settings
+    if (profile?.role === "employee") {
+      const blocked = EMPLOYEE_BLOCKED_PATHS.some(
+        (p) => request.nextUrl.pathname === p || request.nextUrl.pathname.startsWith(p + "/"),
+      );
+      const allowed = !blocked && EMPLOYEE_ALLOWED_PATHS.some(
+        (p) => request.nextUrl.pathname === p || request.nextUrl.pathname.startsWith(p + "/"),
+      );
+      if (!allowed) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/documents";
+        return NextResponse.redirect(url);
+      }
+    }
 
     if (profile?.role === "investor") {
       const completedOnboarding = hasCompletedInvestorOnboarding(user);

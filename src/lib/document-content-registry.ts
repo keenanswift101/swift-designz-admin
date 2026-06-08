@@ -17,6 +17,29 @@ import {
   investorGovernanceCharter,
   familyInvestmentOverview,
 } from "./document-content-investor";
+import {
+  companyOverview,
+  brandGuide,
+  orgStructure,
+  employeeNda,
+  dataProtectionPolicy,
+  acceptableUsePolicy,
+  codeOfConduct,
+  sopClientOnboarding,
+  sopProjectManagement,
+  sopDesignProcess,
+  sopDevelopmentWorkflow,
+  sopQaTesting,
+  sopClientCommunication,
+  sopChangeRequest,
+  sopDeployment,
+  hrLeavePolicy,
+  hrRemoteWork,
+  hrExpenseClaims,
+  hrPerformanceReview,
+  conflictResolutionPolicy,
+  grievanceProcedure,
+} from "./document-content-employee";
 
 /**
  * Maps document slugs (from DOCUMENT_TEMPLATES) to their PDF content definitions.
@@ -37,6 +60,28 @@ const DOCUMENT_CONTENT_REGISTRY: Record<string, TemplateDocument> = {
   "investor-reporting-policy": investorReportingPolicy,
   "investor-governance-charter": investorGovernanceCharter,
   "family-investment-overview": familyInvestmentOverview,
+  // Employee documents
+  "company-overview":         companyOverview,
+  "brand-guide":              brandGuide,
+  "org-structure":            orgStructure,
+  "employee-nda":             employeeNda,
+  "data-protection-policy":   dataProtectionPolicy,
+  "acceptable-use-policy":    acceptableUsePolicy,
+  "code-of-conduct":          codeOfConduct,
+  "sop-client-onboarding":    sopClientOnboarding,
+  "sop-project-management":   sopProjectManagement,
+  "sop-design-process":       sopDesignProcess,
+  "sop-development-workflow": sopDevelopmentWorkflow,
+  "sop-qa-testing":           sopQaTesting,
+  "sop-client-communication": sopClientCommunication,
+  "sop-change-request":       sopChangeRequest,
+  "sop-deployment":           sopDeployment,
+  "hr-leave-policy":          hrLeavePolicy,
+  "hr-remote-work":           hrRemoteWork,
+  "hr-expense-claims":        hrExpenseClaims,
+  "hr-performance-review":    hrPerformanceReview,
+  "conflict-resolution":      conflictResolutionPolicy,
+  "grievance-procedure":      grievanceProcedure,
 };
 
 export function getTemplateContent(slug: string): TemplateDocument | null {

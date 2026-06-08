@@ -24,7 +24,7 @@ function loadLogoBase64(): string | null {
 
 // ── Send Invoice ──────────────────────────────────────────────────────────────
 
-export async function sendInvoiceAction(id: string): Promise<{ error: string } | { ok: true }> {
+export async function sendInvoiceAction(id: string): Promise<{ error: string } | { ok: true; warning?: string }> {
   await requireAuth();
   const supabase = await createClient();
 
@@ -112,8 +112,15 @@ export async function sendInvoiceAction(id: string): Promise<{ error: string } |
 
   await supabase.from("invoices").update({ sent_at: new Date().toISOString() }).eq("id", id);
 
-  // Schedule payment reminders for this invoice
-  try { await supabase.rpc("schedule_invoice_reminders", { p_invoice_id: id }); } catch { /* non-fatal */ }
+  // Schedule payment reminders — surface failure so user knows if reminders weren't created
+  const { error: reminderErr } = await supabase.rpc("schedule_invoice_reminders", { p_invoice_id: id });
+  if (reminderErr) {
+    console.error("schedule_invoice_reminders failed:", reminderErr.message);
+    // Invoice is sent successfully; return a warning rather than a hard error
+    revalidatePath(`/invoices/${id}`);
+    revalidatePath("/accounts-receivable/reminders");
+    return { ok: true, warning: "Invoice sent but payment reminders could not be scheduled. Check the Reminders tab." };
+  }
 
   revalidatePath(`/invoices/${id}`);
   revalidatePath("/accounts-receivable/reminders");

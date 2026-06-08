@@ -5,11 +5,51 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CheckCircle, ClipboardList } from "lucide-react";
 import { acknowledgeSopAction } from "@/app/(dashboard)/documents/actions";
-import type { DocItem } from "@/lib/sop-definitions";
+import type { DocItem, SopSectionExtra } from "@/lib/sop-definitions";
 
 interface Props {
   item: DocItem;
   isSigned: boolean;
+}
+
+function SectionExtras({ extras }: { extras: SopSectionExtra[] }) {
+  return (
+    <div className="mt-3 space-y-4">
+      {extras.map((extra, i) => {
+        if (extra.type === "image") {
+          return (
+            <div key={i} className="rounded-lg overflow-hidden border border-border/50">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={extra.src} alt={extra.alt} className="w-full object-contain max-h-40 bg-white p-4" />
+              {extra.caption && (
+                <p className="text-xs text-gray-500 text-center px-3 py-2 border-t border-border/50">{extra.caption}</p>
+              )}
+            </div>
+          );
+        }
+        if (extra.type === "colors") {
+          return (
+            <div key={i} className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {extra.items.map((color) => (
+                <div key={color.hex} className="flex items-center gap-2.5 rounded-lg border border-border/50 p-2.5">
+                  <div
+                    className="h-8 w-8 rounded-md shrink-0 border border-white/10 shadow-inner"
+                    style={{ backgroundColor: color.hex }}
+                  />
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium text-foreground truncate">{color.name}</p>
+                    <p className="text-[11px] font-mono text-gray-500">{color.hex}</p>
+                    {color.usage && <p className="text-[10px] text-gray-600 leading-tight mt-0.5 truncate">{color.usage}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        }
+        return null;
+      })}
+    </div>
+  );
 }
 
 export default function SopModal({ item, isSigned }: Props) {
@@ -107,6 +147,7 @@ export default function SopModal({ item, isSigned }: Props) {
                     <div className="text-sm text-foreground/60 leading-relaxed whitespace-pre-line">
                       {section.body}
                     </div>
+                    {section.extras && <SectionExtras extras={section.extras} />}
                   </div>
                 ))}
               </div>
