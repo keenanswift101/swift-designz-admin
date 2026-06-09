@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Pencil, Trash2, Loader2, X, Search } from "lucide-react";
+import { Pencil, Trash2, Loader2, X, Search, Download } from "lucide-react";
 import {
   updateContentPostAction,
   deleteContentPostAction,
 } from "@/app/(dashboard)/marketing/campaigns/actions";
+import { importMarketingAssetsAction } from "@/app/(dashboard)/marketing/posts/actions";
 import { useConfirm } from "@/hooks/useConfirm";
 import type { ContentPost, MarketingCampaign, ContentPlatform, ContentStatus } from "@/types/marketing";
 import { PLATFORM_LABELS, PLATFORM_COLORS } from "@/types/marketing";
@@ -18,6 +19,7 @@ interface Props {
 export default function PublishedPostsList({ posts, campaigns }: Props) {
   const [filter, setFilter] = useState<ContentPlatform | "all">("all");
   const [search, setSearch] = useState("");
+  const [importMsg, setImportMsg] = useState<string | null>(null);
   const [editing, setEditing] = useState<ContentPost | null>(null);
   const [form, setForm] = useState<{
     title: string; content: string; platform: ContentPlatform;
@@ -79,9 +81,31 @@ export default function PublishedPostsList({ posts, campaigns }: Props) {
     return campaigns.find((c) => c.id === id)?.name ?? null;
   }
 
+  function handleImport() {
+    setImportMsg(null);
+    startTransition(async () => {
+      const res = await importMarketingAssetsAction();
+      if (res.error) { setImportMsg(`Error: ${res.error}`); return; }
+      setImportMsg(
+        res.imported > 0
+          ? `Imported ${res.imported} posts${res.skipped > 0 ? ` (${res.skipped} already existed)` : ""}.`
+          : `All ${res.skipped} assets already imported.`
+      );
+    });
+  }
+
   return (
     <>
       {ConfirmDialog}
+
+      {importMsg && (
+        <div className="glass-card px-4 py-3 text-sm border border-teal/20 text-teal flex items-center justify-between">
+          {importMsg}
+          <button onClick={() => setImportMsg(null)} className="text-gray-500 hover:text-foreground ml-4">
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
 
       <div className="glass-card overflow-hidden">
         {/* Toolbar */}
@@ -119,6 +143,15 @@ export default function PublishedPostsList({ posts, campaigns }: Props) {
             ))}
           </div>
           <span className="text-xs text-gray-500 shrink-0">{visible.length} posts</span>
+          <button
+            onClick={handleImport}
+            disabled={isPending}
+            className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs text-gray-400 hover:text-foreground hover:border-teal/30 transition-colors disabled:opacity-50"
+            title="Import marketing assets from website"
+          >
+            {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+            Import assets
+          </button>
         </div>
 
         {visible.length === 0 ? (

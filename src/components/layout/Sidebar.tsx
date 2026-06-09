@@ -22,6 +22,7 @@ import {
   CalendarDays,
   Mail,
   LayoutList,
+  Bot,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -91,6 +92,7 @@ const SECTIONS: NavSection[] = [
       { href: "/marketing/calendar",  label: "Content Calendar", icon: CalendarDays },
       { href: "/marketing/posts",     label: "Published Posts",  icon: LayoutList },
       { href: "/marketing/email",     label: "Email Campaigns",  icon: Mail,         countKey: "email_campaigns" },
+      { href: "/marketing/agent",     label: "AI Agent",         icon: Bot },
     ],
   },
   {
