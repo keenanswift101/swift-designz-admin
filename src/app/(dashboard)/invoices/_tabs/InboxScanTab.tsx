@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Inbox, Loader2, CheckCircle, AlertTriangle, ChevronDown, MailSearch, XCircle } from "lucide-react";
+import { Inbox, Loader2, CheckCircle, AlertTriangle, ChevronDown, MailSearch, XCircle, Zap } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 
 interface OpenInvoice {
@@ -42,8 +42,26 @@ const CONFIDENCE_LABELS = {
   none: "No match found",
 };
 
+interface AutoResult {
+  autoApproved: number;
+  needsReview: number;
+  skipped: number;
+  total: number;
+  results: {
+    action: string;
+    invoiceNumber?: string;
+    amountCents?: number;
+    confidence?: string;
+    receiptSent?: boolean;
+    subject: string;
+    error?: string;
+  }[];
+}
+
 export default function InboxScanTab() {
   const [scanning, setScanning] = useState(false);
+  const [autoRunning, setAutoRunning] = useState(false);
+  const [autoResult, setAutoResult] = useState<AutoResult | null>(null);
   const [results, setResults] = useState<ScanResult[] | null>(null);
   const [scannedCount, setScannedCount] = useState(0);
   const [scanError, setScanError] = useState<string | null>(null);
@@ -68,7 +86,8 @@ export default function InboxScanTab() {
     setSkipped(new Set());
     setMessages({});
     try {
-      const res = await fetch("/api/inbox-scan");
+      const devParam = process.env.NODE_ENV !== "production" ? "?dev=1" : "";
+      const res = await fetch(`/api/inbox-scan${devParam}`);
       const data = await res.json();
       if (data.error) { setScanError(data.error); return; }
       setResults(data.results ?? []);
@@ -89,6 +108,23 @@ export default function InboxScanTab() {
       setScanError((e as Error).message);
     } finally {
       setScanning(false);
+    }
+  }
+
+  async function autoProcess() {
+    setAutoRunning(true);
+    setAutoResult(null);
+    setScanError(null);
+    try {
+      const devParam = process.env.NODE_ENV !== "production" ? "?dev=1" : "";
+      const res = await fetch(`/api/inbox-scan/auto${devParam}`);
+      const data = await res.json();
+      if (data.error) { setScanError(data.error); return; }
+      setAutoResult(data);
+    } catch (e) {
+      setScanError((e as Error).message);
+    } finally {
+      setAutoRunning(false);
     }
   }
 
@@ -161,15 +197,67 @@ export default function InboxScanTab() {
             </p>
           </div>
         </div>
-        <button
-          onClick={scan}
-          disabled={scanning}
-          className="shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal text-white text-sm font-medium hover:bg-teal/80 transition-colors disabled:opacity-50"
-        >
-          {scanning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Inbox className="h-4 w-4" />}
-          {scanning ? "Scanning..." : "Scan Inbox"}
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={autoProcess}
+            disabled={autoRunning || scanning}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal/10 border border-teal/30 text-teal text-sm font-medium hover:bg-teal/20 transition-colors disabled:opacity-50"
+          >
+            {autoRunning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
+            {autoRunning ? "Processing..." : "Auto-process"}
+          </button>
+          <button
+            onClick={scan}
+            disabled={scanning || autoRunning}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal text-white text-sm font-medium hover:bg-teal/80 transition-colors disabled:opacity-50"
+          >
+            {scanning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Inbox className="h-4 w-4" />}
+            {scanning ? "Scanning..." : "Scan Inbox"}
+          </button>
+        </div>
       </div>
+
+      {/* Auto-process result summary */}
+      {autoResult && (
+        <div className="glass-card p-4 border border-teal/20">
+          <div className="flex items-center gap-2 mb-3">
+            <Zap className="h-4 w-4 text-teal" />
+            <span className="text-sm font-medium text-foreground">Auto-process complete</span>
+          </div>
+          <div className="flex gap-4 text-sm mb-3">
+            <span className="text-green-400">{autoResult.autoApproved} auto-approved</span>
+            {autoResult.needsReview > 0 && (
+              <span className="text-amber-400">{autoResult.needsReview} need manual review</span>
+            )}
+            {autoResult.skipped > 0 && (
+              <span className="text-gray-500">{autoResult.skipped} skipped</span>
+            )}
+            <span className="text-gray-500 ml-auto">{autoResult.total} emails scanned</span>
+          </div>
+          {autoResult.results.filter((r) => r.action === "auto_approved").map((r, i) => (
+            <div key={i} className="text-xs text-gray-400 flex items-center gap-2 py-1 border-t border-border/40">
+              <CheckCircle className="h-3 w-3 text-green-400 shrink-0" />
+              <span className="font-medium text-foreground">{r.invoiceNumber}</span>
+              <span>— {r.amountCents ? formatCurrency(r.amountCents) : ""}</span>
+              <span className="text-gray-500">({r.confidence} confidence)</span>
+              {r.receiptSent && <span className="text-teal ml-auto">Receipt sent</span>}
+            </div>
+          ))}
+          {autoResult.results.filter((r) => r.action === "notification_created").map((r, i) => (
+            <div key={i} className="text-xs text-amber-400/80 flex items-center gap-2 py-1 border-t border-border/40">
+              <AlertTriangle className="h-3 w-3 shrink-0" />
+              <span className="truncate">{r.subject}</span>
+              <span className="ml-auto shrink-0">review needed</span>
+            </div>
+          ))}
+          {autoResult.results.filter((r) => r.action === "error").map((r, i) => (
+            <div key={i} className="text-xs text-red-400 flex items-center gap-2 py-1 border-t border-border/40">
+              <XCircle className="h-3 w-3 shrink-0" />
+              <span>{r.invoiceNumber} — {r.error}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {scanError && (
         <div className="glass-card p-4 border border-red-500/30 bg-red-500/5">

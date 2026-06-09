@@ -1,14 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { searchPOPEmails, downloadAttachment } from "@/lib/gmail";
-import { extractPaymentFromPDF, matchInvoice, type OpenInvoice } from "@/lib/pop-parser";
+import { extractPaymentFromPDF, matchInvoice, parseAmount, parseReference, parseDate, type OpenInvoice } from "@/lib/pop-parser";
 import { sendReceiptAction } from "@/app/(dashboard)/invoices/actions";
 
 const TODAY = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
 // ── GET — scan inbox ──────────────────────────────────────────────────────────
 
-export async function GET() {
+export async function GET(req: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return new Response("Unauthorized", { status: 401 });
@@ -49,14 +49,17 @@ export async function GET() {
 
   const results = [];
 
+  const devBypass = process.env.NODE_ENV !== "production" &&
+    new URL(req.url).searchParams.get("dev") === "1";
+
   for (const email of emails) {
-    // Skip emails received today (user constraint)
+    // Skip emails received today (user constraint); bypassed in dev with ?dev=1
     const emailDate = new Date(parseInt(email.internalDate)).toISOString().split("T")[0];
-    if (emailDate === TODAY) continue;
+    if (emailDate === TODAY && !devBypass) continue;
 
     let parsed = { amountCents: null as number | null, reference: null as string | null, date: null as string | null };
 
-    // Parse the first PDF attachment
+    // Parse PDF first, then fall back to email body text if PDF yields nothing
     const firstPdf = email.attachments[0];
     if (firstPdf) {
       try {
@@ -66,8 +69,16 @@ export async function GET() {
         // Continue without parsed data — still show email for manual matching
       }
     }
+    const bodyText = email.bodyText ?? "";
+    if (bodyText && (parsed.amountCents === null || parsed.reference === null || parsed.date === null)) {
+      parsed = {
+        amountCents: parsed.amountCents ?? parseAmount(bodyText),
+        reference: parsed.reference ?? parseReference(bodyText),
+        date: parsed.date ?? parseDate(bodyText),
+      };
+    }
 
-    const emailText = `${email.subject} ${email.snippet}`;
+    const emailText = `${email.subject} ${email.snippet} ${bodyText}`;
     const match = matchInvoice(parsed, openInvoices, emailText);
 
     results.push({

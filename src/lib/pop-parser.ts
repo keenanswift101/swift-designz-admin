@@ -6,7 +6,7 @@ export interface ParsedPayment {
   date: string | null; // YYYY-MM-DD
 }
 
-function parseAmount(text: string): number | null {
+export function parseAmount(text: string): number | null {
   // Match: N$ 2,500.00 | NAD 2500.00 | N$2,500 | R 2,500.00
   const patterns = [
     /(?:N\$|NAD|ZAR|R)\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)/gi,
@@ -27,7 +27,7 @@ function parseAmount(text: string): number | null {
   return Math.round(candidates[0] * 100);
 }
 
-function parseReference(text: string): string | null {
+export function parseReference(text: string): string | null {
   // Look for Swift Designz invoice numbers first (highest confidence)
   const sdInvoice = text.match(/SD\d{2}-INV-\d{3,}/i);
   if (sdInvoice) return sdInvoice[0].trim();
@@ -46,7 +46,7 @@ function parseReference(text: string): string | null {
   return null;
 }
 
-function parseDate(text: string): string | null {
+export function parseDate(text: string): string | null {
   // ISO: 2026-06-05 or 2026/06/05
   const iso = text.match(/\b(20\d{2})[-/](0[1-9]|1[0-2])[-/]([0-2]\d|3[01])\b/);
   if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`;

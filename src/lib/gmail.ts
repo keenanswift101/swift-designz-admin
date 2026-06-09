@@ -8,6 +8,7 @@ export interface GmailMessage {
   date: string;       // RFC2822 date string from header
   internalDate: string; // unix ms timestamp
   snippet: string;
+  bodyText: string;   // decoded plain-text body (HTML tags stripped)
   attachments: GmailAttachment[];
 }
 
@@ -36,6 +37,30 @@ async function getAccessToken(): Promise<string> {
 
 function headerVal(headers: { name: string; value: string }[], name: string): string {
   return headers.find((h) => h.name.toLowerCase() === name.toLowerCase())?.value ?? "";
+}
+
+type MimePart = {
+  mimeType: string;
+  body?: { data?: string; attachmentId?: string; size?: number };
+  parts?: MimePart[];
+  filename?: string;
+};
+
+function decodeBase64(s: string): string {
+  return Buffer.from(s.replace(/-/g, "+").replace(/_/g, "/"), "base64").toString("utf8");
+}
+
+function collectBodyText(part: MimePart): string {
+  if (part.body?.data && !part.body.attachmentId) {
+    const text = decodeBase64(part.body.data);
+    if (part.mimeType === "text/plain") return text;
+    if (part.mimeType === "text/html") return text.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  }
+  for (const child of part.parts ?? []) {
+    const t = collectBodyText(child);
+    if (t) return t;
+  }
+  return "";
 }
 
 function collectAttachments(
@@ -88,6 +113,8 @@ export async function searchPOPEmails(): Promise<GmailMessage[]> {
 
     if (pdfAttachments.length === 0) continue;
 
+    const bodyText = collectBodyText(msg.payload as MimePart);
+
     results.push({
       id: msg.id,
       threadId: msg.threadId,
@@ -96,6 +123,7 @@ export async function searchPOPEmails(): Promise<GmailMessage[]> {
       date: headerVal(headers, "Date"),
       internalDate: msg.internalDate,
       snippet: msg.snippet ?? "",
+      bodyText,
       attachments: pdfAttachments,
     });
   }
