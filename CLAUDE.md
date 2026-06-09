@@ -247,7 +247,8 @@ Template logic lives in src/lib/document-templates.ts; content in src/lib/docume
 - No emojis, no faith references, no boilerplate
 
 ## Domain
-- admin.swiftdesignz.co.za (Netlify, @netlify/plugin-nextjs)
+- admin.swiftdesignz.co.za (Vercel, keenanswift101/swift-designz-admin)
+- Cron: vercel.json schedules /api/cron/recurring-expenses daily at 06:00 UTC
 - Main site: swiftdesignz.co.za (separate repo)
 
 ## Company Registration
