@@ -1,8 +1,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function GET(req: Request) {
-  const secret = req.headers.get("x-cron-secret");
-  if (!secret || secret !== process.env.CRON_SECRET) {
+  const auth = req.headers.get("authorization");
+  if (!auth || auth !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response("Unauthorized", { status: 401 });
   }
 
