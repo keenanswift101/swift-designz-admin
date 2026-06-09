@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useRef } from "react";
 import { Pencil, Trash2, Loader2, X, Search, Download, LayoutGrid, List, Play } from "lucide-react";
 import {
   updateContentPostAction,
@@ -30,22 +30,42 @@ function isVideo(url: string) {
   return url.endsWith(".mp4") || url.endsWith(".webm") || url.endsWith(".mov");
 }
 
-function MediaThumb({ url, title }: { url: string; title: string }) {
+function MediaThumb({ url, title, playOnHover = false }: { url: string; title: string; playOnHover?: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+
   if (isVideo(url)) {
     return (
-      <div className="relative w-full h-full bg-black/40">
+      <div
+        className="relative w-full h-full bg-black/40"
+        onMouseEnter={() => {
+          if (!playOnHover) return;
+          videoRef.current?.play();
+          setPlaying(true);
+        }}
+        onMouseLeave={() => {
+          if (!playOnHover) return;
+          const v = videoRef.current;
+          if (v) { v.pause(); v.currentTime = 0; }
+          setPlaying(false);
+        }}
+      >
         <video
+          ref={videoRef}
           src={url}
           className="w-full h-full object-cover"
           preload="metadata"
           muted
           playsInline
+          loop
         />
-        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-          <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-            <Play className="h-3.5 w-3.5 text-white fill-white ml-0.5" />
+        {!playing && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none">
+            <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+              <Play className="h-3.5 w-3.5 text-white fill-white ml-0.5" />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }
@@ -238,7 +258,7 @@ export default function PublishedPostsList({ posts, campaigns }: Props) {
                   className="group relative rounded-lg overflow-hidden border border-border hover:border-teal/40 transition-colors bg-black/20 aspect-square"
                 >
                   {url ? (
-                    <MediaThumb url={url} title={p.title} />
+                    <MediaThumb url={url} title={p.title} playOnHover />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-xs text-gray-600 p-2 text-center">
                       {p.title}
