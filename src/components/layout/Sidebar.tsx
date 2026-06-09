@@ -92,7 +92,7 @@ const SECTIONS: NavSection[] = [
       { href: "/marketing/calendar",  label: "Content Calendar", icon: CalendarDays },
       { href: "/marketing/posts",     label: "Published Posts",  icon: LayoutList },
       { href: "/marketing/email",     label: "Email Campaigns",  icon: Mail,         countKey: "email_campaigns" },
-      { href: "/marketing/agent",     label: "Post Generation",  icon: Sparkles },
+      { href: "/marketing/agent",     label: "Marketing Agent",  icon: Sparkles },
     ],
   },
   {
