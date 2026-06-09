@@ -283,8 +283,10 @@ export default function PublishedPostsList({ posts, drafts, campaigns }: Props) 
                   {url ? (
                     <MediaThumb url={url} title={p.title} />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-xs text-gray-600 p-2 text-center">
-                      {p.title}
+                    <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-card/60">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/favicon.png" alt="Swift Designz" className="w-10 h-10 opacity-30" />
+                      <p className="text-[11px] text-gray-600 px-3 text-center line-clamp-2">{p.title}</p>
                     </div>
                   )}
                   {/* Hover overlay */}
