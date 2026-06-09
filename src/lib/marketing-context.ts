@@ -129,7 +129,7 @@ export const MARKETING_ASSETS = [
   { filename: "Print_Transparent.svg",      platform: "other",     title: "Print — Transparent Logo",  type: "image" },
 ];
 
-export const ASSET_BASE_URL = "https://swiftdesignz.co.za/marketing";
+export const ASSET_BASE_URL = "/marketing";
 
 export function buildSystemPrompt(): string {
   const serviceList = SERVICES.map((s) => `- ${s.name}: ${s.description}`).join("\n");

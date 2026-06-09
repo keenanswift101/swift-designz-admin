@@ -11,8 +11,20 @@ const SECURITY_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["@anthropic-ai/sdk"],
   async headers() {
     return [{ source: "/(.*)", headers: SECURITY_HEADERS }];
+  },
+  async rewrites() {
+    return {
+      // fallback runs only after all app routes have been checked — never intercepts /marketing/posts etc.
+      fallback: [
+        {
+          source: "/marketing/:path*",
+          destination: "https://www.swiftdesignz.co.za/marketing/:path*",
+        },
+      ],
+    };
   },
 };
 
