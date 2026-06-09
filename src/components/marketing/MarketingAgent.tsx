@@ -6,6 +6,42 @@ import { generateMarketingCopyAction, saveDraftPostAction } from "@/app/(dashboa
 import type { ContentPlatform } from "@/types/marketing";
 import { PLATFORM_LABELS } from "@/types/marketing";
 
+function renderInline(text: string): React.ReactNode[] {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith("**") && part.endsWith("**")
+      ? <strong key={i} className="font-semibold text-foreground">{part.slice(2, -2)}</strong>
+      : <span key={i}>{part}</span>
+  );
+}
+
+function MarkdownOutput({ content }: { content: string }) {
+  const lines = content.split("\n");
+  return (
+    <div className="space-y-1 text-sm leading-relaxed overflow-y-auto">
+      {lines.map((line, i) => {
+        if (line.startsWith("### "))
+          return <h3 key={i} className="text-sm font-semibold text-foreground mt-4 mb-0.5">{renderInline(line.slice(4))}</h3>;
+        if (line.startsWith("## "))
+          return <h2 key={i} className="text-base font-bold text-foreground mt-5 mb-1">{renderInline(line.slice(3))}</h2>;
+        if (line.startsWith("# "))
+          return <h1 key={i} className="text-lg font-bold text-teal mt-2 mb-2">{renderInline(line.slice(2))}</h1>;
+        if (/^-{3,}$/.test(line.trim()))
+          return <hr key={i} className="border-border my-3" />;
+        if (line.startsWith("- ") || line.startsWith("* "))
+          return (
+            <div key={i} className="flex gap-2 text-gray-300">
+              <span className="text-teal shrink-0 mt-0.5">·</span>
+              <span>{renderInline(line.slice(2))}</span>
+            </div>
+          );
+        if (line.trim() === "")
+          return <div key={i} className="h-1" />;
+        return <p key={i} className="text-gray-300">{renderInline(line)}</p>;
+      })}
+    </div>
+  );
+}
+
 const TASKS = [
   { id: "caption",  label: "Caption",        description: "Platform-ready post caption + hashtags" },
   { id: "campaign", label: "Campaign Idea",  description: "Full campaign concept with post ideas" },
@@ -182,9 +218,9 @@ export default function MarketingAgent() {
         </div>
 
         {result ? (
-          <pre className="flex-1 text-sm text-foreground whitespace-pre-wrap leading-relaxed font-sans overflow-y-auto">
-            {result}
-          </pre>
+          <div className="flex-1 overflow-y-auto">
+            <MarkdownOutput content={result} />
+          </div>
         ) : isPending ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center space-y-3">
