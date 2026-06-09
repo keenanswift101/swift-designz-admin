@@ -349,7 +349,7 @@ export default function PublishedPostsList({ posts, drafts, campaigns }: Props) 
       {/* Edit modal */}
       {editing && form && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="glass-card w-full max-w-lg p-6 space-y-4">
+          <div className="glass-card w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 space-y-4">
             <div className="flex items-start gap-4">
               {/* Media preview in modal */}
               {assetUrl(editing.notes) && (
@@ -409,7 +409,7 @@ export default function PublishedPostsList({ posts, drafts, campaigns }: Props) 
 
               <div>
                 <label className="block text-xs text-gray-400 mb-1">Copy / Caption</label>
-                <textarea rows={3} value={form.content}
+                <textarea rows={tab === "drafts" ? 14 : 4} value={form.content}
                   onChange={(e) => setForm((f) => f && ({ ...f, content: e.target.value }))}
                   placeholder="Write a caption for this post..."
                   className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-teal/50 resize-none" />
