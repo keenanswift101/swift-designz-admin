@@ -18,6 +18,9 @@ import {
   ClipboardList,
   DollarSign,
   Wallet,
+  Megaphone,
+  CalendarDays,
+  Mail,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -81,6 +84,14 @@ const SECTIONS: NavSection[] = [
     ],
   },
   {
+    label: "Marketing",
+    items: [
+      { href: "/marketing/campaigns", label: "Campaigns",        icon: Megaphone,    countKey: "campaigns" },
+      { href: "/marketing/calendar",  label: "Content Calendar", icon: CalendarDays },
+      { href: "/marketing/email",     label: "Email Campaigns",  icon: Mail,         countKey: "email_campaigns" },
+    ],
+  },
+  {
     label: "Investors",
     viewerHidden: true,
     items: [
@@ -124,6 +135,8 @@ export default function Sidebar({ profile, initialCounts, mobileOpen, onMobileCl
   function getCount(item: NavItem): number | null {
     if (!item.countKey) return null;
     if (item.countKey === "team") return (counts.employees ?? 0) + (counts.ai_agents ?? 0);
+    if (item.countKey === "campaigns") return counts.marketing_campaigns ?? 0;
+    if (item.countKey === "email_campaigns") return counts.email_campaigns ?? 0;
     if (item.countKey === "documents") return (counts.documents ?? 0) + documentLibraryCount;
     if (item.countKey === "payment_reminders") return counts.payment_reminders ?? 0;
     return counts[item.countKey] ?? 0;

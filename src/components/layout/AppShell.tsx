@@ -8,7 +8,7 @@ interface AppShellProps {
   children: React.ReactNode;
 }
 
-const NAV_TABLES = ["leads", "clients", "projects", "invoices", "quotations", "payments", "documents", "investors", "employees", "ai_agents", "equipment", "account_statements", "retainer_subscriptions"] as const;
+const NAV_TABLES = ["leads", "clients", "projects", "invoices", "quotations", "payments", "documents", "investors", "employees", "ai_agents", "equipment", "account_statements", "retainer_subscriptions", "marketing_campaigns", "email_campaigns"] as const;
 type NavTable = typeof NAV_TABLES[number];
 
 // Cache nav counts for 30 seconds to avoid 14 DB round-trips on every page navigation.
