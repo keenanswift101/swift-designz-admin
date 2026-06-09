@@ -42,11 +42,19 @@ export default function SubscribePage() {
         {state === "success" ? (
           <div className="text-center space-y-4 py-8">
             <CheckCircle2 className="h-14 w-14 text-[#30B0B0] mx-auto" />
-            <h1 className="text-2xl font-bold text-white">You are in.</h1>
+            <h1 className="text-2xl font-bold text-white">You&apos;re In!</h1>
             <p className="text-gray-400 text-sm leading-relaxed">
               Welcome to the Swift Designz newsletter. You will get weekly insights on web design,
               digital strategy, and what we are building for businesses in Namibia and beyond.
             </p>
+            <a
+              href="https://www.swiftdesignz.co.za/contact"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 mt-2 px-5 py-2.5 rounded-xl border border-[#2a2a2a] text-sm text-gray-400 hover:text-white hover:border-[#30B0B0]/40 transition-colors"
+            >
+              Questions?
+            </a>
           </div>
         ) : (
           <>
