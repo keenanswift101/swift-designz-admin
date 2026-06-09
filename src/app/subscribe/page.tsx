@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, CheckCircle2, Loader2 } from "lucide-react";
+import { Mail, CheckCircle2, Loader2 } from "lucide-react";
 
 export default function SubscribePage() {
   const [email, setEmail]   = useState("");
@@ -101,7 +101,7 @@ export default function SubscribePage() {
                 {state === "loading" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Sparkles className="h-4 w-4" />
+                  <Mail className="h-4 w-4" />
                 )}
                 {state === "loading" ? "Subscribing..." : "Subscribe"}
               </button>
