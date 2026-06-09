@@ -32,7 +32,7 @@ export default function SubscriberList({ subscribers }: Props) {
   const [isPending, startTransition] = useTransition();
   const { confirm, ConfirmDialog }   = useConfirm();
 
-  const subscribeUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/subscribe`;
+  const subscribeUrl = `${typeof window !== "undefined" ? window.location.origin : "https://admin.swiftdesignz.co.za"}/subscribe`;
 
   function handleAdd(e: React.FormEvent) {
     e.preventDefault();
