@@ -9,12 +9,12 @@ import { buildSystemPrompt } from "@/lib/marketing-context";
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const TASK_PROMPTS: Record<string, string> = {
-  caption:   "Write a social media caption for the platform specified. Include relevant hashtags at the end.",
-  campaign:  "Generate a campaign concept including: campaign name, goal, key message, and 3 post ideas.",
-  email:     "Write a marketing email: subject line, preview text, and full email body (HTML-formatted).",
-  hashtags:  "Generate 20 relevant hashtags — mix broad, niche, and location-specific. Group by category.",
-  headline:  "Write 5 compelling ad headline variations (under 30 characters each) for this brief.",
-  cta:       "Write 5 strong call-to-action variations for this brief. Be direct and action-oriented.",
+  caption:   "Write a social media caption for the platform specified. Include relevant hashtags at the end. Plain text only — no HTML.",
+  campaign:  "Generate a campaign concept including: campaign name, goal, key message, and 3 post ideas. Plain text only — no HTML.",
+  email:     "Write a marketing email as plain text copy only — no HTML, no code, no tags. Output exactly three sections:\n\n**Subject:** (the subject line)\n**Preview:** (the preview text, max 90 chars)\n**Body:** (the full email body as readable prose with short paragraphs)",
+  hashtags:  "Generate 20 relevant hashtags — mix broad, niche, and location-specific. Group by category. Plain text only — no HTML.",
+  headline:  "Write 5 compelling ad headline variations (under 30 characters each) for this brief. Plain text only — no HTML.",
+  cta:       "Write 5 strong call-to-action variations for this brief. Be direct and action-oriented. Plain text only — no HTML.",
 };
 
 export async function generateMarketingCopyAction(formData: FormData): Promise<
