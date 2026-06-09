@@ -17,16 +17,22 @@ export default async function PublishedPostsPage() {
   await requireAuth();
   const supabase = await createClient();
 
-  const [{ data: postsData }, { data: campaignsData }] = await Promise.all([
+  const [{ data: publishedData }, { data: draftsData }, { data: campaignsData }] = await Promise.all([
     supabase
       .from("content_posts")
       .select("*")
       .eq("status", "published")
-      .order("scheduled_at", { ascending: false }),
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("content_posts")
+      .select("*")
+      .eq("status", "draft")
+      .order("created_at", { ascending: false }),
     supabase.from("marketing_campaigns").select("id, name").order("name"),
   ]);
 
-  const posts = (postsData ?? []) as unknown as ContentPost[];
+  const posts     = (publishedData ?? []) as unknown as ContentPost[];
+  const drafts    = (draftsData    ?? []) as unknown as ContentPost[];
   const campaigns = (campaignsData ?? []) as unknown as Pick<MarketingCampaign, "id" | "name">[];
 
   const platforms = [...new Set(posts.map((p) => p.platform))];
@@ -40,18 +46,18 @@ export default async function PublishedPostsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Published Posts"
-        description="All content that has gone live across platforms"
+        title="Content Posts"
+        description="Published assets and AI-generated drafts"
       />
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Stat label="Total Published" value={String(posts.length)} />
-        <Stat label="Last 30 Days"    value={String(last30)}       />
-        <Stat label="Platforms"       value={String(platforms.length)} />
-        <Stat label="Campaigns"       value={String(campaigns.length)} />
+        <Stat label="Total Published" value={String(posts.length)}    />
+        <Stat label="Last 30 Days"    value={String(last30)}          />
+        <Stat label="Platforms"       value={String(platforms.length)}/>
+        <Stat label="Drafts"          value={String(drafts.length)}   />
       </div>
 
-      <PublishedPostsList posts={posts} campaigns={campaigns} />
+      <PublishedPostsList posts={posts} drafts={drafts} campaigns={campaigns} />
     </div>
   );
 }

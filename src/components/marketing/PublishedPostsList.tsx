@@ -13,6 +13,7 @@ import { PLATFORM_LABELS, PLATFORM_COLORS } from "@/types/marketing";
 
 interface Props {
   posts: ContentPost[];
+  drafts: ContentPost[];
   campaigns: Pick<MarketingCampaign, "id" | "name">[];
 }
 
@@ -67,7 +68,8 @@ function MediaThumb({ url, title }: { url: string; title: string }) {
   );
 }
 
-export default function PublishedPostsList({ posts, campaigns }: Props) {
+export default function PublishedPostsList({ posts, drafts, campaigns }: Props) {
+  const [tab, setTab]           = useState<"published" | "drafts">("published");
   const [filter, setFilter]     = useState<ContentPlatform | "all">("all");
   const [search, setSearch]     = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -133,10 +135,11 @@ export default function PublishedPostsList({ posts, campaigns }: Props) {
     });
   }
 
-  const platforms = [...new Set(posts.map((p) => p.platform))] as ContentPlatform[];
+  const activeList = tab === "drafts" ? drafts : posts;
+  const platforms  = [...new Set(posts.map((p) => p.platform))] as ContentPlatform[];
 
-  const visible = posts.filter((p) => {
-    if (filter !== "all" && p.platform !== filter) return false;
+  const visible = activeList.filter((p) => {
+    if (tab === "published" && filter !== "all" && p.platform !== filter) return false;
     if (search && !p.title.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
@@ -160,6 +163,26 @@ export default function PublishedPostsList({ posts, campaigns }: Props) {
       )}
 
       <div className="glass-card overflow-hidden">
+        {/* Tabs */}
+        <div className="flex border-b border-border">
+          {(["published", "drafts"] as const).map((t) => (
+            <button
+              key={t}
+              onClick={() => { setTab(t); setSearch(""); setFilter("all"); }}
+              className={`px-5 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
+                tab === t
+                  ? "border-teal text-teal"
+                  : "border-transparent text-gray-500 hover:text-foreground"
+              }`}
+            >
+              {t === "published" ? "Published" : "Drafts"}
+              <span className="ml-2 text-xs tabular-nums px-1.5 py-0.5 rounded-full bg-border text-gray-400">
+                {t === "published" ? posts.length : drafts.length}
+              </span>
+            </button>
+          ))}
+        </div>
+
         {/* Toolbar */}
         <div className="px-5 py-3 border-b border-border flex items-center gap-3 flex-wrap">
           <div className="relative flex-1 min-w-40">
@@ -172,29 +195,31 @@ export default function PublishedPostsList({ posts, campaigns }: Props) {
             />
           </div>
 
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <button
-              onClick={() => setFilter("all")}
-              className={`px-3 py-1 rounded-full text-xs border transition-colors ${
-                filter === "all"
-                  ? "border-teal/40 bg-teal/10 text-teal"
-                  : "border-border text-gray-400 hover:text-foreground"
-              }`}
-            >
-              All
-            </button>
-            {platforms.map((p) => (
+          {tab === "published" && (
+            <div className="flex items-center gap-1.5 flex-wrap">
               <button
-                key={p}
-                onClick={() => setFilter(p)}
+                onClick={() => setFilter("all")}
                 className={`px-3 py-1 rounded-full text-xs border transition-colors ${
-                  filter === p ? PLATFORM_COLORS[p] : "border-border text-gray-400 hover:text-foreground"
+                  filter === "all"
+                    ? "border-teal/40 bg-teal/10 text-teal"
+                    : "border-border text-gray-400 hover:text-foreground"
                 }`}
               >
-                {PLATFORM_LABELS[p]}
+                All
               </button>
-            ))}
-          </div>
+              {platforms.map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setFilter(p)}
+                  className={`px-3 py-1 rounded-full text-xs border transition-colors ${
+                    filter === p ? PLATFORM_COLORS[p] : "border-border text-gray-400 hover:text-foreground"
+                  }`}
+                >
+                  {PLATFORM_LABELS[p]}
+                </button>
+              ))}
+            </div>
+          )}
 
           <span className="text-xs text-gray-500 shrink-0">{visible.length}</span>
 
@@ -216,20 +241,24 @@ export default function PublishedPostsList({ posts, campaigns }: Props) {
             </button>
           </div>
 
-          <button
-            onClick={handleImport}
-            disabled={isPending}
-            className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs text-gray-400 hover:text-foreground hover:border-teal/30 transition-colors disabled:opacity-50"
-            title="Import marketing assets from website"
-          >
-            {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
-            Import assets
-          </button>
+          {tab === "published" && (
+            <button
+              onClick={handleImport}
+              disabled={isPending}
+              className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs text-gray-400 hover:text-foreground hover:border-teal/30 transition-colors disabled:opacity-50"
+              title="Import marketing assets from website"
+            >
+              {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+              Import assets
+            </button>
+          )}
         </div>
 
         {visible.length === 0 ? (
           <div className="px-5 py-12 text-center text-sm text-gray-500">
-            {posts.length === 0
+            {tab === "drafts"
+              ? "No drafts yet. Generate content in Marketing Agent and hit Save as draft."
+              : posts.length === 0
               ? <span>No posts yet. Click <strong>Import assets</strong> to pull in all 47 website marketing assets.</span>
               : "No posts match the filter."}
           </div>
