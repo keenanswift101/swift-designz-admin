@@ -14,7 +14,7 @@
 - **Database + Auth:** Supabase (PostgreSQL + Auth + RLS + Storage)
 - **Icons:** Lucide React
 - **PDF Generation:** @react-pdf/renderer
-- **Deployment:** Netlify
+- **Deployment:** Vercel (keenanswift101/swift-designz-admin)
 
 ## Brand Identity & Design Guidelines
 - **Core Colors:** #30B0B0 (teal accent), #101010 (background), #1a1a1a (card surface), #2a2a2a (borders), #303030 (dark gray)

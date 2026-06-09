@@ -30,7 +30,8 @@ Internal business management portal for **Swift Designz Investments CC** — han
 | PDFs | @react-pdf/renderer |
 | Charts | Recharts |
 | Icons | Lucide React |
-| Deployment | Netlify + @netlify/plugin-nextjs |
+| Deployment | Vercel (keenanswift101/swift-designz-admin) |
+| Cron | vercel.json — daily recurring expenses at 06:00 UTC |
 
 ---
 

@@ -1,9 +1,9 @@
 # Swift Designz Admin Portal — Session Handoff
 
-> **Date:** 2026-04-13
-> **Repo:** `https://github.com/KeenanHusselmann/swift-designz-admin.git`
-> **Latest commit:** `1dbe784` on `main` — "Phase 1: Foundation"
-> **Build status:** Passing (21 routes, 0 type errors)
+> **Date:** 2026-06-09
+> **Repo:** `https://github.com/keenanswift101/swift-designz-admin.git`
+> **Production:** https://admin.swiftdesignz.co.za (Vercel)
+> **Build status:** Passing (0 type errors, 0 lint errors)
 
 ---
 
@@ -26,7 +26,7 @@ A private admin dashboard for **Swift Designz** (`admin.swiftdesignz.co.za`) to 
 | Animation | Framer Motion | 12.38 |
 | PDF (future) | @react-pdf/renderer | 4.4.1 |
 | Utils | clsx + tailwind-merge | — |
-| Deployment | Netlify + @netlify/plugin-nextjs | 5.15.9 |
+| Deployment | Vercel | — |
 
 ---
 
@@ -60,7 +60,7 @@ A private admin dashboard for **Swift Designz** (`admin.swiftdesignz.co.za`) to 
 swift-designz-admin/
 ├── .env.local                      # Supabase keys (gitignored)
 ├── .env.example                    # Template for env vars
-├── netlify.toml                    # Build config + cache headers
+├── vercel.json                     # Cron job config (recurring expenses daily 06:00 UTC)
 ├── next.config.ts                  # Security headers
 ├── supabase/
 │   └── schema.sql                  # Full DB schema (14 tables, RLS, triggers, storage)
@@ -182,7 +182,7 @@ const income = (incomeResult.data ?? []) as { amount: number }[];
 
 - [x] Next.js 16 scaffold with App Router + TypeScript + Tailwind 4
 - [x] All dependencies installed
-- [x] Config: next.config.ts (security headers), netlify.toml, .env files
+- [x] Config: next.config.ts (security headers), vercel.json (cron), .env files
 - [x] Supabase clients: browser, server, middleware, admin (service role)
 - [x] Full TypeScript types for all 14 entities + 16 enum types
 - [x] Complete SQL schema (14 tables, indexes, triggers, RLS, storage)
@@ -201,11 +201,12 @@ const income = (incomeResult.data ?? []) as { amount: number }[];
 
 ## What's NOT Done Yet
 
-### Before First Deploy (Do These First)
-1. **Push to GitHub** — commit `1dbe784` is local only, needs `git push -u origin main`
-2. **Execute SQL schema** — Run `supabase/schema.sql` in [Supabase SQL Editor](https://supabase.com/dashboard/project/nxuvzdrqgrmureejigpf/sql)
-3. **Create first user** — Sign up in Supabase Auth dashboard or via the login page after deploy
-4. **Deploy on Netlify** — Connect repo, set 3 env vars, deploy
+### Deployment ✅ Complete
+- Deployed on **Vercel** at `admin.swiftdesignz.co.za`
+- GitHub repo: `keenanswift101/swift-designz-admin`
+- All environment variables set in Vercel dashboard
+- Custom domain live with HTTPS (Vercel-managed certificate)
+- Cron job active: `vercel.json` calls `/api/cron/recurring-expenses` daily at 06:00 UTC
 
 ### Phase 2 — Leads & Quotes (Next Priority)
 - Lead detail page (`/leads/[id]`)
