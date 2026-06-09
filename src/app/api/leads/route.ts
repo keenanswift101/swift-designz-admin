@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     const name = str(raw.name, 100);
     const email = str(raw.email, 254);
 
-    if (!name || !email) {
+    if (!email) {
       return NextResponse.json(
         { error: "Name and email are required" },
         { status: 400, headers: corsHeaders() },
@@ -70,15 +70,24 @@ export async function POST(req: NextRequest) {
 
     const supabase = createAdminClient();
 
-    const validSources = ["quote_form", "contact_form", "manual"];
+    const validSources = ["quote_form", "contact_form", "newsletter", "manual"];
     const rawSource = str(raw.source, 20);
     const source = validSources.includes(rawSource) ? rawSource : "manual";
+
+    // Newsletter signups only require email; derive a name from it
+    const resolvedName = name || (source === "newsletter" ? email.split("@")[0].replace(/[._-]/g, " ") : "");
+    if (!resolvedName) {
+      return NextResponse.json(
+        { error: "Name and email are required" },
+        { status: 400, headers: corsHeaders() },
+      );
+    }
 
     const { data, error } = await supabase
       .from("leads")
       .insert({
-        source: source as "quote_form" | "contact_form" | "manual",
-        name,
+        source: source as "quote_form" | "contact_form" | "newsletter" | "manual",
+        name: resolvedName,
         email,
         phone: str(raw.phone, 30) || null,
         company: str(raw.company, 100) || null,

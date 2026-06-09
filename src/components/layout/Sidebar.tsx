@@ -21,6 +21,7 @@ import {
   Megaphone,
   CalendarDays,
   Mail,
+  LayoutList,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -88,6 +89,7 @@ const SECTIONS: NavSection[] = [
     items: [
       { href: "/marketing/campaigns", label: "Campaigns",        icon: Megaphone,    countKey: "campaigns" },
       { href: "/marketing/calendar",  label: "Content Calendar", icon: CalendarDays },
+      { href: "/marketing/posts",     label: "Published Posts",  icon: LayoutList },
       { href: "/marketing/email",     label: "Email Campaigns",  icon: Mail,         countKey: "email_campaigns" },
     ],
   },
