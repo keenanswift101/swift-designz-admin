@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 const INVESTOR_ALLOWED_PATHS = ["/", "/investors", "/projects", "/accounting/reports", "/equipment", "/documents"];
 const EMPLOYEE_ALLOWED_PATHS = ["/documents", "/settings"];
 const EMPLOYEE_BLOCKED_PATHS = ["/documents/retainers", "/documents/employee-contracts"];
-const PUBLIC_PATHS = ["/login", "/auth/callback", "/auth/set-password", "/auth/magic", "/accept", "/api/accept", "/api/docs/quotations", "/api/leads"];
+const PUBLIC_PATHS = ["/login", "/auth/callback", "/auth/set-password", "/auth/magic", "/accept", "/api/accept", "/api/docs/quotations", "/api/leads", "/subscribe", "/api/subscribe"];
 const INVESTOR_ONBOARDING_PATH = "/investors/onboarding";
 const STATIC_FILE_RE = /\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js|map|txt|xml|html|pdf)$/i;
 
