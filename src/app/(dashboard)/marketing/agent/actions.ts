@@ -11,7 +11,7 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const TASK_PROMPTS: Record<string, string> = {
   caption:   "Write a social media caption for the platform specified. Include relevant hashtags at the end. Plain text only — no HTML.",
   campaign:  "Generate a campaign concept including: campaign name, goal, key message, and 3 post ideas. Plain text only — no HTML.",
-  email:     "Write a marketing email as plain text copy only — no HTML, no code, no tags. Output exactly three sections:\n\n**Subject:** (the subject line)\n**Preview:** (the preview text, max 90 chars)\n**Body:** (the full email body as readable prose with short paragraphs)",
+  email:     "Write the words for a marketing email — nothing else. No HTML. No code. No angle brackets. No DOCTYPE. No CSS. Just the actual words.\n\nUse this exact structure:\n\nSubject: [subject line here]\nPreview: [preview text here, max 90 chars]\n\n[greeting]\n\n[body paragraph 1]\n\n[body paragraph 2]\n\n[closing line]\n\n[sign-off]\nSwift Designz",
   hashtags:  "Generate 20 relevant hashtags — mix broad, niche, and location-specific. Group by category. Plain text only — no HTML.",
   headline:  "Write 5 compelling ad headline variations (under 30 characters each) for this brief. Plain text only — no HTML.",
   cta:       "Write 5 strong call-to-action variations for this brief. Be direct and action-oriented. Plain text only — no HTML.",
@@ -42,10 +42,13 @@ Brief: ${brief}`;
       messages: [{ role: "user", content: userMessage }],
     });
 
-    const text = message.content
+    const raw = message.content
       .filter((b) => b.type === "text")
       .map((b) => (b as { type: "text"; text: string }).text)
       .join("\n");
+
+    // Strip any code fences the model sneaks in (```html ... ``` etc.)
+    const text = raw.replace(/```[\w]*\n[\s\S]*?```/g, "").trim();
 
     return { content: text };
   } catch (err) {
