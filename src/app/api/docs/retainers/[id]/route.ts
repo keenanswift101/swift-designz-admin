@@ -27,6 +27,12 @@ export async function GET(
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return new Response("Unauthorized", { status: 401 });
 
+  const { data: profile } = await supabase
+    .from("profiles").select("role").eq("id", user.id).single();
+  if (profile?.role !== "admin" && profile?.role !== "viewer") {
+    return new Response("Forbidden", { status: 403 });
+  }
+
   const { data: retainer, error } = await supabase
     .from("retainers")
     .select("*")

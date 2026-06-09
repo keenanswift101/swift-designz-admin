@@ -30,6 +30,8 @@ export default function LoginPage() {
       setGoogleLoading(false);
       return;
     }
+    const state = crypto.randomUUID();
+    document.cookie = `oauth_state=${state}; path=/; max-age=300; samesite=lax`;
     const redirectUri = `${window.location.origin}/api/auth/google/callback`;
     const url = new URL("https://accounts.google.com/o/oauth2/v2/auth");
     url.searchParams.set("client_id", clientId);
@@ -37,6 +39,7 @@ export default function LoginPage() {
     url.searchParams.set("response_type", "code");
     url.searchParams.set("scope", "openid email profile");
     url.searchParams.set("access_type", "offline");
+    url.searchParams.set("state", state);
     window.location.href = url.toString();
   }
 

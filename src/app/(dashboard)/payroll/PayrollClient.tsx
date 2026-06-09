@@ -32,7 +32,7 @@ interface Entry {
   net_cents: number;
 }
 
-interface Run {
+export interface Run {
   id: string;
   period_year: number;
   period_month: number;

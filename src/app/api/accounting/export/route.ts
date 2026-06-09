@@ -64,6 +64,16 @@ function borderAll(ws: ExcelJS.Worksheet, row: number, fromCol: number, toCol: n
 }
 
 export async function GET() {
+  const authClient = await createClient();
+  const { data: { user } } = await authClient.auth.getUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { data: profile } = await authClient
+    .from("profiles").select("role").eq("id", user.id).single();
+  if (profile?.role !== "admin" && profile?.role !== "viewer") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const supabase = await createClient();
   const now = new Date();
   const yearStart = `${now.getFullYear()}-01-01`;

@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { requireAuth } from "@/lib/auth";
 import PageHeader from "@/components/ui/PageHeader";
-import PayrollClient from "./PayrollClient";
+import PayrollClient, { type Run } from "./PayrollClient";
 
 export default async function PayrollPage() {
   await requireAuth();
@@ -39,7 +39,7 @@ export default async function PayrollPage() {
         description="Monthly payroll runs — fund your payroll company account and track disbursements"
       />
       <PayrollClient
-        runs={safeRuns as any}
+        runs={safeRuns as unknown as Run[]}
         employees={safeEmployees}
         activeCount={activeCount}
         monthlyGross={monthlyGross}

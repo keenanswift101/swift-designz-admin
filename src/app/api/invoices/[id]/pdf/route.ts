@@ -30,6 +30,12 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { data: profile } = await authClient
+    .from("profiles").select("role").eq("id", user.id).single();
+  if (profile?.role !== "admin" && profile?.role !== "viewer" && profile?.role !== "investor") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   // Use admin client to bypass RLS for internal data fetch
   const supabase = createAdminClient();
 

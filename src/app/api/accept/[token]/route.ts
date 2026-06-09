@@ -8,10 +8,18 @@ export async function POST(
 ) {
   const { token } = await params;
 
+  // Reject non-UUID tokens immediately — prevents DB errors leaking to caller
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(token)) {
+    return NextResponse.json(
+      { error: "This quotation link is invalid or has expired." },
+      { status: 404 }
+    );
+  }
+
   let name: string;
   try {
     const body = await request.json();
-    name = typeof body.name === "string" ? body.name.trim() : "";
+    name = typeof body.name === "string" ? body.name.trim().slice(0, 200) : "";
   } catch {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }

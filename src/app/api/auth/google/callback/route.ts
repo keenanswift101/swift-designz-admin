@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -6,8 +7,16 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const error = searchParams.get("error");
+  const state = searchParams.get("state");
 
   if (error || !code) {
+    return NextResponse.redirect(`${origin}/login`);
+  }
+
+  // Validate state cookie to prevent login CSRF
+  const cookieStore = await cookies();
+  const storedState = cookieStore.get("oauth_state")?.value;
+  if (!state || !storedState || state !== storedState) {
     return NextResponse.redirect(`${origin}/login`);
   }
 
@@ -75,5 +84,7 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.redirect(`${origin}/`);
+  const successRedirect = NextResponse.redirect(`${origin}/`);
+  successRedirect.cookies.delete("oauth_state");
+  return successRedirect;
 }
