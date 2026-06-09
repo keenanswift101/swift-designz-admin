@@ -51,7 +51,7 @@ export default function SubscribePage() {
               href="https://www.swiftdesignz.co.za/contact"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 mt-2 px-5 py-2.5 rounded-xl border border-[#2a2a2a] text-sm text-gray-400 hover:text-white hover:border-[#30B0B0]/40 transition-colors"
+              className="inline-flex items-center gap-2 mt-2 px-5 py-2.5 rounded-xl bg-[#30B0B0] text-sm text-white font-semibold hover:bg-[#30B0B0]/80 transition-colors"
             >
               Questions?
             </a>
