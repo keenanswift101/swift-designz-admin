@@ -496,47 +496,55 @@ export default function SubscribePage() {
   const audioDataRef  = useRef<number[]>([0.3, 0.55, 0.4, 0.65]);
   const [audioStarted, setAudioStarted] = useState(false);
 
-  function startAudio() {
+  async function startAudio() {
     if (connectedRef.current) return;
     const audio = audioRef.current;
     if (!audio) return;
     connectedRef.current = true;
-    const Ctx = window.AudioContext ?? (window as unknown as Record<string, typeof AudioContext>).webkitAudioContext;
-    const ctx = new Ctx();
+    try {
+      const Ctx = window.AudioContext ?? (window as unknown as Record<string, typeof AudioContext>).webkitAudioContext;
+      const ctx = new Ctx();
+      // Android starts AudioContext suspended — must resume inside user gesture
+      if (ctx.state === "suspended") await ctx.resume();
 
-    setAudioStarted(true);
-    const analyser = ctx.createAnalyser();
-    analyser.fftSize = 256;
-    analyser.smoothingTimeConstant = 0.82;
-    const source = ctx.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(ctx.destination);
-    audioCtxRef.current  = ctx;
-    analyserRef.current  = analyser;
-    audio.volume = 0.4;
-    audio.play().catch(() => {});
-    const data = new Uint8Array(analyser.frequencyBinCount); // 128 bins
-    // 4 frequency bands: sub-bass, bass, mid, high
-    const BANDS: [number, number][] = [[1, 4], [4, 12], [12, 50], [50, 110]];
-    function tick() {
-      analyser.getByteFrequencyData(data);
-      audioDataRef.current = BANDS.map(([s, e]) => {
-        let sum = 0;
-        for (let j = s; j < e; j++) sum += data[j];
-        return Math.min(1, (sum / (e - s) / 255) * 3.5);
-      });
-      afRef.current = requestAnimationFrame(tick);
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 256;
+      analyser.smoothingTimeConstant = 0.82;
+      const source = ctx.createMediaElementSource(audio);
+      source.connect(analyser);
+      analyser.connect(ctx.destination);
+      audioCtxRef.current = ctx;
+      analyserRef.current = analyser;
+      audio.volume = 0.4;
+      await audio.play(); // await — badge only shows if play() succeeds
+      setAudioStarted(true);
+
+      const data  = new Uint8Array(analyser.frequencyBinCount);
+      const BANDS: [number, number][] = [[1, 4], [4, 12], [12, 50], [50, 110]];
+      function tick() {
+        analyser.getByteFrequencyData(data);
+        audioDataRef.current = BANDS.map(([s, e]) => {
+          let sum = 0;
+          for (let j = s; j < e; j++) sum += data[j];
+          return Math.min(1, (sum / (e - s) / 255) * 3.5);
+        });
+        afRef.current = requestAnimationFrame(tick);
+      }
+      tick();
+    } catch {
+      connectedRef.current = false; // allow retry on next tap
     }
-    tick();
   }
 
   useEffect(() => {
-    const trigger = () => startAudio();
-    window.addEventListener("click",   trigger, { once: true });
-    window.addEventListener("keydown", trigger, { once: true });
+    const trigger = () => { void startAudio(); };
+    window.addEventListener("click",      trigger, { once: true });
+    window.addEventListener("touchstart", trigger, { once: true, passive: true });
+    window.addEventListener("keydown",    trigger, { once: true });
     return () => {
-      window.removeEventListener("click",   trigger);
-      window.removeEventListener("keydown", trigger);
+      window.removeEventListener("click",      trigger);
+      window.removeEventListener("touchstart", trigger);
+      window.removeEventListener("keydown",    trigger);
       cancelAnimationFrame(afRef.current);
       audioCtxRef.current?.close();
     };
