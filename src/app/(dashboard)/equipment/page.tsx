@@ -80,10 +80,10 @@ export default async function EquipmentPage() {
   const supabase = await createClient();
   const { data: equipmentRaw } = await supabase
     .from("equipment")
-    .select("*")
+    .select("id, name, category, status, purchase_price, current_value, purchase_date")
     .order("name");
 
-  const equipment = (equipmentRaw ?? []) as Equipment[];
+  const equipment = (equipmentRaw ?? []) as unknown as Equipment[];
   const active = equipment.filter((e) => e.status === "active");
 
   const hardwareItems = equipment.filter((e) => IT_CATEGORIES.includes(e.category));

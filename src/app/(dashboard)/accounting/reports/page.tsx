@@ -6,7 +6,6 @@ import RevenueChart, { type RevenueDataPoint } from "@/components/dashboard/Reve
 import IncomeCategoryChart, { type CategoryDataPoint as IncomeCatPoint } from "@/components/accounting/IncomeCategoryChart";
 import ExpenseCategoryChart, { type CategoryDataPoint as ExpenseCatPoint } from "@/components/accounting/ExpenseCategoryChart";
 import ProfitMarginChart, { type MarginDataPoint } from "@/components/accounting/ProfitMarginChart";
-import type { IncomeEntry, Expense } from "@/types/database";
 
 const incomeCategoryLabels: Record<string, string> = {
   web_dev: "Web Development",
@@ -61,13 +60,14 @@ export default async function ReportsPage() {
   const now = new Date();
   const yearStart = `${now.getFullYear()}-01-01`;
 
+  type RawRow = { date: string; category: string; amount: number };
   const [{ data: incomeData }, { data: expenseData }] = await Promise.all([
-    supabase.from("income_entries").select("*").gte("date", yearStart).order("date"),
-    supabase.from("expenses").select("*").gte("date", yearStart).order("date"),
+    supabase.from("income_entries").select("date, category, amount").gte("date", yearStart).order("date"),
+    supabase.from("expenses").select("date, category, amount").gte("date", yearStart).order("date"),
   ]);
 
-  const income = (incomeData ?? []) as IncomeEntry[];
-  const expenses = (expenseData ?? []) as Expense[];
+  const income = (incomeData ?? []) as RawRow[];
+  const expenses = (expenseData ?? []) as RawRow[];
 
   // ── Month aggregation ──
   const months = new Set<string>();

@@ -21,7 +21,7 @@ export default async function IncomePage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("income_entries")
-    .select("*")
+    .select("id, date, description, amount, category, reconciled, source, invoice_id")
     .order("date", { ascending: false });
 
   const entries = (data ?? []) as IncomeEntry[];

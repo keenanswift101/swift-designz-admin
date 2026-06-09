@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import ExcelJS from "exceljs";
 import { createClient } from "@/lib/supabase/server";
-import type { IncomeEntry, Expense } from "@/types/database";
 
 const TEAL      = "FF30B0B0";
 const WHITE     = "FFFFFFFF";
@@ -78,13 +77,14 @@ export async function GET() {
   const now = new Date();
   const yearStart = `${now.getFullYear()}-01-01`;
 
+  type RawRow = { date: string; category: string; amount: number; description: string };
   const [{ data: incomeData }, { data: expenseData }] = await Promise.all([
-    supabase.from("income_entries").select("*").gte("date", yearStart).order("date"),
-    supabase.from("expenses").select("*").gte("date", yearStart).order("date"),
+    supabase.from("income_entries").select("date, category, amount, description").gte("date", yearStart).order("date"),
+    supabase.from("expenses").select("date, category, amount, description").gte("date", yearStart).order("date"),
   ]);
 
-  const income = (incomeData ?? []) as IncomeEntry[];
-  const expenses = (expenseData ?? []) as Expense[];
+  const income = (incomeData ?? []) as RawRow[];
+  const expenses = (expenseData ?? []) as RawRow[];
 
   // ── Aggregations ──────────────────────────────────────────
   const months = new Set<string>();

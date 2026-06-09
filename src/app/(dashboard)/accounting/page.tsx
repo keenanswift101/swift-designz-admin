@@ -16,10 +16,13 @@ import {
   CalendarDays,
 } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import type { RevenueDataPoint } from "@/components/dashboard/RevenueChart";
 import PrintAccountantStatementButton from "@/components/statements/PrintAccountantStatementButton";
-import RevenueChart, { type RevenueDataPoint } from "@/components/dashboard/RevenueChart";
-import SparklineChart from "@/components/dashboard/SparklineChart";
 import MonthNav from "@/components/accounting/MonthNav";
+
+const RevenueChart = dynamic(() => import("@/components/dashboard/RevenueChart"));
+const SparklineChart = dynamic(() => import("@/components/dashboard/SparklineChart"));
 import type { IncomeEntry, Expense } from "@/types/database";
 
 interface Props {

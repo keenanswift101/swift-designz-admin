@@ -5,9 +5,13 @@ import AuditFilters from "@/components/accounting/AuditFilters";
 import Link from "next/link";
 import { Suspense } from "react";
 import { AlertTriangle, ExternalLink } from "lucide-react";
-import type { IncomeEntry, Expense } from "@/types/database";
 
-type IncomeWithInvoice = IncomeEntry & {
+type IncomeWithInvoice = {
+  id: string;
+  date: string;
+  description: string;
+  amount: number;
+  category: string;
   invoice: { invoice_number: string } | null;
 };
 
@@ -57,13 +61,17 @@ export default async function AuditPage({
   const [incomeResult, expensesResult] = await Promise.all([
     supabase
       .from("income_entries")
-      .select("*, invoice:invoices!invoice_id(invoice_number)")
+      .select("id, date, description, amount, category, invoice:invoices!invoice_id(invoice_number)")
       .order("date", { ascending: false }),
-    supabase.from("expenses").select("*").order("date", { ascending: false }),
+    supabase
+      .from("expenses")
+      .select("id, date, description, amount, category, receipt_url")
+      .order("date", { ascending: false }),
   ]);
 
-  const incomeRaw = (incomeResult.data ?? []) as IncomeWithInvoice[];
-  const expensesRaw = (expensesResult.data ?? []) as Expense[];
+  type RawExpense = { id: string; date: string; description: string; amount: number; category: string; receipt_url: string | null };
+  const incomeRaw = (incomeResult.data ?? []) as unknown as IncomeWithInvoice[];
+  const expensesRaw = (expensesResult.data ?? []) as RawExpense[];
 
   // Compute large-transaction threshold: max(2.5x average, R5,000)
   const allAmounts = [

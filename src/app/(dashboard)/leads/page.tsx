@@ -31,7 +31,7 @@ export default async function LeadsPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("leads")
-    .select("*")
+    .select("id, name, email, company, service, status, source, created_at")
     .order("created_at", { ascending: false });
 
   const leads = (data ?? []) as Lead[];

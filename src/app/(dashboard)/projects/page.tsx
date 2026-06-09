@@ -24,11 +24,11 @@ export default async function ProjectsPage() {
   const today = new Date().toISOString().slice(0, 10);
 
   const [projectsResult, milestonesResult] = await Promise.all([
-    supabase.from("projects").select("*, clients(name)").order("created_at", { ascending: false }),
+    supabase.from("projects").select("id, name, service, status, progress_override, due_date, quoted_amount, created_at, clients(name)").order("created_at", { ascending: false }),
     supabase.from("project_milestones").select("project_id, completed"),
   ]);
 
-  const projects = (projectsResult.data ?? []) as ProjectWithClient[];
+  const projects = (projectsResult.data ?? []) as unknown as ProjectWithClient[];
   const milestones = (milestonesResult.data ?? []) as Pick<ProjectMilestone, "project_id" | "completed">[];
 
   // ── Per-project milestone progress ─────────────────────────

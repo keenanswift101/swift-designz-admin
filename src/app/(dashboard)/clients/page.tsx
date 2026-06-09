@@ -12,7 +12,7 @@ export default async function ClientsPage() {
   const mtdStart = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
 
   const [clientsResult, invoicesResult, projectsResult] = await Promise.all([
-    supabase.from("clients").select("*").order("created_at", { ascending: false }),
+    supabase.from("clients").select("id, name, email, company, phone, created_at").order("created_at", { ascending: false }),
     supabase
       .from("invoices")
       .select("client_id, amount, paid_amount, status")

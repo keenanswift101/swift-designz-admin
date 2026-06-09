@@ -23,7 +23,7 @@ export default async function ExpensesPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("expenses")
-    .select("*")
+    .select("id, date, description, amount, category, recurring, recurring_interval, receipt_url")
     .order("date", { ascending: false });
 
   const entries = (data || []) as Expense[];

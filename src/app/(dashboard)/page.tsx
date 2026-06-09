@@ -15,9 +15,13 @@ import StatusBadge from "@/components/ui/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import Link from "next/link";
-import RevenueChart, { type RevenueDataPoint } from "@/components/dashboard/RevenueChart";
-import RevenueDonutChart, { type DonutDataPoint } from "@/components/dashboard/RevenueDonutChart";
-import SparklineChart from "@/components/dashboard/SparklineChart";
+import dynamic from "next/dynamic";
+import type { RevenueDataPoint } from "@/components/dashboard/RevenueChart";
+import type { DonutDataPoint } from "@/components/dashboard/RevenueDonutChart";
+
+const RevenueChart = dynamic(() => import("@/components/dashboard/RevenueChart"));
+const RevenueDonutChart = dynamic(() => import("@/components/dashboard/RevenueDonutChart"));
+const SparklineChart = dynamic(() => import("@/components/dashboard/SparklineChart"));
 
 export default async function DashboardPage() {
   const supabase = await createClient();

@@ -16,8 +16,11 @@ const deptConfig: Record<string, { label: string; color: string; bg: string }> =
 
 export default async function EmployeesPage() {
   const supabase = await createClient();
-  const { data } = await supabase.from("employees").select("*").order("name");
-  const employees = (data ?? []) as Employee[];
+  const { data } = await supabase
+    .from("employees")
+    .select("id, name, email, role, department, salary, status, start_date")
+    .order("name");
+  const employees = (data ?? []) as unknown as Employee[];
 
   const active = employees.filter((e) => e.status === "active");
   const monthlyPayroll = active.reduce((s, e) => s + e.salary, 0);

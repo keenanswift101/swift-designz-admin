@@ -17,12 +17,12 @@ export default async function InvestorsPage() {
   const supabase = await createClient();
 
   const [{ data: investorsRaw }, { data: contributionsRaw }, profile] = await Promise.all([
-    supabase.from("investors").select("*").order("created_at", { ascending: false }),
+    supabase.from("investors").select("id, name, email, company, investment_amount, equity_percentage, status, agreement_date").order("created_at", { ascending: false }),
     supabase.from("income_entries").select("investor_id, amount").eq("source", "investor"),
     getProfile(),
   ]);
 
-  const investors = (investorsRaw ?? []) as Investor[];
+  const investors = (investorsRaw ?? []) as unknown as Investor[];
   const contributions = (contributionsRaw ?? []) as Pick<IncomeEntry, "investor_id" | "amount">[];
 
   // Per-investor contributed totals
