@@ -3,9 +3,11 @@ import PageHeader from "@/components/ui/PageHeader";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { deleteIncomeAction } from "./actions";
 import ReconcileToggle from "@/components/accounting/ReconcileToggle";
+import MonthFilter from "@/components/accounting/MonthFilter";
 import Link from "next/link";
 import { Trash2, TrendingUp, Hash, Tag, CheckCircle2, Receipt } from "lucide-react";
 import type { IncomeEntry } from "@/types/database";
+import { Suspense } from "react";
 
 const categoryLabels: Record<string, string> = {
   web_dev: "Web Dev",
@@ -17,12 +19,28 @@ const categoryLabels: Record<string, string> = {
   other: "Other",
 };
 
-export default async function IncomePage() {
+export default async function IncomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ month?: string }>;
+}) {
+  const { month } = await searchParams;
+
   const supabase = await createClient();
-  const { data } = await supabase
+  let query = supabase
     .from("income_entries")
     .select("id, date, description, amount, category, reconciled, source, invoice_id")
     .order("date", { ascending: false });
+
+  if (month && /^\d{4}-\d{2}$/.test(month)) {
+    const [y, m] = month.split("-").map(Number);
+    const from = `${month}-01`;
+    const lastDay = new Date(y, m, 0).getDate();
+    const to = `${month}-${String(lastDay).padStart(2, "0")}`;
+    query = query.gte("date", from).lte("date", to);
+  }
+
+  const { data } = await query;
 
   const entries = (data ?? []) as IncomeEntry[];
 
@@ -43,15 +61,20 @@ export default async function IncomePage() {
     <>
       <PageHeader
         title="Income"
-        description="All revenue records"
+        description={month ? `Filtered: ${new Date(`${month}-01`).toLocaleDateString("en-ZA", { month: "long", year: "numeric" })}` : "All revenue records"}
         backHref="/accounting"
         actions={
-          <Link
-            href="/accounting/income/new"
-            className="px-4 py-2 bg-teal hover:bg-teal-hover text-white text-sm font-medium rounded-lg transition-colors"
-          >
-            Add Income
-          </Link>
+          <div className="flex items-center gap-3">
+            <Suspense>
+              <MonthFilter />
+            </Suspense>
+            <Link
+              href="/accounting/income/new"
+              className="px-4 py-2 bg-teal hover:bg-teal-hover text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              Add Income
+            </Link>
+          </div>
         }
       />
 
