@@ -237,22 +237,16 @@ export default function AccountStatementPDF({
             <Text style={openingBalance > 0 ? s.summaryValAmber : s.summaryVal}>{fmt(openingBalance)}</Text>
           </View>
           <View style={s.summaryCellBorder}>
-            <Text style={s.summaryLabel}>{hasScheduled ? "Total Contracted" : "Total Invoiced"}</Text>
-            <Text style={s.summaryVal}>{fmt(hasScheduled ? totalInvoiced + scheduledTotal : totalInvoiced)}</Text>
-            {hasScheduled && (
-              <Text style={s.summarySubNote}>{fmt(totalInvoiced)} billed + {fmt(scheduledTotal)} scheduled</Text>
-            )}
+            <Text style={s.summaryLabel}>Total Invoiced</Text>
+            <Text style={s.summaryVal}>{fmt(totalInvoiced)}</Text>
           </View>
           <View style={s.summaryCellBorder}>
             <Text style={s.summaryLabel}>Total Paid</Text>
             <Text style={s.summaryValTeal}>{fmt(totalPaid)}</Text>
           </View>
           <View style={s.summaryCellBorder}>
-            <Text style={s.summaryLabel}>{hasScheduled ? "Total Outstanding" : "Closing Balance"}</Text>
-            <Text style={effectiveOutstanding > 0 ? s.summaryValAmber : s.summaryValTeal}>{fmt(effectiveOutstanding)}</Text>
-            {hasScheduled && closingBalance > 0 && (
-              <Text style={s.summarySubNote}>{fmt(closingBalance)} overdue + {fmt(scheduledTotal)} upcoming</Text>
-            )}
+            <Text style={s.summaryLabel}>Closing Balance</Text>
+            <Text style={closingBalance > 0 ? s.summaryValAmber : s.summaryValTeal}>{fmt(closingBalance)}</Text>
           </View>
         </View>
 
@@ -328,40 +322,6 @@ export default function AccountStatementPDF({
             </>
           )}
         </View>
-
-        {/* Scheduled installments */}
-        {hasScheduled && (
-          <View style={s.table} wrap={false}>
-            <Text style={s.sectionLabelAmber}>Scheduled Installments — Not Yet Invoiced</Text>
-            <View style={s.tableHead}>
-              <Text style={[s.headText, s.colSchedLabel]}>Installment</Text>
-              <Text style={[s.headText, s.colSchedPlan]}>Plan Type</Text>
-              <Text style={[s.headText, s.colSchedDue]}>Due Date</Text>
-              <Text style={[s.headText, s.colSchedAmt]}>Amount</Text>
-            </View>
-            {scheduledInstallments.map((entry, i) => (
-              <View key={i} style={s.tableRow} wrap={false}>
-                <Text style={[s.cellText, s.colSchedLabel]}>{entry.label}</Text>
-                <Text style={[s.cellText, s.colSchedPlan]}>{planLabel(entry.plan_type)}</Text>
-                <Text style={[s.cellText, s.colSchedDue]}>{fmtDate(entry.due_date)}</Text>
-                <Text style={[s.cellAmber, s.colSchedAmt]}>{fmt(entry.amount)}</Text>
-              </View>
-            ))}
-            <View style={s.tableFooter}>
-              <Text style={[s.cellBold, { flex: 1 }]}>Total Scheduled</Text>
-              <Text style={[s.cellAmber, s.colSchedAmt]}>{fmt(scheduledTotal)}</Text>
-            </View>
-          </View>
-        )}
-
-        {/* Active plan notice */}
-        {hasScheduled && (
-          <View style={s.alertBox}>
-            <Text style={s.alertText}>
-              This account has an active payment plan. The scheduled installments above are contractual obligations that will be invoiced on their respective due dates. The closing balance of {fmt(effectiveOutstanding)} reflects the full amount outstanding including scheduled future payments.
-            </Text>
-          </View>
-        )}
 
         {/* Notes */}
         {notes && (
