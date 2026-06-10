@@ -144,16 +144,6 @@ function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1).replace(/_/g, " ");
 }
 
-function planLabel(type: string | null): string {
-  if (!type) return "Payment Plan";
-  const map: Record<string, string> = {
-    full_pay: "Full Payment",
-    standard: "Standard (50/50)",
-    "2_month_flex": "2-Month Flex",
-    "3_month_ease": "3-Month Ease",
-  };
-  return map[type] ?? type.replace(/_/g, " ");
-}
 
 export default function AccountStatementPDF({
   statementNumber,
@@ -183,9 +173,6 @@ export default function AccountStatementPDF({
   const ipBilled = invoicesInPeriod.reduce((s, i) => s + i.amount, 0);
   const ipPaid = invoicesInPeriod.reduce((s, i) => s + i.paid_amount, 0);
   const ipOutstanding = invoicesInPeriod.reduce((s, i) => s + Math.max(0, i.amount - i.paid_amount), 0);
-  const scheduledTotal = scheduledInstallments.reduce((s, i) => s + i.amount, 0);
-  const hasScheduled = scheduledInstallments.length > 0;
-  const effectiveOutstanding = closingBalance + scheduledTotal;
 
   return (
     <Document>
